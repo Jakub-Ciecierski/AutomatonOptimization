@@ -1,0 +1,5 @@
+Doc:
+https://docs.python.org/3/library/unittest.html
+
+How to run:
+python3.4 -m unittest discover test/ -v

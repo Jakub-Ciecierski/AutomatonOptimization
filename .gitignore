@@ -4,6 +4,8 @@ __pycache__
 .project
 /nbproject
 
+googletest/make/sample1_unittest
+
 *~
 *.o
 *.a

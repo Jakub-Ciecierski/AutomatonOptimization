@@ -13,6 +13,7 @@ googletest/make/sample1_unittest
 *.pdf
 *.aux
 *.gz
+*.synctex.gz
 *.log
 
 build

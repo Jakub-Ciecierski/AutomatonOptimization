@@ -5,6 +5,11 @@
 \setcounter{tocdepth}{3}
 \usepackage{graphicx}
 
+\usepackage{color}
+
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\enspace\ignorespaces#1}
 
@@ -38,15 +43,208 @@
 %---------------------------------------------------------------------
 \subsection{Automaton Representation}
 
+Automaton is a system of five fields:
+\begin{equation}
+	A = (Q, \Sigma, \delta, q_0, F)
+\end{equation}
+
+where \\
+$Q$ - finite set of states. \\
+$\Sigma$ - Finite input alphabet. \\
+$\delta$ - transition function. $\delta: Q \times \Sigma \rightarrow Q$ \\
+$q_0$ - the initial state. $q_0 \in Q$ \\
+$F$ - Set of accepting states. $F \subseteq Q$ \\
+
+Example of Automaton A- (Place the state diagram here)
+
+Transition Table for A with $\delta: Q \times \Sigma \rightarrow Q$ 
+
+\begin{figure}
+\begin{center}
+
+	\setlength{\tabcolsep}{4pt}
+	\renewcommand{\arraystretch}{1.5}
+	
+	\begin{tabular}{|P{1.0cm} || P{0.6cm} | P{0.6cm} |}
+	\hline
+	$\delta$ & a & b \\
+	\hline
+	\hline
+	$\rightarrow q^-$ 		& $q_0$ & $q_1$ \\
+	\hline
+	$q_0 \rightarrow$ 		& $q_R$ & $q_R$ \\
+	\hline
+	$q_1 \rightarrow$ 		& $q_1$ & $q_1$ \\
+	\hline
+	$q_R$  					& $q_R$ & $q_R$ \\
+	\hline
+	\end{tabular}
+
+	
+\caption{Transition table for A with $\delta: Q \times \Sigma \rightarrow Q$}
+\end{center}
+\end{figure}
+
+
+
+
+Now explain new transition function: $\delta: Q \times \Sigma \times Q \rightarrow \{0,1\}$
+
+
+
+\begin{figure}
+\begin{center}
+
+	\setlength{\tabcolsep}{4pt}
+	\renewcommand{\arraystretch}{1.4}
+
+	\begin{tabular}{|P{1.0cm} || P{0.8cm} | P{0.8cm} | P{0.8cm} | P{0.8cm}|}
+	\hline
+	a & $\rightarrow q^-$ & $q_0 \rightarrow$ & $q_1 \rightarrow$ & $q_R$ \\
+	\hline
+	\hline
+	$\rightarrow q^-$ 		& $0$ & $1$ & $0$ & $0$ \\
+	\hline
+	$q_0 \rightarrow$ 		& $0$ & $0$ & $0$ & $1$ \\
+	\hline
+	$q_1 \rightarrow$ 		& $0$ & $0$ & $1$ & $0$ \\
+	\hline
+	$q_R$  					& $0$ & $0$ & $0$ & $1$ \\
+	\hline
+	
+	\end{tabular}
+	\hspace*{1 cm}
+	\begin{tabular}{|P{1.0cm} || P{0.8cm} | P{0.8cm} | P{0.8cm} | P{0.8cm}|}
+	\hline
+	b & $\rightarrow q^-$ & $q_0 \rightarrow$ & $q_1 \rightarrow$ & $q_R$ \\
+	\hline
+	\hline
+	$\rightarrow q^-$ 		& $0$ & $0$ & $1$ & $0$ \\
+	\hline
+	$q_0 \rightarrow$ 		& $0$ & $0$ & $0$ & $1$ \\
+	\hline
+	$q_1 \rightarrow$ 		& $0$ & $0$ & $1$ & $0$ \\
+	\hline
+	$q_R$  					& $0$ & $0$ & $0$ & $1$ \\
+	\hline
+	
+	\end{tabular}
+	
+\caption{Transition tables for A with $\delta: Q \times \Sigma \times Q \rightarrow \{0,1\}$}
+
+\label{fig:ttable_bin}
+\end{center}
+\end{figure}
+
+Note: only one 1 in each row (Determinism).
+
+Let $n = |Q|$, i.e. n is the number of states.
+Let $r = |\Sigma|$, i.e. the number of symbols in the alphabet.
+
+Enumerate states.
+\begin{equation}
+	Q = \{q_1, q_2, \ldots, q_n\}
+\end{equation}
+where $q_1$ is the initial state.
+
+Enumerate symbols.
+
+\begin{equation}
+	\Sigma = \{x_1, x_2, \ldots, x_r\}
+\end{equation}
+
+Each table in the new approach has size $n^2$. We have r tables.
+
+Thus we can easily decode the automaton as follows:
+\begin{itemize}
+\item To decode one table of symbol $x_l$ create a vector $V_{x_l}$ representing that table:
+	\begin{itemize}
+		\item From each $q_i$ row take an index $j$ for $j = 1,2,..,n$ of the element of this row having value $1$, i.e. there exists a transition $\delta(q_i, x_l, q_j) = 1$.
+		\item If the transition to accepting state is possible, i.e. if the element from current state to accepting state has value 1 then take the negative value of that index. 2 becomes -2, 1 becomes -1 etc.
+		\item Append it to the vector $V_{x_l}$
+	\end{itemize}
+\end{itemize}
+
+Thus the first table in figure~\ref{fig:ttable_bin}, showing the transitions for symbol $a$ can be represented as follows:
+
+\begin{equation}
+	V_a = (-2, 4, -3, 4)
+\end{equation}
+
+
+Similarly vector $V_b$:
+
+\begin{equation}
+	V_b = (-3, 4, -3, 4)
+\end{equation}
+
+Now to create the vector $V$ of entire transition function we simply append the to vectors $V_a$, $V_b$.
+
+
+\begin{equation}
+	V = (-2,4,-3,4,-3,4,-3,4)
+\end{equation}
+
+Properties of vector $V$
+\begin{itemize}
+	\item It is constructed by appending $r$ vectors $V_{x_1}, V_{x_2}, \ldots, V_{x_{r}}$ each with $n$ dimensions. Thus $V$ has $n * r$ dimensions.
+	
+%	\item The first integer number $k_{i,1}$ of each sub vector $V_{x_i}$ is the transition for initial state, symbol $x_i$ and state $q_{|k_{i,1}|}$.
+\end{itemize}
+
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsection{Particle Swarm Optimization}
+In the Particle Swarm Optimization (PSO) we look for optimal solution of the problem in the problem space. Each such solution is called a particle and it consists of $fitness$ value which is evaluated by the fitness function, position $P_p$ and velocity vector $V_p$ which let the particle travel through the problem space (cf. \cite{pso_origin}).
+
+PSO is initialized with random group of particles. It then searches for the optimal solution by updating generations.
+In each iteration of the PSO the particles are updated.
+
+The following illustrates the flow of the PSO algorithm:
+
+
+
+\begin{enumerate}
+	\item Initialize random group of particles. {\color{red} TODO - MAYBE NOT SO RANDOM ? CAN WE USE KNOWLEDGE OF PREVIOUS PS INSTANCE ?}
+	\item \label{itm:pso_iter} Calculate the fitness value of each particle using fitness function.
+		
+	\item Each particle stores its own personal best fitness value obtained so far called $pbest$ and the local best $lbest$ which is the best fitness value of any particle in the neighbourhood of the current particle.
+	
+	
+	\item Update velocity and position of each particle using the equations:
+	\begin{equation}
+		V_p = V_p + c_1 * \mu_1 *(pbest - P_p) + c_2 * \mu_2 *(lbest - P_p)
+	\end{equation}
+	
+	\begin{equation}
+		P_p = P_p + V_p
+	\end{equation}
+	where:\\
+	$V_p$ is the velocity of particle p.\\
+	$P_p$ is the current position of particle p.\\
+	$pbest$ 	is the personal best solution of the particle.\\
+	$lbest$ 	is the best solution in the local neighbourhood of the particle.\\
+	$c_1, c_2$ are the constant learning factors.\\
+	$\mu_1, \mu_2$ are random numbers in the range [0,1]. {\color{red} TODO What distribution function - uniform ?} \\
+
+	\item Repeat~\ref{itm:pso_iter}. until an ending criterion is met.
+	
+\end{enumerate}
+
+Representing the solution
+Fitness Function
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsubsection{Parameters}
 
+\begin{thebibliography}{9}
+\bibitem{pso_origin} 
+Eberhart, R. C. and Kennedy, J. A new optimizer using particle swarm theory. Proceedings of the sixth international symposium on micro machine and human science pp. 39-43. IEEE service center, Piscataway, NJ, Nagoya, Japan, 1995.
 
+ 
+
+\end{thebibliography}
 
 \end{document}

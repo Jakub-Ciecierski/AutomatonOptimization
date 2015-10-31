@@ -11,6 +11,10 @@ googletest/make/sample1_unittest
 *.a
 
 *.pdf
+*.aux
+*.gz
+*.log
 
 build
 bin
+

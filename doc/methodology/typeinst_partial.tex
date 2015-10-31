@@ -5,6 +5,8 @@
 \setcounter{tocdepth}{3}
 \usepackage{graphicx}
 
+\usepackage{amsmath,amssymb}
+
 \usepackage{color}
 
 \usepackage{array}
@@ -19,15 +21,16 @@
 
 \title{Algorithms and Computability \\Methodology}
 
-\titlerunning{Lecture Notes in Computer Science: Authors' Instructions}
+\titlerunning{Algorithms and Computability}
 
-\author{Jakub Ciecierski\and Bartlomiej Dybisz}
+\author{Jakub Ciecierski \and Bartlomiej Dybisz}
 
-\authorrunning{Lecture Notes in Computer Science: Authors' Instructions}
+\authorrunning{Algorithms and Computability}
 
 
-\toctitle{Lecture Notes in Computer Science}
-\tocauthor{Authors' Instructions}
+\toctitle{Algorithms and Computability}
+\tocauthor{Methodology}
+
 \maketitle
 
 \abstract{} Content \\
@@ -35,6 +38,8 @@
 %---------------------------------------------------------------------
 
 \section{Introduction}
+
+\section{Objective}
 
 %---------------------------------------------------------------------
 \section{Methodology}
@@ -44,9 +49,9 @@
 \subsection{Automaton Representation}
 
 Automaton is a system of five fields:
-\begin{equation}
-	A = (Q, \Sigma, \delta, q_0, F)
-\end{equation}
+\begin{center}
+	$A = (Q, \Sigma, \delta, q_0, F)$
+\end{center}
 
 where \\
 $Q$ - finite set of states. \\
@@ -55,7 +60,7 @@ $\delta$ - transition function. $\delta: Q \times \Sigma \rightarrow Q$ \\
 $q_0$ - the initial state. $q_0 \in Q$ \\
 $F$ - Set of accepting states. $F \subseteq Q$ \\
 
-Example of Automaton A- (Place the state diagram here)
+Example of Automaton A- {\color{red}(TODO Place the state diagram here)}
 
 Transition Table for A with $\delta: Q \times \Sigma \rightarrow Q$ 
 
@@ -88,7 +93,7 @@ Transition Table for A with $\delta: Q \times \Sigma \rightarrow Q$
 
 
 
-Now explain new transition function: $\delta: Q \times \Sigma \times Q \rightarrow \{0,1\}$
+ {\color{red}(TODO Now explain new transition function:} $\delta: Q \times \Sigma \times Q \rightarrow \{0,1\}$
 
 
 
@@ -142,16 +147,16 @@ Let $n = |Q|$, i.e. n is the number of states.
 Let $r = |\Sigma|$, i.e. the number of symbols in the alphabet.
 
 Enumerate states.
-\begin{equation}
-	Q = \{q_1, q_2, \ldots, q_n\}
-\end{equation}
+\begin{center}
+	$Q = \{q_1, q_2, \ldots, q_n\}$
+\end{center}
 where $q_1$ is the initial state.
 
 Enumerate symbols.
 
-\begin{equation}
-	\Sigma = \{x_1, x_2, \ldots, x_r\}
-\end{equation}
+\begin{center}
+	$\Sigma = \{x_1, x_2, \ldots, x_r\}$
+\end{center}
 
 Each table in the new approach has size $n^2$. We have r tables.
 
@@ -160,30 +165,28 @@ Thus we can easily decode the automaton as follows:
 \item To decode one table of symbol $x_l$ create a vector $V_{x_l}$ representing that table:
 	\begin{itemize}
 		\item From each $q_i$ row take an index $j$ for $j = 1,2,..,n$ of the element of this row having value $1$, i.e. there exists a transition $\delta(q_i, x_l, q_j) = 1$.
-		\item If the transition to accepting state is possible, i.e. if the element from current state to accepting state has value 1 then take the negative value of that index. 2 becomes -2, 1 becomes -1 etc.
+		\item If the transition to accepting state is possible, i.e. if the element from current state to accepting state has value 1 then take the negative value of that index. 2 becomes -2, 1 becomes -1 etc. {\color{red} TODO, We don't really need accepting states, all we need to know is the state that automaton finishes computation in}
 		\item Append it to the vector $V_{x_l}$
 	\end{itemize}
 \end{itemize}
 
 Thus the first table in figure~\ref{fig:ttable_bin}, showing the transitions for symbol $a$ can be represented as follows:
 
-\begin{equation}
-	V_a = (-2, 4, -3, 4)
-\end{equation}
-
+\begin{center}
+	$V_a = (-2, 4, -3, 4)$
+\end{center}
 
 Similarly vector $V_b$:
 
-\begin{equation}
-	V_b = (-3, 4, -3, 4)
-\end{equation}
+\begin{center}
+	$V_b = (-3, 4, -3, 4)$
+\end{center}
 
 Now to create the vector $V$ of entire transition function we simply append the to vectors $V_a$, $V_b$.
 
-
-\begin{equation}
-	V = (-2,4,-3,4,-3,4,-3,4)
-\end{equation}
+\begin{center}
+	$V = (-2,4,-3,4,-3,4,-3,4)$
+\end{center}
 
 Properties of vector $V$
 \begin{itemize}
@@ -195,55 +198,133 @@ Properties of vector $V$
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsection{Particle Swarm Optimization}
-In the Particle Swarm Optimization (PSO) we look for optimal solution of the problem in the problem space. Each such solution is called a particle and it consists of $fitness$ value which is evaluated by the fitness function, position $P_p$ and velocity vector $V_p$ which let the particle travel through the problem space (cf. \cite{pso_origin}).
+In the Particle Swarm Optimization (PSO) we look for optimal solution of the problem in the problem space. Each solution is called a particle and it consists of $fitness$ value which is evaluated by the fitness function, position $X_p$ and velocity vector $V_p$ which lets the particle travel through the problem space (cf. \cite{pso_origin}).
 
 PSO is initialized with random group of particles. It then searches for the optimal solution by updating generations.
-In each iteration of the PSO the particles are updated.
+In each iteration $t$, the particles are updated by calculating new fitness and velocity which in turn is applied to update new position of the particle.
+
+$X_p(t)$ will denote the position of particle $p$ at time $t$, i.e. the $t$-th iteration. Same notation applies to the velocity vector $V_p(t)$.
 
 The following illustrates the flow of the PSO algorithm:
 
-
+\begin{center}
 
 \begin{enumerate}
-	\item Initialize random group of particles. {\color{red} TODO - MAYBE NOT SO RANDOM ? CAN WE USE KNOWLEDGE OF PREVIOUS PS INSTANCE ?}
-	\item \label{itm:pso_iter} Calculate the fitness value of each particle using fitness function.
+	\item Initialize random group of particles. {\color{red} TODO - MAYBE NOT SO RANDOM ? CAN WE USE KNOWLEDGE OF PREVIOUS PSO INSTANCE ?}
+	\item \label{itm:pso_iter} Calculate the fitness value of each particle $p$ using fitness function.
 		
-	\item Each particle stores its own personal best fitness value obtained so far called $pbest$ and the local best $lbest$ which is the best fitness value of any particle in the neighbourhood of the current particle.
+	\item Each particle $p$ compares newly computed fitness value to the best one obtained so far, the new best fitness value is stored. Additionally we store two positions called $pbest_p$ and $lbest_p$. The former one represents the position of the particle $p$ having the best fitness value so far. The latter position is the local best position taken from a neighbourhood of the particle $p$. Concept of neighbourhood shall be discussed in the next section.
 	
+	\item Update velocity and position of each particle.
 	
-	\item Update velocity and position of each particle using the equations:
-	\begin{equation}
-		V_p = V_p + c_1 * \mu_1 *(pbest - P_p) + c_2 * \mu_2 *(lbest - P_p)
-	\end{equation}
-	
-	\begin{equation}
-		P_p = P_p + V_p
-	\end{equation}
-	where:\\
-	$V_p$ is the velocity of particle p.\\
-	$P_p$ is the current position of particle p.\\
-	$pbest$ 	is the personal best solution of the particle.\\
-	$lbest$ 	is the best solution in the local neighbourhood of the particle.\\
-	$c_1, c_2$ are the constant learning factors.\\
-	$\mu_1, \mu_2$ are random numbers in the range [0,1]. {\color{red} TODO What distribution function - uniform ?} \\
-
 	\item Repeat~\ref{itm:pso_iter}. until an ending criterion is met.
 	
 \end{enumerate}
 
-Representing the solution
-Fitness Function
+\end{center}
+
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
-\subsubsection{Parameters}
+\subsubsection{Representing the solution}
+
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+\subsubsection{Initialization}
+
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+\subsubsection{Fitness Function}
+Calculating the fitness value.
+{\color{red} TODO The error rate function}
+
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+\subsubsection{Updating the particle}
+
+
+% Naive approach
+
+%The naive approach of updating the particles' positions was proposed in the original PSO algorithm~\cite{pso_origin}.
+
+%\begin{equation}
+%		V_p(t+1) = V_p(t) + c_1 * \mu_1 *(pbest_p - X_p(t)) + c_2 * \mu_2 *(lbest_p - X_p(t))
+%	\end{equation}
+%	
+%	\begin{equation}
+%		X_p(t+1) = X_p(t) + V_p(t)
+%	\end{equation}
+%	where:\\
+%	$c_1, c_2$ are the constant learning factors.\\
+%	$\mu_1, \mu_2$ are random numbers in the range [0,1]. {\color{red} TODO What distribution function - uniform ?} \\
+
+The following method of updating the particles has its origins in the Standard Particle Swarm Optimization version 2011 (cf. \cite{pso_11})
+
+Let $G_p(t)$ be the centre of gravity of the three points:
+\begin{enumerate}
+	\item Current position. $X_p(t)$
+	
+	\item Point a bit "beyond" $pbest_p$. $Y_{p1}(t) = c*(pbest_p-X_p(t))$
+	
+	\item Point a bit "beyond" $lbest_p$. $Y_{p2}(t) = c*(lbest_p-X_p(t))$
+			
+\end{enumerate}
+
+The constant $c = \frac{1}{2} + ln(2)$ together with $w = \frac{1}{2 * ln(2)}$ was proposed by Clerc in~\cite{pso_anal}  used in further equations. 
+
+Formally $G_p(t)$ it is defined by the following formula 
+\begin{equation}
+	G_p(t) = \frac{X_p(t) + Y_{p1}(t) + Y_{p2}(t)} {3}
+\end{equation}
+
+We now define a random point $X^{'}_p$ in the hypersphere
+\begin{center}
+	$\mathcal{H}_p(G_p, d(G_p, X_p))$ 
+\end{center}
+of centre $G_p$ and of radius $d(G_p, X_p)$ where the function $d$ is an euclidean distance between two points. The time $t$ has been omitted for simplicity.
+
+The velocity update is computed by
+\begin{equation}
+	V_p(t+1) = w*V_p(t) + X^{'}_p(t) - X_p(t)
+\end{equation}
+Thus the position is updated by the equation
+
+\begin{equation}
+	X_p(t+1) = w*V_p(t) + X^{'}_p(t)
+\end{equation}
+
+This method grants adequate definitions for $exploitation$ and $exploration$. Namely the exploitation occurs when $X_p(t+1)$ is inside atleast one hypersphere $\mathcal{H}_q$, otherwise we recognize exploration.
+
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+\subsubsection{Convergence}
+
+
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+\subsubsection{Size of the swarm}
+
+
 
 \begin{thebibliography}{9}
+
 \bibitem{pso_origin} 
 Eberhart, R. C. and Kennedy, J. A new optimizer using particle swarm theory. Proceedings of the sixth international symposium on micro machine and human science pp. 39-43. IEEE service center, Piscataway, NJ, Nagoya, Japan, 1995.
 
- 
+\bibitem{pso_bias} 
+William M. Spears, Derek T. Green and Diana F. Spears. Biases in particle swarm optimization. International Journal of Swarm Intelligence Research, 1(2):34-57, 2010.
+
+\bibitem{pso_anal}
+Maurice Clerc. Stagnation analysis in particle swarm optimization or what happens when nothing happens, http://hal.archives-ouvertes.fr/hal-00122031. Technical report, 2006.
+
+\bibitem{pso_11}
+M. Clerc. (2011). Standard Particle Swarm Optimisation Available: http://hal.archives-ouvertes.fr/hal-00764996 
 
 \end{thebibliography}
 

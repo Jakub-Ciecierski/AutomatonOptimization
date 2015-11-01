@@ -44,11 +44,11 @@ Work has been structured as follows: section \ref{section:objectives} describes 
 Section \ref{section:methodology} on the other hand, dives directly into implementation. It supplements the reader with needed knowledge of mathematical objects and data structures needed to thoroughly understanding the approach taken to solve our task. 
 
 \section{Objective} \label{section:objectives}
-
+To start with, one need to be familiar with Myhill-Nerode theorem and the definition of relation induced by language.Since they are playing vital role in understanding the problem, both are presented below with some short description. 
 \begin{definition}
 Relation induced by language $L$ is a binary relation $R_{L}$ in the set of words over alphabet of $L$ such that:
 \[
-ssss
+(\forall{u,v \in \Sigma^{*}})(u R_{L} v \equiv ((\forall z \in \Sigma^{*}) uz \in L \Leftrightarrow vz \in L))
 \]
 \end{definition}
 

@@ -5,6 +5,13 @@
 \setcounter{tocdepth}{3}
 \usepackage{graphicx}
 
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{compatibility=false}
+
+
+
 \usepackage{amsmath,amssymb}
 
 \usepackage{color}
@@ -64,6 +71,11 @@ Example of Automaton A- {\color{red}(TODO Place the state diagram here)}
 
 Transition Table for A with $\delta: Q \times \Sigma \rightarrow Q$ 
 
+%%%
+%
+% Standard Transition function
+%
+%%%
 \begin{figure}
 \begin{center}
 
@@ -95,14 +107,22 @@ Transition Table for A with $\delta: Q \times \Sigma \rightarrow Q$
 The binary representation of automaton might perhaps provide more adequate solution for a computer. Thus a new transition function is defined, $\delta^{'}: Q \times \Sigma \times Q \rightarrow \{0,1\}$. It simply provides an answer whether there exists a transition between two states for a given symbol. For example, by looking at figure~\ref{fig:ttable_std} we can define value for $\delta^{'}(q^-,a,q^0) = 1$, since we there exists a transition from $q^-$ to $q^0$ through symbol $a$. The entire automaton is presented in figure~\ref{fig:ttable_bin}.
 
 
-
+%%%
+%
+% Binary transition function.
+%
+%%%
 \begin{figure}
 \begin{center}
 
 	\setlength{\tabcolsep}{4pt}
 	\renewcommand{\arraystretch}{1.4}
+	
+	\begin{subfigure}{.5\textwidth}
 
+	\centering
 	\begin{tabular}{|P{1.0cm} || P{0.8cm} | P{0.8cm} | P{0.8cm} | P{0.8cm}|}
+
 	\hline
 	a & $\rightarrow q^-$ & $q_0 \rightarrow$ & $q_1 \rightarrow$ & $q_R$ \\
 	\hline
@@ -115,10 +135,18 @@ The binary representation of automaton might perhaps provide more adequate solut
 	\hline
 	$q_R$  					& $0$ & $0$ & $0$ & $1$ \\
 	\hline
-	
+
 	\end{tabular}
-	\hspace*{1 cm}
+
+	\caption{Transition table for symbol $a$}
+	\label{fig:ttable_bin_a}	
+	
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+	
+	\centering
 	\begin{tabular}{|P{1.0cm} || P{0.8cm} | P{0.8cm} | P{0.8cm} | P{0.8cm}|}
+	
 	\hline
 	b & $\rightarrow q^-$ & $q_0 \rightarrow$ & $q_1 \rightarrow$ & $q_R$ \\
 	\hline
@@ -131,8 +159,14 @@ The binary representation of automaton might perhaps provide more adequate solut
 	\hline
 	$q_R$  					& $0$ & $0$ & $0$ & $1$ \\
 	\hline
-	
+
 	\end{tabular}
+	
+	\caption{Transition table for symbol $b$}
+	\label{fig:ttable_bin_b}
+	
+	\end{subfigure}%
+
 	
 \caption{Transition tables for symbols $a$ and $b$, making up the entire transition function $\delta^{'}: Q \times \Sigma \times Q \rightarrow \{0,1\}$}
 
@@ -184,47 +218,69 @@ Thus, we only need to represent the transition function and initial state. The f
 
 Let us denote the number of states by $n = |Q|$, and number of symbols in alphabet by $r = |\Sigma|$. Further, we shall enumerate all states 	$Q = \{q_1, q_2, \ldots, q_n\}$, and all the symbols in the alphabet 	$\Sigma = \{x_1, x_2, \ldots, x_r\}$.
 
-We now turn to the binary approach of transition function $\delta^{'}$ described in \ref{sec:autom} presentation 
+We now turn to the binary approach of transition function $\delta^{'}$ described in the section~\ref{sec:autom}. Notice that each table for symbol $x_l$ for $l = 1,2, \dots, r$ has exactly $n$ rows. Furthermore, we can easily encode each $row_{x_l, i}$ into a natural number. Let $j$ be the index of occurrence of digit $1$ in the $row_{x_l, i}$. The natural number $j$ will then be a encoding of $row_{x_l, i}$. Encoding of a single table will be a vector of $n$ natural numbers. Notice that the first element of such vector will correspond to the transition of initial state. Now the last objective of representing the automaton is to combine all vectors, each corresponding to transition table for symbol $x_{l}$, into one. We simply append all vectors in order of the symbols' enumeration. The entire proceeder is illustrated in figure~\ref{fig:encoding}. Firstly in figures~\ref{fig:encoding_a} and~\ref{fig:encoding_b} we see encodings of transition tables for symbols $a$ and $b$ respectively. Finally the figure~\ref{fig:encoding_both} shows entire encoding of automaton $A$. We will call such encoding a direct or natural encoding of automaton with binary transition function.
 
-
-
-
-Each table in the new approach has size $n^2$. We have r tables.
-
-Thus we can easily decode the automaton as follows:
-\begin{itemize}
-\item To decode one table of symbol $x_l$ create a vector $V_{x_l}$ representing that table:
-	\begin{itemize}
-		\item From each $q_i$ row take an index $j$ for $j = 1,2,..,n$ of the element of this row having value $1$, i.e. there exists a transition $\delta(q_i, x_l, q_j) = 1$.
-		\item If the transition to accepting state is possible, i.e. if the element from current state to accepting state has value 1 then take the negative value of that index. 2 becomes -2, 1 becomes -1 etc. {\color{red} TODO, We don't really need accepting states, all we need to know is the state that automaton finishes computation in}
-		\item Append it to the vector $V_{x_l}$
-	\end{itemize}
-\end{itemize}
-
-Thus the first table in figure~\ref{fig:ttable_bin}, showing the transitions for symbol $a$ can be represented as follows:
-
+%%%
+%
+% Natural encoding
+%
+%%%
+\begin{figure}
 \begin{center}
-	$V_a = (-2, 4, -3, 4)$
-\end{center}
 
-Similarly vector $V_b$:
-
-\begin{center}
-	$V_b = (-3, 4, -3, 4)$
-\end{center}
-
-Now to create the vector $V$ of entire transition function we simply append the to vectors $V_a$, $V_b$.
-
-\begin{center}
-	$V = (-2,4,-3,4,-3,4,-3,4)$
-\end{center}
-
-Properties of vector $V$
-\begin{itemize}
-	\item It is constructed by appending $r$ vectors $V_{x_1}, V_{x_2}, \ldots, V_{x_{r}}$ each with $n$ dimensions. Thus $V$ has $n * r$ dimensions.
+	\setlength{\tabcolsep}{1pt}
+	\renewcommand{\arraystretch}{1.9}
 	
-%	\item The first integer number $k_{i,1}$ of each sub vector $V_{x_i}$ is the transition for initial state, symbol $x_i$ and state $q_{|k_{i,1}|}$.
-\end{itemize}
+	\begin{subfigure}{.5\textwidth}
+	\centering
+	
+	\begin{tabular}{|P{.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} |}
+	\hline
+	$row_{a,1}$  & $row_{a,2}$ & $row_{a,3}$ & $row_{a,4}$ \\
+	\hline
+	\hline
+	$2$  & $4$ & $3$ & $4$ \\
+	\hline	
+	\end{tabular}
+\caption{Natural encoding of Transition table \\presented in figure~\ref{fig:ttable_bin_a}}
+	\label{fig:encoding_a}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+	\centering
+	
+	\begin{tabular}{|P{.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} |}
+	\hline
+	$row_{b,1}$  & $row_{b,2}$ & $row_{b,3}$ & $row_{b,4}$ \\
+	\hline
+	\hline
+	$3$  & $4$ & $3$ & $4$ \\
+	\hline	
+	\end{tabular}
+	\caption{Natural encoding of Transition table \\presented in figure~\ref{fig:ttable_bin_b}}
+	\label{fig:encoding_b}
+	\end{subfigure}
+	
+	\begin{subfigure}{.5\textwidth}
+	\centering
+	
+	\begin{tabular}{|P{.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} |P{.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} |}
+	\hline
+	$row_{a,1}$  & $row_{a,2}$ & $row_{a,3}$ & $row_{a,4}$ & $row_{b,1}$  & $row_{b,2}$ & $row_{b,3}$ & $row_{b,4}$ \\
+	\hline
+	\hline
+	$2$  & $4$ & $3$ & $4$ & $3$  & $4$ & $3$ & $4$ \\
+	\hline	
+	\end{tabular}
+	\caption{Natural encoding of all Transition tables presented in figure~\ref{fig:ttable_bin}}
+	\label{fig:encoding_both}
+	\end{subfigure}
+
+\caption{Natural encoding of Automaton A}
+\label{fig:encoding}
+\end{center}
+\end{figure}
+
+Natural encoding of an automaton with $n$ states and $r$ symbols in the alphabet will be a vector of size $n*r$. First element of each sub vector will indicate the transition for initial symbol. The retrieval of elements corresponding to transitions of specific symbols is omitted due to its triviality. 
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------

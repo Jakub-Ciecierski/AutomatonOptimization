@@ -41,16 +41,18 @@
 Following paper is devoted to methodology description. Methodology concerns project realized during Algorithms and Computability subject at Warsaw University of Technology. Such a paper is crucial, because it helps us to wrap up ideas and to present them in a transparent way. In addition, it should speed up the process of implementation and elevate awareness of what exactly is going on.
 \paragraph{}
 Work has been structured as follows: section \ref{section:objectives} describes general assumptions of the problem along with necessary definitions and theorems. Basically it helps to grasp the idea of the task.
-Section \ref{section:methodology} on the other hand, dives directly into implementation. It supplements the reader with needed knowledge of mathematical objects and data structures needed to thoroughly understanding the approach taken to solve our task. 
+Section \ref{section:methodology} on the other hand, dives directly into implementation. It supplements the reader with knowledge of mathematical objects and data structures needed to thoroughly understanding the approach taken to solve our task. 
 
 \section{Objective} \label{section:objectives}
-To start with, one need to be familiar with Myhill-Nerode theorem and the definition of relation induced by language.Since they are playing vital role in understanding the problem, both are presented below with some short description. 
+To start with, one need to be familiar with Myhill-Nerode theorem and the definition of relation induced by language. Since they are playing vital role in understanding the problem, both are presented below with some short description. 
+
 \begin{definition}
 Relation induced by language $L$ is a binary relation $R_{L}$ in the set of words over alphabet of $L$ such that:
 \[
 (\forall{u,v \in \Sigma^{*}})(u R_{L} v \equiv ((\forall z \in \Sigma^{*}) uz \in L \Leftrightarrow vz \in L))
 \]
 \end{definition}
+What is more, we know that $R_{L}$ is an equivalence relation, hence it divides $\Sigma^{*}$ into equivalence classes.
 
 \paragraph{}
 In the theory of formal languages, the $Myhill-Nerode$ theorem provides a necessary and sufficient condition for a language to be regular. The theorem is named for John Myhill and Anil Nerode, who proved it at the University of Chicago in 1958 (Nerode 1958).
@@ -64,6 +66,24 @@ The following conditions are equivalent:
 \end{enumerate}
 \end{theorem}
 
+\subsection{Problem Description}
+General description of problem is as follows:
+
+\begin{description}
+  \item[What Do We Have]: 
+   	\begin{itemize}
+		\item Regular language $L$
+		\item Some tool, which answers question "$x R_{L} y$?" for $x,y \in \Sigma^{*}$
+	\end{itemize}
+  \item[What We Should Do]:
+    \begin{itemize}
+		\item Construct Deterministic Finite Automaton (DFA) accepting $L$ (or find automaton close to exact one)
+	\end{itemize}
+ \end{description}
+
+\paragraph{}
+
+Since 'a tool' is rather an abstract concept in terms of language theory, we need to adapt some 
 
 
 

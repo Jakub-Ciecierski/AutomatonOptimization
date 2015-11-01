@@ -57,7 +57,7 @@ What is more, we know that $R_{L}$ is an equivalence relation, hence it divides 
 \paragraph{}
 In the theory of formal languages, the $Myhill-Nerode$ theorem provides a necessary and sufficient condition for a language to be regular. The theorem is named for John Myhill and Anil Nerode, who proved it at the University of Chicago in 1958 (Nerode 1958).
 
-\begin{theorem}[Myhill-Nerode Theorem]
+\begin{theorem}[Myhill-Nerode Theorem]\label{Theorem:Myhill_Nerode}
 The following conditions are equivalent:
 \begin{enumerate}
 \item a language $L$ is accepted by a deterministic finite automaton $M = (Q,\Sigma,\delta,q_0,F)$,
@@ -81,9 +81,14 @@ General description of problem is as follows:
 	\end{itemize}
  \end{description}
 
-\paragraph{}
 
-Since 'a tool' is rather an abstract concept in terms of language theory, we need to adapt some 
+Since 'a tool' is rather an abstract concept in terms of language theory, we need to adapt it to our needs. From theorem \ref{Theorem:Myhill_Nerode}, we know that if language is regular (and the one given to us is) then it has an Deterministic Finite Automaton, let us say $T$, which accepts it. By accepting we mean that for any word $w \in \Sigma^{*}$, $T$ is able to determine whether $w \in L$ or not. 
+
+Now for our purposes we will assume that $T$ has a following behaviour for any $x,y \in \Sigma^{*}$:
+\begin{itemize}
+  \item if both computations of $T$ for words $x$ and $y$ end in the same state $\Rightarrow$ $x R_{L} y$
+  \item if both computations of $T$ for words $x$ and $y$ end in different states $\Rightarrow$ $\thicksim x R_{L} y$
+\end{itemize}
 
 
 

@@ -46,7 +46,7 @@
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
-\subsection{Automaton Representation}
+\subsection{Automaton Representation} \label{sec:autom}
 
 Automaton is a system of five fields:
 \begin{center}
@@ -87,13 +87,12 @@ Transition Table for A with $\delta: Q \times \Sigma \rightarrow Q$
 
 	
 \caption{Transition table for A with $\delta: Q \times \Sigma \rightarrow Q$}
+\label{fig:ttable_std}
 \end{center}
 \end{figure}
 
 
-
-
- {\color{red}(TODO Now explain new transition function:} $\delta: Q \times \Sigma \times Q \rightarrow \{0,1\}$
+The binary representation of automaton might perhaps provide more adequate solution for a computer. Thus a new transition function is defined, $\delta^{'}: Q \times \Sigma \times Q \rightarrow \{0,1\}$. It simply provides an answer whether there exists a transition between two states for a given symbol. For example, by looking at figure~\ref{fig:ttable_std} we can define value for $\delta^{'}(q^-,a,q^0) = 1$, since we there exists a transition from $q^-$ to $q^0$ through symbol $a$. The entire automaton is presented in figure~\ref{fig:ttable_bin}.
 
 
 
@@ -135,28 +134,60 @@ Transition Table for A with $\delta: Q \times \Sigma \rightarrow Q$
 	
 	\end{tabular}
 	
-\caption{Transition tables for A with $\delta: Q \times \Sigma \times Q \rightarrow \{0,1\}$}
+\caption{Transition tables for symbols $a$ and $b$, making up the entire transition function $\delta^{'}: Q \times \Sigma \times Q \rightarrow \{0,1\}$}
 
 \label{fig:ttable_bin}
 \end{center}
 \end{figure}
 
-Note: only one 1 in each row (Determinism).
+It is important to note that to preserve determinism, there must exist exactly one transition from any state for a given symbol. In other words in each transition table for $\delta^{'}$ a single row must be a sequence of $0s$ and a single digit $1$.
 
-Let $n = |Q|$, i.e. n is the number of states.
-Let $r = |\Sigma|$, i.e. the number of symbols in the alphabet.
 
-Enumerate states.
+
+
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+\subsection{Particle Swarm Optimization}
+In the Particle Swarm Optimization (PSO) we look for optimal solution of the problem in the solution space. Each solution is called a particle and it consists of $fitness$ value which is evaluated by the fitness function, position $X_p$ and velocity vector $V_p$ which lets the particle travel through the solution space (cf. \cite{pso_origin}).
+
+PSO is initialized with random group of particles. It then searches for the optimal solution by updating generations.
+In each iteration $t$, the particles are updated by calculating new fitness and velocity which in turn is applied to update new position of the particle.
+
+$X_p(t)$ will denote the position of particle $p$ at time $t$, i.e. the $t$-th iteration. Same notation applies to the velocity vector $V_p(t)$.
+
+The following illustrates the flow of the PSO algorithm:
+
 \begin{center}
-	$Q = \{q_1, q_2, \ldots, q_n\}$
-\end{center}
-where $q_1$ is the initial state.
 
-Enumerate symbols.
+\begin{enumerate}
+	\item Initialize random group of particles. {\color{red} TODO - MAYBE NOT SO RANDOM ? CAN WE USE KNOWLEDGE OF PREVIOUS PSO INSTANCE ?}
+	\item \label{itm:pso_iter} Calculate the fitness value of each particle $p$ using fitness function.
+		
+	\item Each particle $p$ compares newly computed fitness value to the best one obtained so far, the new best fitness value is stored. Additionally we store two positions called $pbest_p$ and $lbest_p$. The former one represents the position of the particle $p$ having the best fitness value so far. The latter position is the local best position taken from a neighbourhood of the particle $p$. Concept of neighbourhood shall be discussed in the next section.
+	
+	\item Update velocity and position of each particle.
+	
+	\item Repeat~\ref{itm:pso_iter}. until an ending criterion is met.
+	
+\end{enumerate}
 
-\begin{center}
-	$\Sigma = \{x_1, x_2, \ldots, x_r\}$
 \end{center}
+
+
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+\subsubsection{Representing the solution}
+
+Solution that the PSO is trying to find is an automaton. Let us recall that automaton is a system: $A = (Q, \Sigma, \delta, q_0, F)$. In a single PSO instance we assume that a set of states $Q$ and alphabet $\Sigma$ is invariant. Through the nature of our problem we also can conclude that distinguishing accepting states is not necessary. ({\color{red} TODO refer to problem description, aka the relation})
+Thus, we only need to represent the transition function and initial state. The following description formulates such representation.
+
+Let us denote the number of states by $n = |Q|$, and number of symbols in alphabet by $r = |\Sigma|$. Further, we shall enumerate all states 	$Q = \{q_1, q_2, \ldots, q_n\}$, and all the symbols in the alphabet 	$\Sigma = \{x_1, x_2, \ldots, x_r\}$.
+
+We now turn to the binary approach of transition function $\delta^{'}$ described in \ref{sec:autom} presentation 
+
+
+
 
 Each table in the new approach has size $n^2$. We have r tables.
 
@@ -194,40 +225,6 @@ Properties of vector $V$
 	
 %	\item The first integer number $k_{i,1}$ of each sub vector $V_{x_i}$ is the transition for initial state, symbol $x_i$ and state $q_{|k_{i,1}|}$.
 \end{itemize}
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\subsection{Particle Swarm Optimization}
-In the Particle Swarm Optimization (PSO) we look for optimal solution of the problem in the problem space. Each solution is called a particle and it consists of $fitness$ value which is evaluated by the fitness function, position $X_p$ and velocity vector $V_p$ which lets the particle travel through the problem space (cf. \cite{pso_origin}).
-
-PSO is initialized with random group of particles. It then searches for the optimal solution by updating generations.
-In each iteration $t$, the particles are updated by calculating new fitness and velocity which in turn is applied to update new position of the particle.
-
-$X_p(t)$ will denote the position of particle $p$ at time $t$, i.e. the $t$-th iteration. Same notation applies to the velocity vector $V_p(t)$.
-
-The following illustrates the flow of the PSO algorithm:
-
-\begin{center}
-
-\begin{enumerate}
-	\item Initialize random group of particles. {\color{red} TODO - MAYBE NOT SO RANDOM ? CAN WE USE KNOWLEDGE OF PREVIOUS PSO INSTANCE ?}
-	\item \label{itm:pso_iter} Calculate the fitness value of each particle $p$ using fitness function.
-		
-	\item Each particle $p$ compares newly computed fitness value to the best one obtained so far, the new best fitness value is stored. Additionally we store two positions called $pbest_p$ and $lbest_p$. The former one represents the position of the particle $p$ having the best fitness value so far. The latter position is the local best position taken from a neighbourhood of the particle $p$. Concept of neighbourhood shall be discussed in the next section.
-	
-	\item Update velocity and position of each particle.
-	
-	\item Repeat~\ref{itm:pso_iter}. until an ending criterion is met.
-	
-\end{enumerate}
-
-\end{center}
-
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\subsubsection{Representing the solution}
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
@@ -274,7 +271,7 @@ Let $G_p(t)$ be the centre of gravity of the three points:
 			
 \end{enumerate}
 
-The constant $c = \frac{1}{2} + ln(2)$ together with $w = \frac{1}{2 * ln(2)}$ was proposed by Clerc in~\cite{pso_anal}  used in further equations. 
+The constant $c = \frac{1}{2} + ln(2)$ together with the inertia parameter that weights the particle's velocity $\omega = \frac{1}{2 * ln(2)}$ was proposed by Clerc in~\cite{pso_anal}  used in further equations. 
 
 Formally $G_p(t)$ it is defined by the following formula 
 \begin{equation}
@@ -289,12 +286,12 @@ of centre $G_p$ and of radius $d(G_p, X_p)$ where the function $d$ is an euclide
 
 The velocity update is computed by
 \begin{equation}
-	V_p(t+1) = w*V_p(t) + X^{'}_p(t) - X_p(t)
+	V_p(t+1) = \omega * V_p(t) + X^{'}_p(t) - X_p(t)
 \end{equation}
 Thus the position is updated by the equation
 
 \begin{equation}
-	X_p(t+1) = w*V_p(t) + X^{'}_p(t)
+	X_p(t+1) = \omega * V_p(t) + X^{'}_p(t)
 \end{equation}
 
 This method grants adequate definitions for $exploitation$ and $exploration$. Namely the exploitation occurs when $X_p(t+1)$ is inside atleast one hypersphere $\mathcal{H}_q$, otherwise we recognize exploration.

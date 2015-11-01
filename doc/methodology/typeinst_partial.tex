@@ -5,6 +5,9 @@
 \setcounter{tocdepth}{3}
 \usepackage{graphicx}
 
+\usepackage{url} % for bibliograpy links
+\urlstyle{same}  % (for bibliography links
+
 \usepackage{amsmath,amssymb}
 
 \usepackage{color}
@@ -58,7 +61,7 @@ Relation induced by language $L$ is a binary relation $R_{L}$ in the set of word
 What is more, we know that $R_{L}$ is an equivalence relation, hence it divides $\Sigma^{*}$ into equivalence classes.
 
 \paragraph{}
-In the theory of formal languages, the $Myhill-Nerode$ theorem provides a necessary and sufficient condition for a language to be regular. The theorem is named for John Myhill and Anil Nerode, who proved it at the University of Chicago in 1958 (Nerode 1958).
+In the theory of formal languages, the $Myhill-Nerode$ theorem provides a necessary and sufficient condition for a language to be regular. The theorem is named for John Myhill and Anil Nerode, who proved it at the University of Chicago in 1958 (Nerode 1958) \cite{Myhill_Nerode}.
 
 \begin{theorem}[Myhill-Nerode Theorem]\label{Theorem:Myhill_Nerode}
 The following conditions are equivalent:
@@ -69,7 +72,7 @@ The following conditions are equivalent:
 \end{enumerate}
 \end{theorem}
 
-\subsection{Problem Description}
+\subsection{Problem Description} \label{sub:definition}
 General description of problem is as follows:
 
 \begin{description}
@@ -289,8 +292,11 @@ Properties of vector $V$
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsubsection{Fitness Function}
-Calculating the fitness value.
-{\color{red} TODO The error rate function}
+It describes how well a particle (in our case an automaton) reflects the goal. Since all we know about our target DFA (accepting language $L$) is a tool described in subsection \ref{sub:definition}, we decided to base our fitness function on knowledge about relation $R_{L}$. 
+\paragraph{}
+Measure is fairly simple: for a given test set of pairs of words, we check how many of them are correctly classified to equivalence class (using $R_{L} relation$) and divide this amount by number of all pairs. We will use an example to illustrate the process.
+Let us assume that we have following pairs ${(x_1,y_1), (x_2,y_2), (x_3, y_3), (x_4, y_4), (x_5, y_5)} $
+
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
@@ -364,6 +370,8 @@ This method grants adequate definitions for $exploitation$ and $exploration$. Na
 
 
 \begin{thebibliography}{9}
+\bibitem{Myhill_Nerode}
+\url{https://en.wikipedia.org/wiki/Myhill-Nerode_theorem}
 
 \bibitem{pso_origin} 
 Eberhart, R. C. and Kennedy, J. A new optimizer using particle swarm theory. Proceedings of the sixth international symposium on micro machine and human science pp. 39-43. IEEE service center, Piscataway, NJ, Nagoya, Japan, 1995.

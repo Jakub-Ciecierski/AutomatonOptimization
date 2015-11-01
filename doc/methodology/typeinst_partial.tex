@@ -4,10 +4,15 @@
 \usepackage{amssymb}
 \setcounter{tocdepth}{3}
 \usepackage{graphicx}
+\usepackage{amssymb}% http://ctan.org/pkg/amssymb
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
 
 \usepackage{url} % for bibliograpy links
 \urlstyle{same}  % (for bibliography links
-
+\usepackage{float} % To force image to stand still
 \usepackage{amsmath,amssymb}
 
 \usepackage{color}
@@ -88,14 +93,15 @@ General description of problem is as follows:
  \end{description}
 
 
-Since 'a tool' is rather an abstract concept in terms of language theory, we need to adapt it to our needs. From theorem \ref{Theorem:Myhill_Nerode}, we know that if language is regular (and the one given to us is) then it has an Deterministic Finite Automaton, let us say $T$, which accepts it. By accepting we mean that for any word $w \in \Sigma^{*}$, $T$ is able to determine whether $w \in L$ or not. 
+Since 'a tool' is rather an abstract concept in terms of language theory, we need to adapt it to our needs. From theorem \ref{Theorem:Myhill_Nerode}, we know that if language is regular (and the one given to us is) then it has an Deterministic Finite Automaton, let us say $T$, which accepts it. By accepting we mean that for any word $w \in \Sigma^{*}$, $T$ is able to determine whether $w \in L$ or not. Now our purposes we will assume that:
 
-Now for our purposes we will assume that $T$ has a following behaviour for any $x,y \in \Sigma^{*}$:
+\begin{definition} \label{def:T}
+DFA $T$, for any $x,y \in \Sigma^{*}$, has following behaviour :
 \begin{itemize}
   \item if both computations of $T$ for words $x$ and $y$ end in the same state $\Rightarrow$ $x R_{L} y$
   \item if both computations of $T$ for words $x$ and $y$ end in different states $\Rightarrow$ $\thicksim x R_{L} y$
 \end{itemize}
-
+\end{definition}
 
 
 %---------------------------------------------------------------------
@@ -293,11 +299,47 @@ Properties of vector $V$
 %---------------------------------------------------------------------
 \subsubsection{Fitness Function}
 It describes how well a particle (in our case an automaton) reflects the goal. Since all we know about our target DFA (accepting language $L$) is a tool described in subsection \ref{sub:definition}, we decided to base our fitness function on knowledge about relation $R_{L}$. 
-\paragraph{}
-Measure is fairly simple: for a given test set of pairs of words, we check how many of them are correctly classified to equivalence class (using $R_{L} relation$) and divide this amount by number of all pairs. We will use an example to illustrate the process.
-Let us assume that we have following pairs ${(x_1,y_1), (x_2,y_2), (x_3, y_3), (x_4, y_4), (x_5, y_5)} $
 
+Measure is fairly simple: for a given set of pairs of words, we check how many of them are correctly classified to equivalence class (using $R_{L} relation$) and divide this amount by number of all pairs. We will use example to illustrate the process.
 
+Let us assume that we have following set of pairs
+\[
+S_{test} = \{(x_1,y_1), (x_2,y_2), (x_3, y_3), (x_4, y_4), (x_5, y_5)\} \subset \Sigma^{*}\times\Sigma^{*} 
+\]
+, and an automaton $A$ (decoded as vector).
+Let us also recall automaton $T$, whose behaviour has been described in definition \ref{def:T} and define $\# = \{ x : x \in \{1 ,0 \}\}$  Having all of this we can construct simple table to illustrate the idea:
+
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{ m{4.5em}  m{3em}  m{3em}  m{3em} }
+                 & $T$ & $A$ & $\#$ \\  
+ $x_1 R_{L} y_1$ & 1 & 0 & 0 \\   
+ $x_1 R_{L} y_1$ & 0 & 0 & 1 \\   
+ $x_1 R_{L} y_1$ & 0 & 0 & 1 \\   
+ $x_1 R_{L} y_1$ & 1 & 1 & 1 \\   
+ $x_1 R_{L} y_1$ & 0 & 0 & 0 \\   
+\end{tabular}
+\caption{}
+\label{fig:fitness_table}
+\end{center}
+\end{figure}
+
+Entries of figure \ref{fig:fitness_table} are calculate as follows:
+\begin{enumerate}
+\item check computation of automaton $T$ for each pair of words from set $S_{test}$
+\item if computations end in the same state for both words, put 1 in column $T$ and row corresponding to that pair.
+\item otherwise put 0
+\item repeat steps 1., 2. and 3. for automaton $A$ and write results in column $A$
+\item if in row for (columns $T$ and $A$), we have the same digits (i.e. 1 1 or 0 0 ), put 1 in the last column ($\#$)
+\item otherwise put 0
+\end{enumerate}
+
+At this point we can define fitness function $F$, in terms of presented notation:
+\[
+	F = \frac{|\{x \in \# : x = 1 \}|}{|\#|}
+\]
+
+Concerning given example, $F = \frac{3}{5} = 0.6$. One need to note that this function is never bigger than 1, nor less than 0. Closer $F$ gets to one, better the automaton approximation. 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------

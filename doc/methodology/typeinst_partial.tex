@@ -4,13 +4,19 @@
 \usepackage{amssymb}
 \setcounter{tocdepth}{3}
 \usepackage{graphicx}
+\usepackage{amssymb}% http://ctan.org/pkg/amssymb
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
 
-\usepackage{float}
+
 \usepackage{caption}
 \usepackage{subcaption}
 \captionsetup{compatibility=false}
 
-
+\usepackage{url} % for bibliograpy links
+\urlstyle{same}  % (for bibliography links
+\usepackage{float} % To force image to stand still
 
 \usepackage{amsmath,amssymb}
 
@@ -26,11 +32,13 @@
 \vspace{-100pt}
 \mainmatter
 
-\title{Algorithms and Computability \\Methodology}
+\title{A Stochastic Approach to Optimization of Deterministic Finite Automata}
 
 \titlerunning{Algorithms and Computability}
 
-\author{Jakub Ciecierski \and Bartlomiej Dybisz}
+\author{Jakub Ciecierski \and Bartlomiej Dybisz \\ 
+\textit{Warsaw University of Technology,\\
+Faculty of Mathematics and Information Science.}}
 
 \authorrunning{Algorithms and Computability}
 
@@ -40,20 +48,74 @@
 
 \maketitle
 
-\abstract{} Content \\
+\abstract{} Following work addresses the problem of finding a way to construct Deterministic Finite Automaton accepting some arbitrary regular language L. The only thing that we know is a tool, which for two words over alphabet of L is able to determine if they are in relation induced by language or not. Although at this point problem may seem vague, presented document tries to explain theory behind it, task itself and approach taken to solve it. 
+
+\smallskip
+\noindent \textbf{Keywords.} Deterministic Finite Automata, Regular Language, Relation Induced bv Language, Myhill-Nerode Theorem, Particle Swarm Optimization
 
 %---------------------------------------------------------------------
 
 \section{Introduction}
+Following paper is devoted to methodology description. Methodology concerns project realized during Algorithms and Computability subject at Warsaw University of Technology. Such a paper is crucial, because it helps us to wrap up ideas and to present them in a transparent way. In addition, it should speed up the process of implementation and elevate awareness of what exactly is going on.
+\paragraph{}
+Work has been structured as follows: section \ref{section:objectives} describes general assumptions of the problem along with necessary definitions and theorems. Basically it helps to grasp the idea of the task.
+Section \ref{section:methodology} on the other hand, dives directly into implementation. It supplements the reader with knowledge of mathematical objects and data structures needed to thoroughly understanding the approach taken to solve our task. 
 
-\section{Objective}
+\section{Objective} \label{section:objectives}
+To start with, one need to be familiar with Myhill-Nerode theorem and the definition of relation induced by language. Since they are playing vital role in understanding the problem, both are presented below with some short description. 
+
+\begin{definition}
+Relation induced by language $L$ is a binary relation $R_{L}$ in the set of words over alphabet of $L$ such that:
+\[
+(\forall{u,v \in \Sigma^{*}})(u R_{L} v \equiv ((\forall z \in \Sigma^{*}) uz \in L \Leftrightarrow vz \in L))
+\]
+\end{definition}
+What is more, we know that $R_{L}$ is an equivalence relation, hence it divides $\Sigma^{*}$ into equivalence classes.
+
+\paragraph{}
+In the theory of formal languages, the $Myhill-Nerode$ theorem provides a necessary and sufficient condition for a language to be regular. The theorem is named for John Myhill and Anil Nerode, who proved it at the University of Chicago in 1958 (Nerode 1958) \cite{Myhill_Nerode}.
+
+\begin{theorem}[Myhill-Nerode Theorem]\label{Theorem:Myhill_Nerode}
+The following conditions are equivalent:
+\begin{enumerate}
+\item a language $L$ is accepted by a deterministic finite automaton $M = (Q,\Sigma,\delta,q_0,F)$,
+\item a language $L$ is a union of some classes of a right invariant equivalence relation with finite index,
+\item the relation $R_{L}$ induced by a language $L$ has finite index.
+\end{enumerate}
+\end{theorem}
+
+\subsection{Problem Description} \label{sub:definition}
+General description of problem is as follows:
+
+\begin{description}
+  \item[What Do We Have]: 
+   	\begin{itemize}
+		\item Regular language $L$
+		\item Some tool, which answers question "$x R_{L} y$?" for $x,y \in \Sigma^{*}$
+	\end{itemize}
+  \item[What We Should Do]:
+    \begin{itemize}
+		\item Construct Deterministic Finite Automaton (DFA) accepting $L$ (or find automaton close to exact one)
+	\end{itemize}
+ \end{description}
+
+
+Since 'a tool' is rather an abstract concept in terms of language theory, we need to adapt it to our needs. From theorem \ref{Theorem:Myhill_Nerode}, we know that if language is regular (and the one given to us is) then it has an Deterministic Finite Automaton, let us say $T$, which accepts it. By accepting we mean that for any word $w \in \Sigma^{*}$, $T$ is able to determine whether $w \in L$ or not. Now our purposes we will assume that:
+
+\begin{definition} \label{def:T}
+DFA $T$, for any $x,y \in \Sigma^{*}$, has following behaviour :
+\begin{itemize}
+  \item if both computations of $T$ for words $x$ and $y$ end in the same state $\Rightarrow$ $x R_{L} y$
+  \item if both computations of $T$ for words $x$ and $y$ end in different states $\Rightarrow$ $\thicksim x R_{L} y$
+\end{itemize}
+\end{definition}
 
 %---------------------------------------------------------------------
 \section{Methodology}
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
-\subsection{Automaton Representation} \label{sec:autom}
+\subsection{Automaton} \label{sec:autom}
 
 Automaton is a system of five fields:
 \begin{center}
@@ -67,7 +129,7 @@ $\delta$ - transition function. $\delta: Q \times \Sigma \rightarrow Q$ \\
 $q_0$ - the initial state. $q_0 \in Q$ \\
 $F$ - Set of accepting states. $F \subseteq Q$ \\
 
-Example of Automaton A- {\color{red}(TODO Place the state diagram here)}
+Example of Automaton A- {\color{red}(TODO Place the state diagram here, THIS SECTION IS VERY UGLY)}
 
 Transition Table for A with $\delta: Q \times \Sigma \rightarrow Q$ 
 
@@ -176,13 +238,17 @@ The binary representation of automaton might perhaps provide more adequate solut
 
 It is important to note that to preserve determinism, there must exist exactly one transition from any state for a given symbol. In other words in each transition table for $\delta^{'}$ a single row must be a sequence of $0s$ and a single digit $1$.
 
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+\subsubsection{Decoding}
 
 
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsection{Particle Swarm Optimization}
-In the Particle Swarm Optimization (PSO) we look for optimal solution of the problem in the solution space. Each solution is called a particle and it consists of $fitness$ value which is evaluated by the fitness function, position $X_p$ and velocity vector $V_p$ which lets the particle travel through the solution space (cf. \cite{pso_origin}).
+In the Particle Swarm Optimization (PSO), originated by Eberhart and Kennedy in~\cite{pso_origin}, we look for optimal solution of the problem in the solution space. Each solution is called a particle and it consists of $fitness$ value which is evaluated by the fitness function, position $X_p$ and velocity vector $V_p$ which lets the particle travel through the solution space.
 
 PSO is initialized with random group of particles. It then searches for the optimal solution by updating generations.
 In each iteration $t$, the particles are updated by calculating new fitness and velocity which in turn is applied to update new position of the particle.
@@ -194,10 +260,10 @@ The following illustrates the flow of the PSO algorithm:
 \begin{center}
 
 \begin{enumerate}
-	\item Initialize random group of particles. {\color{red} TODO - MAYBE NOT SO RANDOM ? CAN WE USE KNOWLEDGE OF PREVIOUS PSO INSTANCE ?}
+	\item Initialize random group of particles.
 	\item \label{itm:pso_iter} Calculate the fitness value of each particle $p$ using fitness function.
 		
-	\item Each particle $p$ compares newly computed fitness value to the best one obtained so far, the new best fitness value is stored. Additionally we store two positions called $pbest_p$ and $lbest_p$. The former one represents the position of the particle $p$ having the best fitness value so far. The latter position is the local best position taken from a neighbourhood of the particle $p$. Concept of neighbourhood shall be discussed in the next section.
+	\item Each particle $p$ compares newly computed fitness value to the best one obtained so far, the new best fitness value is stored. Additionally we store two positions called $pbest_p$ and $lbest_p$. The former one represents the position of the particle $p$ having the best fitness value so far. The latter position is the local best position taken from a neighbourhood of the particle $p$.
 	
 	\item Update velocity and position of each particle.
 	
@@ -207,18 +273,19 @@ The following illustrates the flow of the PSO algorithm:
 
 \end{center}
 
+We now concentrate on describing in details each step of the PSO algorithm. The following part of this section is devoted to illustrating problems associated with the objective of this study and more importantly, methods of solving these problems.
+
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsubsection{Representing the solution}
 
-Solution that the PSO is trying to find is an automaton. Let us recall that automaton is a system: $A = (Q, \Sigma, \delta, q_0, F)$. In a single PSO instance we assume that a set of states $Q$ and alphabet $\Sigma$ is invariant. Through the nature of our problem we also can conclude that distinguishing accepting states is not necessary. ({\color{red} TODO refer to problem description, aka the relation})
-Thus, we only need to represent the transition function and initial state. The following description formulates such representation.
+Solution that the PSO is trying to find is an automaton. Let us recall that automaton is a system: $A = (Q, \Sigma, \delta, q_0, F)$. In a single PSO instance we assume that a set of states $Q$ and alphabet $\Sigma$ is invariant. Through the nature of our problem we can conclude that distinguishing the set $F$ of accepting states is not necessary. Namely, the tool given to us (DFA) described in section~\ref{sub:definition} only answers whether any arbitrary two words are in the relation induced by the language. That information suffices in the process of recreating that DFA. Thus, we only need to represent the transition function and initial state. The following description formulates such representation.
 
 Let us denote the number of states by $n = |Q|$, and number of symbols in alphabet by $r = |\Sigma|$. Further, we shall enumerate all states 	$Q = \{q_1, q_2, \ldots, q_n\}$, and all the symbols in the alphabet 	$\Sigma = \{x_1, x_2, \ldots, x_r\}$.
 
-We now turn to the binary approach of transition function $\delta^{'}$ described in the section~\ref{sec:autom}. Notice that each table for symbol $x_l$ for $l = 1,2, \dots, r$ has exactly $n$ rows. Furthermore, we can easily encode each $row_{x_l, i}$ into a natural number. Let $j$ be the index of occurrence of digit $1$ in the $row_{x_l, i}$. The natural number $j$ will then be a encoding of $row_{x_l, i}$. Encoding of a single table will be a vector of $n$ natural numbers. Notice that the first element of such vector will correspond to the transition of initial state. Now the last objective of representing the automaton is to combine all vectors, each corresponding to transition table for symbol $x_{l}$, into one. We simply append all vectors in order of the symbols' enumeration. The entire proceeder is illustrated in figure~\ref{fig:encoding}. Firstly in figures~\ref{fig:encoding_a} and~\ref{fig:encoding_b} we see encodings of transition tables for symbols $a$ and $b$ respectively. Finally the figure~\ref{fig:encoding_both} shows entire encoding of automaton $A$. We will call such encoding a direct or natural encoding of automaton with binary transition function.
+We now turn to the binary approach of transition function $\delta^{'}$ described in the section~\ref{sec:autom}. Notice that each table for symbol $x_l$ for $l = 1,2, \dots, r$ has exactly $n$ rows. Furthermore, we can easily decode each $row_{x_l, i}$ into a natural number. Let $j$ be the index of occurrence of digit $1$ in the $row_{x_l, i}$. The natural number $j$ will then be a encoding of $row_{x_l, i}$. Decoding of a single table will be a vector of $n$ natural numbers. Notice that the first element of such vector will correspond to the transition of initial state. Now the last objective of representing the automaton is to combine all vectors, each corresponding to transition table for symbol $x_{l}$, into one. We simply append all vectors in order of the symbols' enumeration. The entire proceeder is illustrated in figure~\ref{fig:encoding}. Firstly in figures~\ref{fig:encoding_a} and~\ref{fig:encoding_b} we see decoding of transition tables for symbols $a$ and $b$ respectively. Finally the figure~\ref{fig:encoding_both} shows entire decoding of automaton $A$. We will call such decoding a direct or natural decoding of automaton with binary transition function.
 
 %%%
 %
@@ -236,13 +303,13 @@ We now turn to the binary approach of transition function $\delta^{'}$ described
 	
 	\begin{tabular}{|P{.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} |}
 	\hline
-	$row_{a,1}$  & $row_{a,2}$ & $row_{a,3}$ & $row_{a,4}$ \\
+	$r_{a,1}$  & $r_{a,2}$ & $r_{a,3}$ & $r_{a,4}$ \\
 	\hline
 	\hline
 	$2$  & $4$ & $3$ & $4$ \\
 	\hline	
 	\end{tabular}
-\caption{Natural encoding of Transition table \\presented in figure~\ref{fig:ttable_bin_a}}
+\caption{Natural decoding of Transition table \\presented in figure~\ref{fig:ttable_bin_a}}
 	\label{fig:encoding_a}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
@@ -250,13 +317,13 @@ We now turn to the binary approach of transition function $\delta^{'}$ described
 	
 	\begin{tabular}{|P{.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} |}
 	\hline
-	$row_{b,1}$  & $row_{b,2}$ & $row_{b,3}$ & $row_{b,4}$ \\
+	$r_{b,1}$  & $r_{b,2}$ & $r_{b,3}$ & $r_{b,4}$ \\
 	\hline
 	\hline
 	$3$  & $4$ & $3$ & $4$ \\
 	\hline	
 	\end{tabular}
-	\caption{Natural encoding of Transition table \\presented in figure~\ref{fig:ttable_bin_b}}
+	\caption{Natural decoding of Transition table \\presented in figure~\ref{fig:ttable_bin_b}}
 	\label{fig:encoding_b}
 	\end{subfigure}
 	
@@ -265,22 +332,27 @@ We now turn to the binary approach of transition function $\delta^{'}$ described
 	
 	\begin{tabular}{|P{.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} |P{.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} | P{0.9cm} |}
 	\hline
-	$row_{a,1}$  & $row_{a,2}$ & $row_{a,3}$ & $row_{a,4}$ & $row_{b,1}$  & $row_{b,2}$ & $row_{b,3}$ & $row_{b,4}$ \\
+	$r_{a,1}$  & $r_{a,2}$ & $r_{a,3}$ & $r_{a,4}$ & $r_{b,1}$  & $r_{b,2}$ & $r_{b,3}$ & $r_{b,4}$ \\
 	\hline
 	\hline
 	$2$  & $4$ & $3$ & $4$ & $3$  & $4$ & $3$ & $4$ \\
 	\hline	
 	\end{tabular}
-	\caption{Natural encoding of all Transition tables presented in figure~\ref{fig:ttable_bin}}
+	\caption{Natural decoding of all Transition tables presented in figure~\ref{fig:ttable_bin}. The abbreviation $r_{x,i}$, represents the $i$-th row of table corresponding to symbol x}
 	\label{fig:encoding_both}
 	\end{subfigure}
 
-\caption{Natural encoding of Automaton A}
+\caption{Natural decoding of Automaton A}
 \label{fig:encoding}
 \end{center}
 \end{figure}
 
-Natural encoding of an automaton with $n$ states and $r$ symbols in the alphabet will be a vector of size $n*r$. First element of each sub vector will indicate the transition for initial symbol. The retrieval of elements corresponding to transitions of specific symbols is omitted due to its triviality. 
+Natural decoding of an automaton with $n$ states and $r$ symbols in the alphabet will be a vector of size $n*r$. First element of each sub vector will indicate the transition for initial symbol. The retrieval of elements corresponding to transitions of specific symbols is omitted due to its triviality.
+
+Formally, each element of the decoding vector is a natural number greater than 0. Moreover, the elements take values from the discrete set $\{1,2, \ldots, n\}$.
+
+It becomes clear now that each particle will be in fact a natural decoding of an automaton. Strictly speaking, the position of an particle in the solution space, will be the natural decoding vector. Thus our search will be conducted in $(n*r)$-dimensional space.
+
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
@@ -291,9 +363,48 @@ Natural encoding of an automaton with $n$ states and $r$ symbols in the alphabet
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsubsection{Fitness Function}
-Calculating the fitness value.
-{\color{red} TODO The error rate function}
+It describes how well a particle (in our case an automaton) reflects the goal. Since all we know about our target DFA (accepting language $L$) is a tool described in subsection \ref{sub:definition}, we decided to base our fitness function on knowledge about relation $R_{L}$. 
 
+Measure is fairly simple: for a given set of pairs of words, we check how many of them are correctly classified to equivalence class (using $R_{L} relation$) and divide this amount by number of all pairs. We will use example to illustrate the process.
+
+Let us assume that we have following set of pairs
+\[
+S_{test} = \{(x_1,y_1), (x_2,y_2), (x_3, y_3), (x_4, y_4), (x_5, y_5)\} \subset \Sigma^{*}\times\Sigma^{*} 
+\]
+, and an automaton $A$ (decoded as vector).
+Let us also recall automaton $T$, whose behaviour has been described in definition \ref{def:T} and define $\# = \{ x : x \in \{1 ,0 \}\}$  Having all of this we can construct simple table to illustrate the idea:
+
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{ m{4.5em}  m{3em}  m{3em}  m{3em} }
+                 & $T$ & $A$ & $\#$ \\  
+ $x_1 R_{L} y_1$ & 1 & 0 & 0 \\   
+ $x_1 R_{L} y_1$ & 0 & 0 & 1 \\   
+ $x_1 R_{L} y_1$ & 0 & 0 & 1 \\   
+ $x_1 R_{L} y_1$ & 1 & 1 & 1 \\   
+ $x_1 R_{L} y_1$ & 0 & 0 & 0 \\   
+\end{tabular}
+\caption{}
+\label{fig:fitness_table}
+\end{center}
+\end{figure}
+
+Entries of figure \ref{fig:fitness_table} are calculate as follows:
+\begin{enumerate}
+\item check computation of automaton $T$ for each pair of words from set $S_{test}$
+\item if computations end in the same state for both words, put 1 in column $T$ and row corresponding to that pair.
+\item otherwise put 0
+\item repeat steps 1., 2. and 3. for automaton $A$ and write results in column $A$
+\item if in row for (columns $T$ and $A$), we have the same digits (i.e. 1 1 or 0 0 ), put 1 in the last column ($\#$)
+\item otherwise put 0
+\end{enumerate}
+
+At this point we can define fitness function $F$, in terms of presented notation:
+\[
+	F = \frac{|\{x \in \# : x = 1 \}|}{|\#|}
+\]
+
+Concerning given example, $F = \frac{3}{5} = 0.6$. One need to note that this function is never bigger than 1, nor less than 0. Closer $F$ gets to one, better the automaton approximation. 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
@@ -315,7 +426,7 @@ Calculating the fitness value.
 %	$c_1, c_2$ are the constant learning factors.\\
 %	$\mu_1, \mu_2$ are random numbers in the range [0,1]. {\color{red} TODO What distribution function - uniform ?} \\
 
-The following method of updating the particles has its origins in the Standard Particle Swarm Optimization version 2011 (cf. \cite{pso_11})
+The following method of updating the particles has its origins in the Standard Particle Swarm Optimization version 2011 presented in~\cite{pso_11}
 
 Let $G_p(t)$ be the centre of gravity of the three points:
 \begin{enumerate}
@@ -350,8 +461,23 @@ Thus the position is updated by the equation
 	X_p(t+1) = \omega * V_p(t) + X^{'}_p(t)
 \end{equation}
 
-This method grants adequate definitions for $exploitation$ and $exploration$. Namely the exploitation occurs when $X_p(t+1)$ is inside atleast one hypersphere $\mathcal{H}_q$, otherwise we recognize exploration.
+This method of updating the particles grants adequate definitions for $exploitation$ and $exploration$. Namely the exploitation occurs when $X_p(t+1)$ is inside atleast one hypersphere $\mathcal{H}_q$, otherwise we recognize exploration.
 
+
+% Interval confinement
+It may happen that the particle might leave the search space, in means that the particle lies outside the acceptable interval. If that happens we generally try to lead the particle back to its right course. For each dimension $x_{d} \in X_p$ that lies  outside the acceptable interval we apply the following:
+
+  \[
+	x_{d} \notin [x_{min}, x_{max}] \Rightarrow \left \{
+                \begin{array}{ll}
+                  v_{d} = 0 \\
+                  x_d < x_{min} \Rightarrow x_d = x_{min} \\
+                  x_d > x_{max} \Rightarrow x_d = x_{max}
+                \end{array}
+              \right.
+  \]
+
+This means that the corresponding dimension of velocity vector $v_d \in V_p$ is zeroed and the position is takes value of the edge of the search space.
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
@@ -364,17 +490,26 @@ This method grants adequate definitions for $exploitation$ and $exploration$. Na
 \subsubsection{Size of the swarm}
 
 
+%---------------------------------------------------------------------
+\section{Automaton Optimization}
+In this section we describe the main algorithm to approximate our automaton. The objective of the study is summarized and all the methods presented in previous sections are used to formulate what we can the automaton approximation process.
+
+
+
 
 \begin{thebibliography}{9}
+\bibitem{Myhill_Nerode}
+\url{https://en.wikipedia.org/wiki/Myhill-Nerode_theorem}
 
 \bibitem{pso_origin} 
 Eberhart, R. C. and Kennedy, J. A new optimizer using particle swarm theory. Proceedings of the sixth international symposium on micro machine and human science pp. 39-43. IEEE service center, Piscataway, NJ, Nagoya, Japan, 1995.
 
+\bibitem{pso_anal}
+Maurice Clerc. Stagnation analysis in particle swarm optimization or what happens when nothing happens, http://hal.archives-ouvertes.fr/hal-00122031. Technical report, 2006.
+
 \bibitem{pso_bias} 
 William M. Spears, Derek T. Green and Diana F. Spears. Biases in particle swarm optimization. International Journal of Swarm Intelligence Research, 1(2):34-57, 2010.
 
-\bibitem{pso_anal}
-Maurice Clerc. Stagnation analysis in particle swarm optimization or what happens when nothing happens, http://hal.archives-ouvertes.fr/hal-00122031. Technical report, 2006.
 
 \bibitem{pso_11}
 M. Clerc. (2011). Standard Particle Swarm Optimisation Available: http://hal.archives-ouvertes.fr/hal-00764996 

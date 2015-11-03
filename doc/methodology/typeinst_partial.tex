@@ -60,8 +60,8 @@ Faculty of Mathematics and Information Science.}}
 \section{Introduction}
 Following paper is devoted to methodology description. Methodology concerns project realized during Algorithms and Computability subject at Warsaw University of Technology. Such a paper is crucial, because it helps us to wrap up ideas and to present them in a transparent way. In addition, it should speed up the process of implementation and elevate awareness of what exactly is going on.
 \paragraph{}
-Work has been structured as follows: section \ref{section:objectives} describes general assumptions of the problem along with necessary definitions and theorems. Basically it helps to grasp the idea of the task.
-Section \ref{sec:method} on the other hand, dives directly into the methodology. It supplements the reader with knowledge of mathematical objects and data structures needed to thoroughly understanding the approach taken to solve our task. 
+Work has been structured as follows: section \ref{section:objectives} describes general assumptions of the problem along with necessary definitions and theorems. Basically it helps to grasp the idea of the task. In section~\ref{sec:prelim} all necessary tools are defined and explained in great detail.
+Section~\ref{sec:method} on the other hand, dives directly into the methodology of the main objective. It supplements the reader with knowledge of mathematical objects and data structures needed to thoroughly understanding the approach taken to solve our task. 
 
 \section{Objective} \label{section:objectives}
 To start with, one need to be familiar with Myhill-Nerode theorem and the definition of relation induced by language. Since they are playing vital role in understanding the problem, both are presented below with some short description. 
@@ -102,7 +102,7 @@ General description of problem is as follows:
  \end{description}
 
 
-Since 'a tool' is rather an abstract concept in terms of language theory, we need to adapt it to our needs. From theorem \ref{Theorem:Myhill_Nerode}, we know that if language is regular (and the one given to us is) then it has an Deterministic Finite Automaton, let us say $T$, which accepts it. By accepting we mean that for any word $w \in \Sigma^{*}$, $T$ is able to determine whether $w \in L$ or not. Now our purposes we will assume that:
+Since 'a tool' is rather an abstract concept in terms of language theory, we need to adapt it to our needs. From theorem \ref{Theorem:Myhill_Nerode}, we know that if language is regular (and the one given to us is) then it has an Deterministic Finite Automaton, let us say $T$, which accepts it. By accepting we mean that for any word $w \in \Sigma^{*}$, $T$ is able to determine whether $w \in L$ or not. Now for our purposes we will assume that:
 
 \begin{definition} \label{def:T}
 DFA $T$, for any $x,y \in \Sigma^{*}$, has following behaviour :
@@ -128,10 +128,6 @@ Hamming distance $H_d$ between two string of the same length is the number of po
 Let $w = John$ and $v = Jhon$. Notice that the symbols at positions two and three differ. Thus the Hamming distance between these two strings is $H_d(w,v) = 2$.
 \end{example}
 
-\begin{example} 
-Let $w = 10100$ and $v = 10101$. In this case, only the last position is different, thus $H_d(w,v) = 1$.
-\end{example}
-
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsection{Automaton} \label{sec:autom}
@@ -149,6 +145,7 @@ $q_0$ - the initial state. $q_0 \in Q$ \\
 $F$ - Set of accepting states. $F \subseteq Q$ \\
 \end{definition}
 
+Table~\ref{fig:ttable_std} shows transition table for an example of an automaton.
 
 %%%
 %
@@ -190,7 +187,7 @@ $F$ - Set of accepting states. $F \subseteq Q$ \\
 \end{figure}
 
 
-The binary representation of automaton might perhaps provide more adequate solution for a computer. Thus a new transition function is defined, $\delta^{'}: Q \times \Sigma \times Q \rightarrow \{0,1\}$. It simply provides an answer whether there exists a transition between two states for a given symbol. For example, by looking at figure~\ref{fig:ttable_std} we can define value for $\delta^{'}(q^-,a,q^0) = 1$, since we there exists a transition from $q^-$ to $q^0$ through symbol $a$. The entire automaton is presented in figure~\ref{fig:ttable_bin}.
+The binary representation of automaton might perhaps provide more adequate solution for a computer. Thus a new transition function is defined, $\delta^{'}: Q \times \Sigma \times Q \rightarrow \{0,1\}$. It simply provides an answer whether there exists a transition between two states for a given symbol. For example, by looking at figure~\ref{fig:ttable_std} we can define value for $\delta^{'}(q^-,a,q^0) = 1$, since there exists a transition from $q^-$ to $q^0$ through symbol $a$. The entire automaton is presented in figure~\ref{fig:ttable_bin}.
 
 
 %%%
@@ -269,7 +266,7 @@ It is important to note that to preserve determinism, there must exist exactly o
 
 Let us denote the number of states by $n = |Q|$, and number of symbols in alphabet by $r = |\Sigma|$. Further, we shall enumerate all states 	$Q = \{q_1, q_2, \ldots, q_n\}$, and all the symbols in the alphabet 	$\Sigma = \{x_1, x_2, \ldots, x_r\}$. We will also define the size of automaton $s(A) = n*r$.
 
-We now turn to the binary approach of transition function $\delta^{'}$ described in the figure~\ref{fig:ttable_bin}. Notice that each table for symbol $x_l$ for $l = 1,2, \dots, r$ has exactly $n$ rows. Furthermore, we can easily decode each $row_{x_l, i}$ into a natural number. Let $j$ be the index of occurrence of digit $1$ in the $row_{x_l, i}$. The natural number $j$ will then be a decoding of $row_{x_l, i}$. Decoding of a single table will be a vector of $n$ natural numbers. Notice that the first element of such vector will correspond to the transition of initial state. Now the last objective of representing the automaton is to combine all vectors, each corresponding to transition table for symbol $x_{l}$, into one. We simply append all vectors in order of the symbols' enumeration. The entire proceeder is illustrated in figure~\ref{fig:encoding}. Firstly, in figures~\ref{fig:encoding_a} and~\ref{fig:encoding_b} we see decoding of transition tables for symbols $a$ and $b$ respectively. Finally the figure~\ref{fig:encoding_both} shows entire decoding of automaton $A$. We will call such decoding a direct or natural decoding of automaton with binary transition function.
+We now turn to the binary approach of transition function $\delta^{'}$ described in the figure~\ref{fig:ttable_bin}. Notice that each table for symbol $x_l$ for $l = 1,2, \dots, r$ has exactly $n$ rows. Furthermore, we can easily decode each $row_{x_l, i}$ into a natural number. Let $j$ be the index of occurrence of digit $1$ in the $row_{x_l, i}$. The natural number $j$ will then be a decoding of $row_{x_l, i}$. Decoding of a single table will be a vector of $n$ natural numbers. Notice that the first element of such vector will correspond to the transition of initial state. Now the last objective of representing the automaton is to combine all vectors, each corresponding to transition table for symbol $x_{l}$. We simply append all vectors in order of the symbols' enumeration. The entire proceeder is illustrated in figure~\ref{fig:encoding}. Firstly, in figures~\ref{fig:encoding_a} and~\ref{fig:encoding_b} we see decoding of transition tables for symbols $a$ and $b$ respectively. Finally the figure~\ref{fig:encoding_both} shows entire decoding of automaton $A$. We will call such decoding a direct or natural decoding of automaton with binary transition function.
 
 %%%
 %
@@ -340,26 +337,37 @@ It is worth mentioning, that in such decoding the information about accepting st
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsection{Particle Swarm Optimization}
-In the Particle Swarm Optimization (PSO), originated by Eberhart and Kennedy in~\cite{pso_origin}, we look for optimal solution of the problem in the solution space. Each solution is called a particle and it consists of $fitness$ value which is evaluated by the fitness function, position $X_p$ and velocity vector $V_p$ which lets the particle travel through the solution space.
+In the Particle Swarm Optimization (PSO), originated by Eberhart and Kennedy in~\cite{pso_origin}, we look for optimal solution of the problem in the solution space. 
+
+Each solution is called a particle and it consists of the following fields. First of all, the particle stores $fitness$ value which is evaluated by the fitness function, representing the quality of the solution and the best fitness value computed so far. It also stores the position $X_p$ and velocity vector $V_p$ which lets the particle travel through the solution space. Lastly two additional positions called $pbest_p$ and $lbest_p$ are stored. The position in which the particle $p$ reached its best fitness value so far is called $pbest_p$. However, the $lbest_p$ is the position of the best fitness value obtained so far by any other particle in the neighbourhood of particle $p$. The concept of neighbourhood is defined later in this section.
 
 PSO is initialized with random group of particles. It then searches for the optimal solution by updating generations.
-In each iteration $t$, the particles are updated by calculating new fitness and velocity which in turn is applied to update new position of the particle.
+In each iteration $t$, the particles are updated by calculating new fitness and velocity which in turn is applied to update new position of the particle. $X_p(t)$ will denote the position of particle $p$ at time $t$, i.e. the $t$-th iteration. Similarly, the velocity vector is denoted by $V_p(t)$.
 
-$X_p(t)$ will denote the position of particle $p$ at time $t$, i.e. the $t$-th iteration. Same notation applies to the velocity vector $V_p(t)$.
+The PSO will take as input number of states $n$ and number of symbols in alphabet $r$.
 
-The following illustrates the flow of the algorithm of a single PSO instance:
+Firstly, the general flow of the PSO algorithm is given, then each module is discussed and defined in details.
 
 \begin{center}
 
 \begin{enumerate}
-	\item Initialize random group of particles.
-	\item \label{itm:pso_iter} Calculate the fitness value of each particle $p$ using fitness function.
+	\item For the input $n$ and $r$, initialize the group of particles.
+
+	\item For each particle: \label{itm:pso_iter}
+	\begin{enumerate}
+		\item Calculate the fitness value, using the fitness function.
+		\item Compare the fitness to its best obtained so far, the better value is stored together with $pbest_p$	
 		
-	\item Each particle $p$ compares newly computed fitness value to its best obtained so far, the new best fitness value is stored. Additionally we store two positions called $pbest_p$ and $lbest_p$. The former one represents the position of the particle $p$ having the best fitness value so far. The latter position is the local best position taken from a neighbourhood of the particle $p$.
+		\item Update velocity and position.	
+		
+		\item Find neighbourhood and update $lbest_p$ position.
+	\end{enumerate}		
 	
-	\item Update velocity and position of each particle.
+
 	
 	\item Repeat~\ref{itm:pso_iter}. until an ending criterion is met.
+
+	\item Output the best solution	
 	
 \end{enumerate}
 
@@ -372,10 +380,10 @@ We now concentrate on describing in details each step of the PSO algorithm. The 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsubsection{Representing the solution}
+As an input, the PSO algorithm takes number of states $n$ and number of symbols in the alphabet $r$.
+Solution that the PSO is trying to find is an automaton. Let us recall that automaton is a system: $A = (Q, \Sigma, \delta, q_0, F)$. In a single PSO instance we assume that a set of states $Q$ and alphabet $\Sigma$ is invariant. Through the nature of our problem we can conclude that distinguishing the set $F$ of accepting states is not necessary. Namely, the tool given to us (DFA) described in section~\ref{sub:definition} only answers whether any arbitrary two words are in the relation induced by the language. That information suffices in the process of recreating that DFA. Thus, we only need to represent the transition function and initial state.
 
-Solution that the PSO is trying to find is an automaton. Let us recall that automaton is a system: $A = (Q, \Sigma, \delta, q_0, F)$. In a single PSO instance we assume that a set of states $Q$ and alphabet $\Sigma$ is invariant. Through the nature of our problem we can conclude that distinguishing the set $F$ of accepting states is not necessary. Namely, the tool given to us (DFA) described in section~\ref{sub:definition} only answers whether any arbitrary two words are in the relation induced by the language. That information suffices in the process of recreating that DFA. Thus, we only need to represent the transition function and initial state. The following description formulates such representation.
-
-The position of our particles will be represented by the natural decoding vector of an automaton described in section~\ref{sec:auto_dec} with more freedom allowed. Namely, all of the dimensions of the position will take real values in the interval $[1, n]$. Whenever we need to encode the automaton back, we simply round up the values, taking the floor value of each dimension. As we may learn further in the article, the method of updating the particle will make a good use of continuous interval. On the other hand, the method of rounding up real numbers, might be vulnerable to error.
+The position of our particles will be represented by the natural decoding vector of size $n*r$ of an automaton described in section~\ref{sec:auto_dec} with more freedom allowed. Namely, all of the dimensions of the position will take real values in the interval $[1, n]$. Whenever we need to encode the automaton back, we simply round up the values, taking the floor value of each dimension. As we may learn further in the article, the method of updating the particle will make a good use of continuous interval. On the other hand, the method of rounding up real numbers, might be vulnerable to error.
 
 
 
@@ -402,36 +410,41 @@ It describes how well a particle (in our case an automaton) reflects the goal. S
 
 Measure is fairly simple: for a given set of pairs of words, we check how many of them are correctly classified to equivalence class (using $R_{L} relation$) and divide this amount by number of all pairs. We will use example to illustrate the process.
 
+\begin{example}\label{ex:fitness}
+
+
 Let us assume that we have following set of pairs
 \[
 S_{test} = \{(x_1,y_1), (x_2,y_2), (x_3, y_3), (x_4, y_4), (x_5, y_5)\} \subset \Sigma^{*}\times\Sigma^{*} 
 \]
-, and an automaton $A$ (decoded as vector).
+and an automaton $A_p$ (encoded back from a particle $p$).
 Let us also recall automaton $T$, whose behaviour has been described in definition \ref{def:T} and define $\# = \{ x : x \in \{1 ,0 \}\}$  Having all of this we can construct simple table to illustrate the idea:
 
 \begin{figure}[H]
 \begin{center}
 \begin{tabular}{ m{4.5em}  m{3em}  m{3em}  m{3em} }
-                 & $T$ & $A$ & $\#$ \\  
+                 & $T$ & $A_p$ & $\#$ \\  
  $x_1 R_{L} y_1$ & 1 & 0 & 0 \\   
  $x_1 R_{L} y_1$ & 0 & 0 & 1 \\   
  $x_1 R_{L} y_1$ & 0 & 0 & 1 \\   
  $x_1 R_{L} y_1$ & 1 & 1 & 1 \\   
  $x_1 R_{L} y_1$ & 0 & 0 & 0 \\   
 \end{tabular}
-\caption{}
+\caption{Computing the error of an automaton $A_p$}
 \label{fig:fitness_table}
 \end{center}
 \end{figure}
 
+\end{example}
+
 Entries of figure \ref{fig:fitness_table} are calculate as follows:
 \begin{enumerate}
-\item check computation of automaton $T$ for each pair of words from set $S_{test}$
-\item if computations end in the same state for both words, put 1 in column $T$ and row corresponding to that pair.
-\item otherwise put 0
-\item repeat steps 1., 2. and 3. for automaton $A$ and write results in column $A$
-\item if in row for (columns $T$ and $A$), we have the same digits (i.e. 1 1 or 0 0 ), put 1 in the last column ($\#$)
-\item otherwise put 0
+\item Check computation of automaton $T$ for each pair of words from set $S_{test}$
+\item If computations end in the same state for both words, put 1 in column $T$ and row corresponding to that pair.
+\item Otherwise put 0
+\item Repeat steps 1., 2. and 3. for automaton $A_p$ and write results in column $A_p$
+\item If in row for (columns $T$ and $A_p$), we have the same digits (i.e. 1 1 or 0 0 ), put 1 in the last column ($\#$)
+\item Otherwise put 0
 \end{enumerate}
 
 At this point we can define fitness function $F$, in terms of presented notation:
@@ -439,7 +452,9 @@ At this point we can define fitness function $F$, in terms of presented notation
 	F = \frac{|\{x \in \# : x = 1 \}|}{|\#|}
 \]
 
-Concerning given example, $F = \frac{3}{5} = 0.6$. One need to note that this function is never bigger than 1, nor less than 0. Closer $F$ gets to one, better the automaton approximation. 
+
+
+Concerning given example, $F = \frac{3}{5} = 0.6$. One needs to note that this function is never bigger than 1, nor less than 0. Closer $F$ gets to one, better the automaton approximation. 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
@@ -465,15 +480,18 @@ The following method of updating the particles has its origins in the Standard P
 
 Let $G_p(t)$ be the centre of gravity of the three points:
 \begin{enumerate}
-	\item Current position. $X_p(t)$
+	\item Current position. \\
+	$X_p(t)$
 	
-	\item Point a bit "beyond" $pbest_p$. $Y_{p1}(t) = c*(pbest_p-X_p(t))$
+	\item Point a bit beyond $pbest_p$. \\
+	$Y_{p1}(t) = c*(pbest_p-X_p(t))$
 	
-	\item Point a bit "beyond" $lbest_p$. $Y_{p2}(t) = c*(lbest_p-X_p(t))$
+	\item Point a bit beyond $lbest_p$. \\
+	$Y_{p2}(t) = c*(lbest_p-X_p(t))$
 			
 \end{enumerate}
 
-The constant $c = \frac{1}{2} + ln(2)$ called a learning factor, together with the inertia parameter that weights the particle's velocity $\omega = \frac{1}{2 * ln(2)}$ was proposed by Clerc in~\cite{pso_anal}  used in further equations. 
+The constant $c = \frac{1}{2} + ln(2)$ called a learning factor, together with the inertia parameter that weights the particle's velocity $\omega = \frac{1}{2 * ln(2)}$ used in further equations, was proposed by Clerc in~\cite{pso_anal}.
 
 Formally $G_p(t)$ it is defined by the following formula 
 \begin{equation}
@@ -496,7 +514,9 @@ Thus the position is updated by the equation
 	X_p(t+1) = \omega * V_p(t) + X^{'}_p(t)
 \end{equation}
 
-This method of updating the particles grants adequate definitions for $exploitation$ and $exploration$. Namely the exploitation occurs when $X_p(t+1)$ is inside atleast one hypersphere $\mathcal{H}_q$, otherwise we recognize exploration.
+% Exploitation vs Exploration
+
+%This method of updating the particles grants adequate definitions for $exploitation$ and $exploration$. Namely the exploitation occurs when $X_p(t+1)$ is inside atleast one hypersphere $\mathcal{H}_q$, otherwise we recognize exploration.
 
 
 % Interval confinement
@@ -512,17 +532,27 @@ It may happen that the particle might leave the search space, in means that the 
               \right.
   \]
 
-This means that the corresponding dimension of velocity vector $v_d \in V_p$ is zeroed and the position is takes value of the edge of the search space.
-
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\subsubsection{Convergence}
+This means that the corresponding dimension of velocity vector $v_d \in V_p$ is zeroed and the position is bound to the edge of the interval.
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 \subsubsection{Neighbourhood}
+The neighbourhood system is defined by grouping the swarm into clusters. Cluster analysis methods can estimate the number of clusters $k$ that a data set should be grouped with. An algorithm for cluster evaluation used in this work is called mcclain-rao defined in~\cite{mc_rao}. Having the knowledge of data distortion, the data is then clustered into $k$ clusters, where each cluster represents a single neighbourhood. K-means algorithm is used to compute the clustering. The following formulates the algorithm for neighbourhood update.
+
+\begin{enumerate}
+	\item Evaluate number of clusters in the swarm using the mcclian-rao index. Denote that number by $k$.
+	\item Group the swarm into $k$ clusters using k-means algorithm.
+	\item Each cluster represents a single neighbourhood.
+\end{enumerate}
+
+
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+%---------------------------------------------------------------------
+\subsubsection{Ending criteria}
+The computation finishes after $t_{max}$ iterations or after finding a satisfactory solution which is bounded by $F_{max} \in [0,1]$, where value 1 corresponds to trying to find the automaton exactly as good as $T$ defined in definition~\ref{def:T}.
+
 
 
 %---------------------------------------------------------------------
@@ -530,52 +560,65 @@ This means that the corresponding dimension of velocity vector $v_d \in V_p$ is 
 
 So far, we have discussed the preliminary methods of decoding and finding an optimal automaton. What has been omitted thus far is the problem of choosing appropriate size of the automaton $A$ and the set of words over the alphabet $\Sigma$ to compute the fitness function described in section~\ref{sec:fitness}. Recall, that the size $s(A)$ has been defined as the product of number of states and the number of symbols in the alphabet.
 
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\subsection{Size of Automaton}\label{sec:tmp1}
-
 By the definition of the objective of this study, any arbitrary word over the alphabet $\Sigma$ can be chosen for fitness verification. Thus the alphabet must be known prior to construction of the optimizer and it must remain constant.
 
-The problem remains in finding a sufficient number of states. A good candidate would be a number of equivalence classes of the relation $R_L$ induced by the language $L$. Without dwelling into details, this approach in practical implementation will most likely fail due to the computation complexity required. Instead, we will iterate through a fixed interval of possible values for the number of states that a single PSO instance can compute. The formalities are described in the latter part of this section.
+The problem remains in finding a sufficient number of states. We will iterate through a fixed interval of possible values for the number of states that a single PSO instance can take as input. We define $n_{min}$ and $n_{max}$ for minimum and maximum number of states respectively.
 
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-0\subsection{Sample Words}\label{sec:tmp2}
-
-The discussion now turns to the problem of fitness function. Let us recall, that the fitness function in its roots has to determine whether two arbitrary  words over the alphabet $\Sigma$ are in relation $R_L$ or not. It is known from the language theory that the set of all words $\Sigma^*$ is an infinite countable set. We propose the set of words $\Omega \subset \Sigma^*$ to be included in the fitness evaluation.
+The discussion now turns to the problem of fitness function. Let us recall, that the fitness function in its roots has to determine whether two arbitrary  words over the alphabet $\Sigma$ are in relation $R_L$ or not. It is known from the language theory that the set of all words $\Sigma^*$ is an infinite countable set. We propose the set of words $\Omega \subset \Sigma^*$ to be included in the fitness evaluation, which has a maximum number of elements $R_{max}$.
 
 \begin{enumerate}
-	\item Choose the maximum number of words $R_{max}$.
-	
-	\item Create three sets of words: $\Omega_s$, $\Omega_m$ and $\Omega_l$,  representing the set of small, medium and large words respectively, where $\Omega = \Omega_s \cup \Omega_m \cup \Omega_l$. The lengths of words in each of the subset of $\Omega$ have been defined informally and shall remain so for the time being. It is important to note, that the lengths of words within each of the subsets might differ, but the following is always true:
+	\item Create three sets of words: $\Omega_s$, $\Omega_m$ and $\Omega_l$,  representing the set of small, medium and large words respectively, where $\Omega = \Omega_s \cup \Omega_m \cup \Omega_l$. It is important to note, that the lengths of words within each of the subsets might differ, but the following is always true:
 \begin{center}
-$(\forall {v_{s} \in \Omega_{s}}, \forall {v_{m} \in \Omega_{m}} , \forall{v_{l} \in \Omega_{l}}) |v_{s}| < |v_{m}| < |v_{l}|$
+$(\forall {v_{s} \in \Omega_{s}}, \forall {v_{m} \in \Omega_{m}} , \forall{v_{l} \in \Omega_{l}}) [|v_{s}| < |v_{m}| < |v_{l}|]$
 \end{center}
 
-Each subset should have an equal number of words, up to $\frac{R_{max}}{3}$.
+The sizes of each subset of $\Omega$ and the specific lengths of words are considered to be parameters.
 	
-	\item Each set $\Omega_x$, where $x \in \{s, m, l\}$, should have words that start with each symbol of the alphabet. 
-	\begin{enumerate}
-	\item  If the size of each set of words is greater than the number of symbols, continue creating words with first symbol chosen randomly.
-	\item  If the size of the set of words is smaller, choose the first symbols at random, without repetitions.
-	\end{enumerate}	
-	\item The Hamming distance ...
+	\item \label{enum:wx} Each set $\Omega_x$, where $x \in \{s, m, l\}$, should have words that start with different symbol of the alphabet. This restriction must hold given the size of the alphabet is big enough. Otherwise these symbols might repeat.
+	
+	\item \label{enum:hamm} The Hamming distance of any two words of the same length should not be smaller than half of the length:
+	\begin{center}
+		$(\forall {u,w \in \Omega}, n=|u| = |w|) H_d(u,w) \geq \frac{n}{2}$
+	\end{center}
 	
 \end{enumerate}
 
-%---------------------------------------------------------------------
-%---------------------------------------------------------------------
-\subsection{Algorithm}\label{sec:tmp2}
+The motivation behind point~\ref{enum:wx} is to put more stress into initial state. Namely to, force all possible transitions for initial state.
+
+Point~\ref{enum:hamm} however, enforces all the generated words to be somehow different.
 
 
 %---------------------------------------------------------------------
-\section{Conclusions}\label{sec:clonc}
+%---------------------------------------------------------------------
+\subsection{Algorithm}\label{sec:algorithm}
+All the necessary methods to establish the final algorithms has been presented. Now, the main algorithm of the study is shown.
 
+\begin{enumerate}
+	\item Select a sample set of words $\Omega$
+	\item Using DFA $T$ defined in definition~\ref{def:T}, check for all pairs of words from $\Omega$ whether they are in relation $R_L$. Using the example~\ref{ex:fitness}, store the results.
+	\item Run PSO algorithm for $n_{min}, n_{min}+1, \ldots, n_{max}$ number of states. For each PSO instance:
+	
+	\begin{enumerate}
+		\item After each iteration, every particle is encoded back into automaton $A_p$. For each automaton $A_p$:
+		\begin{enumerate}
+			\item Using $A_p$ check for all pairs of words from $\Omega$ whether they are in relation $R_L$.
+			\item Compare the results with $T$, thus computing the fitness function.
+		\end{enumerate}
+
+		\item After PSO converges, save the best result.
+	\end{enumerate}		
+	
+	\item Choose the best result within all PSO instances.
+\end{enumerate}
+
+Finally, few notes regarding the algorithm are discussed. 
+
+Since $R_L$ is a equivalence relation, it is obvious that not all pairs of words have to checked to get the full results. It was omitted for the sake of clarity.
+
+Through out the computations, we might find several equally best automatons. In such case the automaton that uses least amount of states to computes all the words from the sample $\Omega$ will be chosen for the overall output.
 
 
 \begin{thebibliography}{9}
-\bibitem{Myhill_Nerode}
-\url{https://en.wikipedia.org/wiki/Myhill-Nerode_theorem}
 
 \bibitem{pso_origin} 
 Eberhart, R. C. and Kennedy, J. A new optimizer using particle swarm theory. Proceedings of the sixth international symposium on micro machine and human science pp. 39-43. IEEE service center, Piscataway, NJ, Nagoya, Japan, 1995.
@@ -590,9 +633,15 @@ William M. Spears, Derek T. Green and Diana F. Spears. Biases in particle swarm 
 \bibitem{pso_11}
 M. Clerc. (2011). Standard Particle Swarm Optimisation Available: http://hal.archives-ouvertes.fr/hal-00764996 
 
+\bibitem{mc_rao}
+J. O. McClain and V. R. Rao. Clustisz: A program to test for the quality of
+clustering of a set of objects. Journal of Marketing Research, 12:456–460,
+1975.
 
-\bibitem{topology}
-%http://www.researchgate.net/publication/221616406_A_Comparative_Study_of_Neighborhood_Topologies_for_Particle_Swarm_Optimizers
+
+\bibitem{Myhill_Nerode}
+\url{https://en.wikipedia.org/wiki/Myhill-Nerode_theorem}
+
 
 \end{thebibliography}
 

@@ -9,7 +9,9 @@
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
 
-
+\usepackage{floatrow}
+% Table float box with bottom caption, box width adjusted to content
+\newfloatcommand{capbtabbox}{table}[][\FBwidth]
 \usepackage{caption}
 \usepackage{subcaption}
 \captionsetup{compatibility=false}
@@ -148,22 +150,20 @@ $F$ - Set of accepting states. $F \subseteq Q$ \\
 \end{definition}
 
 
-
-Example of Automaton A- {\color{red}(TODO Place the state diagram here, THIS SECTION IS VERY UGLY)}
-
-Transition Table for A with $\delta: Q \times \Sigma \rightarrow Q$ 
-
 %%%
 %
 % Standard Transition function
 %
 %%%
 \begin{figure}
-\begin{center}
+\CenterFloatBoxes
+\begin{floatrow}
 
-	\setlength{\tabcolsep}{4pt}
+\ttabbox
+  {
+  \centering
+  \setlength{\tabcolsep}{15pt}
 	\renewcommand{\arraystretch}{1.5}
-	
 	\begin{tabular}{|P{1.0cm} || P{0.6cm} | P{0.6cm} |}
 	\hline
 	$\delta$ & a & b \\
@@ -178,11 +178,15 @@ Transition Table for A with $\delta: Q \times \Sigma \rightarrow Q$
 	$q_R$  					& $q_R$ & $q_R$ \\
 	\hline
 	\end{tabular}
+  }
+  {\caption{Transition table for A with $\delta: Q \times \Sigma \rightarrow Q$}\label{fig:ttable_std}}
 
-	
-\caption{Transition table for A with $\delta: Q \times \Sigma \rightarrow Q$}
-\label{fig:ttable_std}
-\end{center}
+\ffigbox
+  {\includegraphics[width=0.35\textwidth]{automaton_example.jpg}}
+  {\caption{Example of Automaton A}\label{fig:automaton_ex}}
+\killfloatstyle
+
+\end{floatrow}
 \end{figure}
 
 

@@ -1,6 +1,6 @@
 #include "main.h"
 
-#include "console.h"
+#include <console.h>
 
 #include <stdio.h>
 #include <stdlib.h>

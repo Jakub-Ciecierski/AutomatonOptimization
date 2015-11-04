@@ -383,7 +383,9 @@ We now concentrate on describing in details each step of the PSO algorithm. The 
 As an input, the PSO algorithm takes number of states $n$ and number of symbols in the alphabet $r$.
 Solution that the PSO is trying to find is an automaton. Let us recall that automaton is a system: $A = (Q, \Sigma, \delta, q_0, F)$. In a single PSO instance we assume that a set of states $Q$ and alphabet $\Sigma$ is invariant. Through the nature of our problem we can conclude that distinguishing the set $F$ of accepting states is not necessary. Namely, the tool given to us (DFA) described in section~\ref{sub:definition} only answers whether any arbitrary two words are in the relation induced by the language. That information suffices in the process of recreating that DFA. Thus, we only need to represent the transition function and initial state.
 
-The position of our particles will be represented by the natural decoding vector of size $n*r$ of an automaton described in section~\ref{sec:auto_dec} with more freedom allowed. Namely, all of the dimensions of the position will take real values in the interval $[1, n]$. Whenever we need to encode the automaton back, we simply round up the values, taking the floor value of each dimension. As we may learn further in the article, the method of updating the particle will make a good use of continuous interval. On the other hand, the method of rounding up real numbers, might be vulnerable to error.
+The position of our particles will be represented by the natural decoding vector of size $n*r$ of an automaton described in section~\ref{sec:auto_dec} with more freedom allowed. Namely, all of the dimensions of the position will take real values in the interval $[1, n]$. Whenever we need to encode the automaton back, we simply round up the values, taking the closest integer value. The real number $3.4$ becomes $3$ and $3.5$ becomes 4.
+
+As we may learn further in the article, the method of updating the particle will make a good use of continuous interval. On the other hand, the method of rounding up real numbers, might be vulnerable to error.
 
 
 
@@ -401,6 +403,8 @@ The initial velocities will be generated from the range $[-n,n]$. It is also cru
 	v_{max} = (\frac{n}{2})c_{v}
 \end{equation}
 where $c_{v}$ is a constant $speed$ factor and $v_{max} \leq n$.
+
+In all cases uniform distribution is used for random number generation.
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
@@ -569,7 +573,7 @@ The discussion now turns to the problem of fitness function. Let us recall, that
 \begin{enumerate}
 	\item Create three sets of words: $\Omega_s$, $\Omega_m$ and $\Omega_l$,  representing the set of small, medium and large words respectively, where $\Omega = \Omega_s \cup \Omega_m \cup \Omega_l$. It is important to note, that the lengths of words within each of the subsets might differ, but the following is always true:
 \begin{center}
-$(\forall {v_{s} \in \Omega_{s}}, \forall {v_{m} \in \Omega_{m}} , \forall{v_{l} \in \Omega_{l}}) [|v_{s}| < |v_{m}| < |v_{l}|]$
+$(\forall {v_{s} \in \Omega_{s}}, \forall {v_{m} \in \Omega_{m}} , \forall{v_{l} \in \Omega_{l}}) \Big[ |v_{s}| < |v_{m}| < |v_{l}| \Big]$
 \end{center}
 
 The sizes of each subset of $\Omega$ and the specific lengths of words are considered to be parameters.
@@ -578,7 +582,7 @@ The sizes of each subset of $\Omega$ and the specific lengths of words are consi
 	
 	\item \label{enum:hamm} The Hamming distance of any two words of the same length should not be smaller than half of the length:
 	\begin{center}
-		$(\forall {u,w \in \Omega}, n=|u| = |w|) H_d(u,w) \geq \frac{n}{2}$
+		$(\forall {u,w \in \Omega}, n=|u| = |w|) \Big[ H_d(u,w) \geq \frac{n}{2} \Big]$
 	\end{center}
 	
 \end{enumerate}
@@ -620,6 +624,12 @@ Through out the computations, we might find several equally best automatons. In 
 
 \begin{thebibliography}{9}
 
+\bibitem{mc_rao}
+J. O. McClain and V. R. Rao. Clustisz: A program to test for the quality of
+clustering of a set of objects. Journal of Marketing Research, 12:456–460,
+1975.
+
+
 \bibitem{pso_origin} 
 Eberhart, R. C. and Kennedy, J. A new optimizer using particle swarm theory. Proceedings of the sixth international symposium on micro machine and human science pp. 39-43. IEEE service center, Piscataway, NJ, Nagoya, Japan, 1995.
 
@@ -632,11 +642,6 @@ William M. Spears, Derek T. Green and Diana F. Spears. Biases in particle swarm 
 
 \bibitem{pso_11}
 M. Clerc. (2011). Standard Particle Swarm Optimisation Available: http://hal.archives-ouvertes.fr/hal-00764996 
-
-\bibitem{mc_rao}
-J. O. McClain and V. R. Rao. Clustisz: A program to test for the quality of
-clustering of a set of objects. Journal of Marketing Research, 12:456–460,
-1975.
 
 
 \bibitem{Myhill_Nerode}

@@ -78,7 +78,7 @@
 # Changes log:
 # 01.07.2015 - Created
 # 26.10.2015 - Added Unit Test rule
-#
+# 08.11.2015 - OpenGL and CUDA libraries commented out 
 #
 #---------------------------------------------------------------------
 
@@ -132,9 +132,10 @@ MAKE_EXTERNAL =
 #---------------- LIBRARIES -------------------#
 
 # Paths and names of libraries to link with
-LIBS += -L /opt/cuda/lib64 \
-		-L /usr/local/cuda/lib64 \
-		-lGL -lglut -lGLEW -lcudart -lcuda
+LIBS +=
+# -L /opt/cuda/lib64 \
+#		-L /usr/local/cuda/lib64 \
+#		-lGL -lglut -lGLEW -lcudart -lcuda
 
 #----------------- INCLUDES -------------------#
 

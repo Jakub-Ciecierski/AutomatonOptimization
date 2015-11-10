@@ -1,6 +1,23 @@
+################################################################################
+For Clion Users !!!
+To make Clion see all the files add the following to CMakeLists.txt
+
+    # To make clion see header files
+    include_directories("./automata/include")
+    # To make clion see source files - for unit tests
+    include_directories("./automata/src/*")
+    # To make clion see gtests header file - for unit tests
+    include_directories("./googletest/include")
+
+CMakeLists.txt itself is in .gitignore for now
+################################################################################
+
+
+################################################################################
 KMeans:
     Sequential
     Parallel
         CPU, GPU
 
 mclain-rao:
+################################################################################

@@ -3,6 +3,8 @@
 // It is not a mistake to include source files in unit tests
 #include "console.cpp"
 
+//#include "console.h"
+
 TEST(MathTest, TwoPlusTwoEqualsFour) {
     EXPECT_EQ(2 + 2, 4);
 }

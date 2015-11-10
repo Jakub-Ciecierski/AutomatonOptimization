@@ -141,7 +141,7 @@ LIBS +=
 
 # Paths to all Includes
 INCLUDES += -I /usr/local/cuda/include \
-    		-I /opt/cuda/include
+			-I /opt/cuda/include
 
 #------------------- FLAGS --------------------#
 
@@ -297,5 +297,5 @@ info_suffix:
 #--------------- DEPENDENCY GRAPH -------------#
 
 # Automatic dependency graph generation
-# Must be inserted at the end of the makefile (TODO verify)
+# Must be inserted at the end of the makefile
 -include $(OBJECTS:.o=.d)

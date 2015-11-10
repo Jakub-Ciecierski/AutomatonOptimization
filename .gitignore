@@ -19,6 +19,6 @@ googletest/make/sample1_unittest
 build
 bin
 
-CMakeLists.txt
+
 
 .idea

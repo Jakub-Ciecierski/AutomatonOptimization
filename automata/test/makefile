@@ -50,12 +50,12 @@ MAKE_EXTERNAL = $(GTEST_ROOT)/make/
 
 # Paths and names of libraries to link with
 LIBS += $(GTEST_ROOT)/make/gtest_main.a -lpthread
-		
+
 
 #----------------- INCLUDES -------------------#
 
 # Paths to all Includes
-INCLUDES += -I $(GTEST_ROOT)/include \
+INCLUDES += -I $(GTEST_ROOT)/include
 
 #------------------- FLAGS --------------------#
 
@@ -68,8 +68,8 @@ NVCC_FLAGS += -arch=sm_20
 #----------------- PRINT OUTS -----------------#
 
 # The separator will be printed between compiling objects
-INFO_SEPARATOR = "-----------------------------------------------------"
-INFO_FILLER = "\t\t\t\t"
+INFO_SEPARATOR = "|-------------------------------------------------------------------|"
+INFO_FILLER = "  <<  "
 
 ######################################################################
 #------------------ STATIC SUBSECTION - DO NOT MODIFY ---------------#
@@ -90,11 +90,11 @@ NVCC_FLAGS +=
 # [2>/dev/null] is added to supresss the 'file not found'
 # message when inititing project structure for the first time
 # (src file does not exist at the beginning)
-CPP_SOURCES = $(shell find ${SRC} -name *${CPP_EXT} 2>/dev/null)
+CPP_SOURCES += $(shell find ${SRC} -name *${CPP_EXT} 2>/dev/null)
 CUDA_SOURCES = $(shell find ${SRC} -name *${CUDA_EXT} 2>/dev/null)
 
 # List of all subdirectories in source directory 
-MODULES = $(shell find ${SRC} -type d 2>/dev/null)
+MODULES += $(shell find ${SRC} -type d 2>/dev/null)
 
 # All objects to be compiled
 OBJECTS += $(addprefix ${OBJ}/,$(notdir $(CPP_SOURCES:${CPP_EXT}=.o)))
@@ -102,6 +102,15 @@ OBJECTS += $(addprefix ${OBJ}/,$(notdir $(CUDA_SOURCES:${CUDA_EXT}=.o)))
 
 # Add modules to vpath
 VPATH = ${MODULES}
+
+#----------------- TESTED OBJECTS -------------------#
+
+# Find all objects from the main application being tested.
+TST_SRCS += $(shell find ../${SRC} -name *${CPP_EXT} 2>/dev/null)
+TST_OBJS_TMP += $(addprefix ../${OBJ}/,$(notdir $(TST_SRCS:${CPP_EXT}=.o)))
+
+# Remove main.o. We don't want 2 main functions. One is included in gtests.
+TST_OBJS = $(filter-out %main.o, ${TST_OBJS_TMP})
 
 ######################################################################
 #---------------------------------2----------------------------------#
@@ -132,7 +141,7 @@ run:
 #------------------ LINKER --------------------#
 
 ${APP_NAME}: ${OBJECTS}
-	@$(CC) -o ${BIN}/${APP_NAME} $^ $(L_FLAGS)
+	@$(CC) -o ${BIN}/${APP_NAME} ${TST_OBJS} $^ $(L_FLAGS)
 
 #----------------- COMPILERS ------------------#
 

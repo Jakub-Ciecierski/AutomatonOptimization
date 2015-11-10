@@ -1,6 +1,8 @@
-#ifndef _PR_CONSOLE_H_
-#define _PR_CONSOLE_H_
+//
+// Created by jakub on 11/10/15.
+//
 
-bool isBig(int number);
+#ifndef AC_CONSOLE_H
+#define AC_CONSOLE_H
 
-#endif /* _PR_CONSOLE_H_ */
+#endif //AC_CONSOLE_H

@@ -1,0 +1,6 @@
+KMeans:
+    Sequential
+    Parallel
+        CPU, GPU
+
+mclain-rao:

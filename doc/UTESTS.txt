@@ -1,0 +1,13 @@
+1)
+Only include header files from the main project that you want to test
+  in test project
+    #include "main.h" - Good
+Never the source it self
+    #include "main.cpp" - Wrong!!
+
+2)
+You can include header file from main project without specifying the
+path <=> The test project has a path to includes of main project
+
+3)
+Sources from main project are already compiled together with test project

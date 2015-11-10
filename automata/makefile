@@ -155,8 +155,8 @@ NVCC_FLAGS += -arch=sm_20
 #----------------- PRINT OUTS -----------------#
 
 # The separator will be printed between compiling objects
-INFO_SEPARATOR = "-----------------------------------------------------"
-INFO_FILLER = "\t\t\t\t"
+INFO_SEPARATOR = "|-------------------------------------------------------------------|"
+INFO_FILLER = "  <<  "
 
 
 ######################################################################
@@ -258,6 +258,7 @@ init:
 
 clean:
 	@$(RM) *.o *~ ${OBJ}/*.o ${OBJ}/*.d ${OBJ}/*~ ${BIN}/*
+	@$(MAKE) -C $(TST) clean
 
 
 .PHONY: $(SUBDIRS) clean

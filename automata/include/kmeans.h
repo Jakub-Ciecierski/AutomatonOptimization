@@ -5,17 +5,23 @@
 #ifndef AC_KMEANS_H
 #define AC_KMEANS_H
 
+#include <vector>
+
 /*
- * Computes clustering kmeans algorithm.
+ * Computes clustering Kmeans algorithm.
  *
  * 1) Randomly select k center
  * 2) Group points to their closest centroids
  * 3) update centroids by computing center of gravity - mean
  * 4) Repeat 2), 3) until convergence or after maximum iterations.
  */
-class kmeans {
+class KMeans {
 
 private:
+    //-----------------------------------------------------------//
+    //  PRIVATE FIELDS
+    //-----------------------------------------------------------//
+
     // Number of clusters
     int k;
 
@@ -24,6 +30,17 @@ private:
 
     // Maximum number of iteration
     int max_iter;
+
+    // Each vector is Cluster having a vector of indices
+    // Each index i corresponds to the i-th element in the data set.
+    std::vector<std::vector<int>> clusterIndices;
+
+    //
+    std::vector<int> centroidsIndices;
+
+    //-----------------------------------------------------------//
+    //  PRIVATE METHODS
+    //-----------------------------------------------------------//
 
     // Initializes centroids
     void initCentroids();
@@ -38,23 +55,25 @@ private:
     bool isConverged();
 
 public:
-    kmeans(int k, double tol, int max_iter);
+    KMeans(int k, double tol, int max_iter);
 
     void compute();
 
-    // Setters
-    void setK(int k);
-    void setTol(double tol);
-    void setMaxIter(int max_iter);
+    //-----------------------------------------------------------//
+    //  GETTERS / SETTERS
+    //-----------------------------------------------------------//
 
     // Getters
     int getK();
     double getTol();
     int getMaxIter();
 
-    inline int test(){
-        return 1;
-    }
+    // Setters
+    void setK(int k);
+    void setTol(double tol);
+    void setMaxIter(int max_iter);
+
+
 };
 
 

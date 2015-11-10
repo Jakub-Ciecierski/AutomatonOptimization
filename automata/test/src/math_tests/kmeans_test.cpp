@@ -6,7 +6,7 @@
 
 #include "kmeans.h"
 
-TEST(KMeans, ConstructorTest) {
+TEST(KMeans, GetK_GetMaxIter_GetTol) {
     int expected_k, actual_k;
     int expected_max_iter, actual_max_iter;
     double expected_tol, actual_tol;
@@ -15,7 +15,7 @@ TEST(KMeans, ConstructorTest) {
     actual_max_iter = 20;
     actual_tol = 0.001;
 
-    kmeans km(actual_k, actual_tol, actual_max_iter);
+    KMeans km(actual_k, actual_tol, actual_max_iter);
 
     expected_k = km.getK();
     expected_max_iter = km.getMaxIter();

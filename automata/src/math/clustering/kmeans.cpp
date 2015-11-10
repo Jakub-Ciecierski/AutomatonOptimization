@@ -4,21 +4,21 @@
 
 #include "kmeans.h"
 
-kmeans::kmeans(int k, double tol, int max_iter) :
+KMeans::KMeans(int k, double tol, int max_iter) :
         k(k), tol(tol), max_iter(max_iter) { }
 
-int kmeans::getK() {
+int KMeans::getK() {
     return this->k;
 }
 
-int kmeans::getMaxIter() {
+int KMeans::getMaxIter() {
     return this->max_iter;
 }
 
-double kmeans::getTol() {
+double KMeans::getTol() {
     return this->tol;
 }
 
-void kmeans::compute() {
+void KMeans::compute() {
 
 }

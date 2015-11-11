@@ -31,3 +31,18 @@ TEST(STL, vector_iterator) {
 
     }
 }
+
+TEST(STL, Vector_SubVectors){
+    const int size = 5;
+    int expectedSubSize, actualSubSize;
+
+    expectedSubSize = 0;
+    std::vector<std::vector<int>> vec(size);
+
+    for(int i = 0;i < size; i++){
+        std::vector<int> sub_vec = vec[i];
+        actualSubSize = sub_vec.size();
+
+        EXPECT_EQ(expectedSubSize, actualSubSize);
+    }
+}

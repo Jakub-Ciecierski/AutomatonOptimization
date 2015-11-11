@@ -15,6 +15,7 @@ googletest/make/sample1_unittest
 *.gz
 *.synctex.gz
 *.log
+*.out
 
 build
 bin

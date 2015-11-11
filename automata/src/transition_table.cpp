@@ -12,7 +12,7 @@ void TransitionTable::loadFromFile(string url) {
         file.close();
     }
     else {
-        cout << "[ERROR] Unable to open file\n";
+        LOG_ERROR("Unable to open file " + url)
     }
 
 }
@@ -37,7 +37,7 @@ int TransitionTable::_loadOneSymbolFromFile(istream &inputFileStream) {
 
 int **TransitionTable::_loadDefaultTransitionTable(istream &inputFileStream) {
 
-    if (_numberOfStates > 1 || _numberOfSymbols < 1) {
+    if (_numberOfStates < 1 || _numberOfSymbols < 1) {
         throw invalid_argument("_numberOfStates < 1 || _numberOfSymbols < 1");
     }
 

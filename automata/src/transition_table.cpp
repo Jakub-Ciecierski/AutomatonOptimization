@@ -24,7 +24,7 @@ void TransitionTable::_processInputData(istream &inputFileStream) {
         _defaultTransitionTable = _loadDefaultTransitionTable(inputFileStream);
     }
     catch (std::exception &e) {
-        LOG(e.what())
+        LOG_ERROR(e.what())
     }
     cout << "\n# states: " << _numberOfStates << " # symbols: " << _numberOfSymbols << endl;
 }
@@ -37,7 +37,7 @@ int TransitionTable::_loadOneSymbolFromFile(istream &inputFileStream) {
 
 int **TransitionTable::_loadDefaultTransitionTable(istream &inputFileStream) {
 
-    if (_numberOfStates < 1 || _numberOfSymbols < 1) {
+    if (_numberOfStates > 1 || _numberOfSymbols < 1) {
         throw invalid_argument("_numberOfStates < 1 || _numberOfSymbols < 1");
     }
 

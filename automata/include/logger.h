@@ -11,6 +11,7 @@
 #ifndef AC_LOGGER_H
 #define AC_LOGGER_H
 
+#include "color_text.h"
 
 static inline char* whitespaces(int);
 
@@ -30,19 +31,19 @@ static inline char* whitespaces(int);
 #endif
 
 #define LENGTH(word)    sizeof(word)
-#define SPACE(tag)      whitespaces(LENGTH(tag))
+#define SPACE(word)     whitespaces(LENGTH(word))
 
 #define PRINT_FUNCTION(TAG, message) \
-        std::cout << TAG << std::endl << \
+        std::cout << RED_BOLD_TEXT(TAG) << std::endl << \
                      SPACE(TAG) << "[file]:     " << __FILE__ << std::endl << \
                      SPACE(TAG) << "[function]: " << __PRETTY_FUNCTION__ << std::endl << \
                      SPACE(TAG) << "[line]:     " << __LINE__ << std::endl << \
                      SPACE(TAG) << "[message]:  " << message << std::endl;
 
 #if LOG_TYPE == ERROR_LOG
-#define LOG(message) PRINT_FUNCTION(TAG_ERROR_LOG, message)
+#define LOG_ERROR(message) PRINT_FUNCTION(TAG_ERROR_LOG, message)
 #else
-#define LOG(message)
+#define LOG_ERROR(message)
 #endif
 
 
@@ -50,6 +51,7 @@ static inline char *whitespaces(int length) {
     static char* buffer = new char[length +1];
 
     for(int i = 0; i < length ; i++) {
+        // blank symbols
         buffer[i] = char(32);
     }
     buffer[length] = '\0';

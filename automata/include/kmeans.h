@@ -6,6 +6,7 @@
 #define AC_KMEANS_H
 
 #include <vector>
+#include "point.h"
 
 /*
  * Computes clustering Kmeans algorithm.
@@ -15,6 +16,7 @@
  * 3) update centroids by computing center of gravity - mean
  * 4) Repeat 2), 3) until convergence or after maximum iterations.
  */
+template <class T>
 class KMeans {
 
 private:
@@ -35,45 +37,64 @@ private:
     // Each index i corresponds to the i-th element in the data set.
     std::vector<std::vector<int>> clusterIndices;
 
-    //
-    std::vector<int> centroidsIndices;
+    // Centroid of each cluster
+    std::vector<Point<T>> centroids;
+
+    // Point to the data to be cluster
+    const std::vector<Point<T>>* data;
 
     //-----------------------------------------------------------//
     //  PRIVATE METHODS
     //-----------------------------------------------------------//
 
-    // Initializes centroids
+    /*
+     * Initializes centroids
+     */
     void initCentroids();
 
-    // Update centroids position
+    /*
+     * Update centroids position
+     */
     void updateCentroids();
 
-    // Updates clusters based on current centroids position.
+    /*
+     * Updates clusters based on current centroids position.
+     */
     void updateClusters();
 
-    // Checks whether the computation converged.
+    /*
+     * Checks whether the computation converged.
+     */
     bool isConverged();
 
 public:
-    KMeans(int k, double tol, int max_iter);
+    //-----------------------------------------------------------//
+    //  CONSTRUCTORS
+    //-----------------------------------------------------------//
 
-    void compute();
+    KMeans(int k, double tol, int max_iter);
+    ~KMeans();
+
+    //-----------------------------------------------------------//
+    //  PUBLIC METHODS
+    //-----------------------------------------------------------//
+
+    /*
+     * Starts the computations
+     */
+    void compute(std::vector<Point<T>>* data);
 
     //-----------------------------------------------------------//
     //  GETTERS / SETTERS
     //-----------------------------------------------------------//
 
-    // Getters
     int getK();
     double getTol();
     int getMaxIter();
 
-    // Setters
     void setK(int k);
     void setTol(double tol);
     void setMaxIter(int max_iter);
-
-
 };
 
 

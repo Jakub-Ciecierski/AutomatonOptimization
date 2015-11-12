@@ -1,13 +1,14 @@
-#include "main.h"
+#ifndef AC_MAIN_H
+#define AC_MAIN_H
+
 
 #define LOG_TYPE ERROR_LOG
 
 #include <iostream>
 #include <stdio.h>
 #include <vector>
-#include <stdlib.h>
-#include "logger.h"
-#include "dfa.h"
+#include "random_generator.h"
+#include "global_settings.h"
 
 int main(int argc, char *argv[]) {
     printf("Main starting...\n");
@@ -17,8 +18,9 @@ int main(int argc, char *argv[]) {
         cout << "argc != 2\n";
         return EXIT_FAILURE;
     }
-    string url = argv[1];
+    global_settings::TOOL_URL = argv[1];
 
-    cout << res;
     return EXIT_SUCCESS;
 }
+
+#endif //AC_STANDARD_TRANSITION_T_H

@@ -35,7 +35,6 @@ private:
     void _loadAndLogDefaultTransitionTable(istream& inputFileStream);
     int _loadOneSymbolFromFile(istream& inputFileStream);
     void _loadEntries(istream &inputFileStream);
-
 };
 
 

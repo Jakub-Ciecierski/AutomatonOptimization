@@ -9,7 +9,9 @@
 #include "dfa.h"
 #include "particle.h"
 
+
 class PSO {
+public:
 
 private:
     DFA _tool;

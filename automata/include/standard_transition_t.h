@@ -1,5 +1,5 @@
 //
-// Created by root on 11/12/15.
+// Created by dybisz on 11/12/15.
 //
 
 #ifndef AC_STANDARD_TRANSITION_T_H
@@ -7,12 +7,13 @@
 
 #include "transition_table.h"
 #include <iostream>
-#include <fstream>
 #include <stdexcept>
 
 class StandardTransitionTable: public TransitionTable {
 public:
     StandardTransitionTable(string url);
+    StandardTransitionTable(TransitionTable& transitionTable);
+
     void print();
     int operator()(int symbol, int state);
 

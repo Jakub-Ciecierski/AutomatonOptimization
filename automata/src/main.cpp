@@ -8,6 +8,7 @@
 #include "logger.h"
 #include "standard_transition_t.h"
 #include "per_symbol_transition_t.h"
+#include "coded_transition_t.h"
 
 int main(int argc, char* argv[]) {
     printf("Main starting...\n");
@@ -18,6 +19,8 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
     string url = argv[1];
+    CodedTransitionTable ctt(url);
+    ctt.print();
 
     return EXIT_SUCCESS;
 }

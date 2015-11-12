@@ -7,7 +7,6 @@
 
 #include "standard_transition_t.h"
 #include <iostream>
-#include <fstream>
 #include <stdexcept>
 #include <vector>
 
@@ -17,8 +16,10 @@ public:
     void print();
     bool operator()(int state1, int symbol, int state2);
 
-private:
+protected:
     bool _isTransition(int state1, int symbol, int state2);
+
+private:
     void _printEntries();
     void _printPerSymbolTransitionTable(int symbol);
 };

@@ -1,5 +1,5 @@
 //
-// Created by root on 11/12/15.
+// Created by dybisz on 11/12/15.
 //
 
 #ifndef AC_PER_SYMBOL_TRANSITION_T_H

@@ -1,5 +1,5 @@
 //
-// Created by root on 11/12/15.
+// Created by dybisz on 11/12/15.
 //
 
 #include "per_symbol_transition_t.h"

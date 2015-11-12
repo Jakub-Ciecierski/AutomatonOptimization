@@ -78,3 +78,4 @@ void TransitionTable::_printEntries() {
         std::cout << *i << ' ';
     cout << endl;
 }
+

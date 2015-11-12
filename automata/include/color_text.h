@@ -1,6 +1,6 @@
 //
 // I do not suppose this header will not last long ...
-// Created by root on 11/11/15.
+// Created by dybisz on 11/11/15.
 //
 
 #ifndef AC_COLOR_TEXT_H

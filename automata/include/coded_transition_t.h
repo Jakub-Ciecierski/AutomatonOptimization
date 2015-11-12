@@ -15,6 +15,7 @@ public:
     CodedTransitionTable(string url);
     void print();
     vector<int> getDecodedTransitionTable();
+    int processWord(vector<int> word);
 
 private:
     vector<int> _decodedTransitionTable;

@@ -20,9 +20,9 @@ void CodedTransitionTable::_decodeEntries() {
 
 vector<int> CodedTransitionTable::_decodeSymbol(int symbol) {
     vector<int> decodedSymbol;
-    for(int r = 1; r <= _numberOfStates; r++) {
-        for(int c = 1; c <= _numberOfStates; c++) {
-            if(_isTransition(r,symbol,c)) {
+    for (int r = 1; r <= _numberOfStates; r++) {
+        for (int c = 1; c <= _numberOfStates; c++) {
+            if (_isTransition(r, symbol, c)) {
                 decodedSymbol.push_back(c);
                 break;
             }
@@ -47,4 +47,12 @@ void CodedTransitionTable::_printDecoded() {
 
 vector<int> CodedTransitionTable::getDecodedTransitionTable() {
     return _decodedTransitionTable;
+}
+
+int CodedTransitionTable::processWord(vector<int> word) {
+    int currentState = 1;
+    for (int i = 0; i < word.size(); i++) {
+        currentState = _accessTransitionTable(word[i], currentState);
+    }
+    return currentState;
 }

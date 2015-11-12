@@ -75,9 +75,15 @@ INFO_FILLER = "  <<  "
 #------------------ STATIC SUBSECTION - DO NOT MODIFY ---------------#
 ######################################################################
 
+# Include modules of this application
+INC_MODULES = $(addprefix -I, $(shell find ${INC} -type d 2>/dev/null))
+
+# Include modules of tested application
+TST_INC_MODULES = $(addprefix -I, $(shell find ../${INC} -type d 2>/dev/null))
+
 LIBS += -L ${LIB}
 # It is not a mistake to include source files in unit tests!
-INCLUDES += -I ${INC} -I ../$(INC) -I ../$(SRC)
+INCLUDES += -I ${INC} ${INC_MODULES} ${TST_INC_MODULES}
 
 CC = g++
 NVCC = nvcc 

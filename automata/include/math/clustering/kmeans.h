@@ -33,12 +33,18 @@ private:
     // Maximum number of iteration
     int max_iter;
 
+    // Number of dimension of the data;
+    int dataDimension;
+
     // Each vector is Cluster having a vector of indices
     // Each index i corresponds to the i-th element in the data set.
     std::vector<std::vector<int>> clusterIndices;
 
     // Centroid of each cluster
     std::vector<Point<T>> centroids;
+
+    // The centroids of previous iteration.
+    std::vector<Point<T>> previousCentroids;
 
     // Point to the data to be cluster
     const std::vector<Point<T>>* data;

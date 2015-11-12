@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "logger.h"
 #include "standard_transition_t.h"
+#include "per_symbol_transition_t.h"
 
 int main(int argc, char* argv[]) {
     printf("Main starting...\n");
@@ -18,8 +19,16 @@ int main(int argc, char* argv[]) {
     }
     string url = argv[1];
 
+    cout <<"RAW\n";
+    TransitionTable tt(url);
+    tt.print();
+
+    cout << "\nSTANDARD\n";
     StandardTransitionTable stt(url);
     stt.print();
 
+    cout << "\nPER_SYMBOL\n";
+    PerSymbolTransitionTable pstt(url);
+    pstt.print();
     return EXIT_SUCCESS;
 }

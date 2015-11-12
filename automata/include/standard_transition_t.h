@@ -16,7 +16,7 @@ public:
     void print();
     int operator()(int symbol, int state);
 
-private:
+protected:
     int _accessTransitionTable(int symbol, int state);
     void _printEntries();
     void _printStandardTransitionTable();

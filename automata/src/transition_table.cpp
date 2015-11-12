@@ -4,7 +4,7 @@
 
 #include "transition_table.h"
 
-void TransitionTable::loadFromFile(string url) {
+TransitionTable::TransitionTable(string url) {
     ifstream file(url);
 
     if (file.is_open()) {
@@ -14,7 +14,6 @@ void TransitionTable::loadFromFile(string url) {
     else {
         LOG_ERROR("Unable to open file " + url)
     }
-
 }
 
 void TransitionTable::_processInputData(istream &inputFileStream) {
@@ -62,7 +61,6 @@ void TransitionTable::_loadEntries(istream &inputFileStream) {
         _entries.push_back(val);
     }
 }
-
 
 void TransitionTable::print() {
     _printSpecifications();

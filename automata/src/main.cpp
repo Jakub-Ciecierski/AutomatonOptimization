@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "logger.h"
-#include "transition_table.h"
+#include "standard_transition_t.h"
 
 int main(int argc, char* argv[]) {
     printf("Main starting...\n");
@@ -17,8 +17,9 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
     string url = argv[1];
-    TransitionTable tt;
-    tt.loadFromFile(url);
-    tt.print();
+
+    StandardTransitionTable stt(url);
+    stt.print();
+
     return EXIT_SUCCESS;
 }

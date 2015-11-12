@@ -78,7 +78,15 @@
 # Changes log:
 # 01.07.2015 - Created
 # 26.10.2015 - Added Unit Test rule
-# 08.11.2015 - OpenGL and CUDA libraries commented out 
+# 08.11.2015 - OpenGL and CUDA libraries commented out
+# 12.11.2015 - Added each module in include separately.
+#	For example.
+#	File:
+#		./include/math/clustering/kmeans.h
+#	can be included as:
+#		#include "kmeans.h"
+#	or:
+#		#include "math/clustering/kmeans.h"
 #
 #---------------------------------------------------------------------
 
@@ -163,8 +171,11 @@ INFO_FILLER = "  <<  "
 #------------------ STATIC SUBSECTION - DO NOT MODIFY ---------------#
 ######################################################################
 
+# Adds each modules in include separately.
+INC_MODULES =  $(addprefix -I , $(shell find ${INC} -type d 2>/dev/null))
+
 LIBS += -L ${LIB}
-INCLUDES += -I ${INC}
+INCLUDES += ${INC_MODULES}
 
 CC = g++
 NVCC = nvcc

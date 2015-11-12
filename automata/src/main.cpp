@@ -1,11 +1,12 @@
 #include "main.h"
 
+#define LOG_TYPE ERROR_LOG
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include "logger.h"
 #include "transition_table.h"
-
 
 int main(int argc, char* argv[]) {
     printf("Main starting...\n");
@@ -18,6 +19,6 @@ int main(int argc, char* argv[]) {
     string url = argv[1];
     TransitionTable tt;
     tt.loadFromFile(url);
-
+    tt.print();
     return EXIT_SUCCESS;
 }

@@ -12,23 +12,28 @@
 #include <iostream>
 #include <fstream>
 #include "logger.h"
+#include "default_transition_t.h"
 
 using namespace std;
 
 class TransitionTable {
-
 public:
     void loadFromFile(string url);
+    void print();
 
 private:
     int _numberOfStates;
     int _numberOfSymbols;
-    int** _defaultTransitionTable;
+    vector<int> _entries;
 
     void _processInputData(istream& inputFileStream);
+    void _loadAndLogNumberOfStates(istream& inputFileStream);
+    void _loadAndLogNumberOfSymbols(istream& inputFileStream);
+    void _loadAndLogDefaultTransitionTable(istream& inputFileStream);
     int _loadOneSymbolFromFile(istream& inputFileStream);
-    int** _loadDefaultTransitionTable(istream &inputFileStream);
-    void _deleteDefaultTransitionTable();
+    void _loadEntries(istream &inputFileStream);
+    void _printSpecifications();
+    void _printEntries();
 };
 
 

@@ -30,7 +30,7 @@
 #define TAG_INFO_LOG    "[INFO]"
 #define TAG_DEBUG_LOG   "[DEBUG]"
 
-// By default there is no log
+// Set logging type
 #ifndef LOG_TYPE
 #define LOG_TYPE        ERROR_LOG
 #endif

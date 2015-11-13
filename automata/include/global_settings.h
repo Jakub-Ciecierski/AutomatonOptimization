@@ -1,5 +1,5 @@
 //
-// Created by root on 11/12/15.
+// Created by dybisz on 11/12/15.
 //
 
 #ifndef AC_GLOBAL_SETTINGS_H
@@ -12,9 +12,9 @@
 // |--o   states are marked by values from interval [1; _numberOfStates]
 
 namespace global_settings {
-//    std::string TOOL_URL = "test_jastrz.txt";
-//    int MIN_STATES = 1;
-//    int MAX_STATES = 6;
+    extern std::string TOOL_URL;
+    extern int MIN_STATES;
+    extern int MAX_STATES;
 }
 
 

@@ -15,6 +15,8 @@ class PSO {
 public:
     PSO(string toolUrl, int numberOfStates, int populationFactor);
     ~PSO();
+    void start();
+
 private:
     DFA _tool;
     int _psoNumberOfStates;
@@ -22,6 +24,7 @@ private:
     int _swarmSize;
     int _populationFactor;
     vector<Particle*> _particles;
+
     void _loadAndLogSwarmSize();
     int _calculateSwarmSize(int numberOfStates, int numberOfSymbols, int populationFactor);
     void _loadAndLogRandomParticles(int numberOfParticles);

@@ -19,13 +19,6 @@ PSO::PSO(string toolUrl, int numberOfStates, int populationFactor) :
     }
 }
 
-PSO::~PSO() {
-    for (auto particle = _particles.begin(); particle != _particles.end(); ++particle) {
-        delete (*particle);
-    }
-    _particles.clear();
-}
-
 void PSO::_loadAndLogSwarmSize() {
     _swarmSize = _calculateSwarmSize(_psoNumberOfStates, _numberOfSymbols, _populationFactor);
     LOG_DEBUG("_swarmSize calculated: " + to_string(_swarmSize));
@@ -62,4 +55,15 @@ vector<Particle*> PSO::_generateRandomParticles(int numberOfParticles) {
         particles.push_back(p);
     }
     return particles;
+}
+
+void PSO::start() {
+
+}
+
+PSO::~PSO() {
+    for (auto particle = _particles.begin(); particle != _particles.end(); ++particle) {
+        delete (*particle);
+    }
+    _particles.clear();
 }

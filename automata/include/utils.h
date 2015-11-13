@@ -1,5 +1,5 @@
 //
-// Created by root on 11/12/15.
+// Created by dybisz on 11/12/15.
 //
 
 #ifndef AC_RANDOM_GENERATOR_H
@@ -8,6 +8,7 @@
 #include <random>
 #include <vector>
 #include <string>
+#include "word.h"
 
 namespace utils {
 
@@ -36,7 +37,6 @@ namespace utils {
         }
         return output;
     }
-
 }
 
 #endif //AC_RANDOM_GENERATOR_H

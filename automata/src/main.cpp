@@ -12,6 +12,7 @@
 #include "pso.h"
 #include "word.h"
 #include "bag_of_words.h"
+#include "words_generator.h"
 
 using namespace std;
 
@@ -24,6 +25,12 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 //    PSO pso(argv[1], 5, 1);
+    WordsGenerator wg;
+
+    Word w1({1,1,1,0});
+    Word w2({1,0,0});
+
+    cout << wg.hammingDistance(w1,w2);
     return EXIT_SUCCESS;
 }
 

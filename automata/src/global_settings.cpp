@@ -4,7 +4,10 @@
 
 #include "global_settings.h"
 
+// Meaning of constants described in global_settings.h
+// This file is just for quick values manipulations
 namespace global_settings {
+
     /* ------ PSO SETTINGS ----- */
     std::string TOOL_URL    = "test_jastrz.txt";
     int MIN_STATES          = 1;

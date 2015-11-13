@@ -19,6 +19,6 @@ int main(int argc, char *argv[]) {
     }
     string url = argv[1];
 
-    cout << res;
+    //cout << res;
     return EXIT_SUCCESS;
 }

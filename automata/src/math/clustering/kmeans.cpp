@@ -132,7 +132,7 @@ void KMeans<T>::initCentroids(){
     this->centroids[centroidCount++] = center;
 
     while(centroidCount < k){
-        /* 2) Compute D(x)*/
+        /* 2) Compute D(x) */
 
         double sumOfSquaredDist= 0;
         std::vector<double> squaredDist(dataSize);
@@ -156,7 +156,7 @@ void KMeans<T>::initCentroids(){
             sumOfSquaredDist += minDistance * minDistance;
         }
 
-
+        /* 3) Weighted Distribution TODO */
     }
     for(int i = 0; i < k; i++){
         centroids[i] = (*data)[i];
@@ -249,7 +249,6 @@ bool KMeans<T>::isConverged(){
 
     return flags == k;
 }
-
 
 //-----------------------------------------------------------//
 //  EXPLICIT INSTANTIATING

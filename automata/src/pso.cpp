@@ -51,14 +51,14 @@ void PSO::_loadAndLogRandomParticles(int numberOfParticles) {
 // TODO(dybisz) google test
 vector<Particle*> PSO::_generateRandomParticles(int numberOfParticles) {
     vector<Particle*> particles;
-    int particleLength = _psoNumberOfStates * _numberOfSymbols;
+    double speedFactor = 0.5;
 
     if (numberOfParticles < 1) {
         throw invalid_argument("numberOfParticles < 1");
     }
 
     for(int i = 0; i < numberOfParticles; i++ ) {
-        Particle* p = new Particle(particleLength, 1, _psoNumberOfStates, _psoNumberOfStates, _numberOfSymbols);
+        Particle* p = new Particle(_psoNumberOfStates, _numberOfSymbols, speedFactor);
         particles.push_back(p);
     }
     return particles;

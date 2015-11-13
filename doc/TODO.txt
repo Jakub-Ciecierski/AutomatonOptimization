@@ -1,23 +1,58 @@
 ################################################################################
-For Clion Users !!!
-To make Clion see all the files add the following to CMakeLists.txt
+For Clion Users MUST DO!!!
+This has been made for your convenience.
 
-    # To make clion see header files
-    include_directories("./automata/include")
-    # To make clion see source files - for unit tests
-    include_directories("./automata/src/*")
-    # To make clion see gtests header file - for unit tests
-    include_directories("./googletest/include")
+1) Copy the following to CMakeLists.txt, completely overriding your version.
+#--------------------------------------------------------------------#
+                cmake_minimum_required(VERSION 3.3)
+                project(ac)
 
-CMakeLists.txt itself is in .gitignore for now
-################################################################################
+                MACRO(FIND_DIRS return_list regex)
+                    FILE(GLOB_RECURSE new_list ${regex})
+                    SET(dir_list "")
+                    FOREACH(file_path ${new_list})
+                        GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
+                        SET(dir_list ${dir_list} ${dir_path})
+                    ENDFOREACH()
+                    LIST(REMOVE_DUPLICATES dir_list)
+                    SET(${return_list} ${dir_list})
+                ENDMACRO()
 
+                FIND_DIRS(INC_DIRS ./automata/include/*.h)
+                FIND_DIRS(SRC_DIRS ./automata/src/*.cpp)
+                FIND_DIRS(G_DIRS ./googletest/include/*.h)
 
-################################################################################
-KMeans:
-    Sequential
-    Parallel
-        CPU, GPU
+                include_directories(${INC_DIRS})
+                include_directories(${SRC_DIRS})
+                include_directories(${G_DIRS})
 
-mclain-rao:
+                # To make clion see gtests header file - for unit tests
+                include_directories("./googletest/include")
+
+                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+                file(GLOB_RECURSE FILES
+                        "./automata/src/*.cpp"
+                        "./automata/include/*.h"
+                        "./automata/test/src/*.cpp"
+                        "./automata/test/include/*.h")
+
+                set(SPAM)
+
+                add_executable(ac ${FILES} ${SPAM})
+#--------------------------------------------------------------------#
+
+2) Go to File->Settings->(Build, Execution, Deployment)->Cmake
+Select Automatic Cmake Project Reload On Editing, ON.
+
+3) Whenever you create a new file Clion will ask you to choose:
+        Add to targets
+        [Check] ac<-${SPAM}
+   Ones you select it, IDE will remember your choice.
+
+Comment:
+    The given CMakeList finds all files automatically in the project and helps
+    CLion with parsing these files. Sadly CMakeList needs to be reloaded whenever
+    You add new file. To avoid git merges and to create illusion of automatic
+    Cmake reload this method is presented.
 ################################################################################

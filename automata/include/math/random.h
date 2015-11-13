@@ -5,4 +5,9 @@
 #ifndef AC_RANDOM_H
 #define AC_RANDOM_H
 
+namespace rand
+{
+
+}
+
 #endif //AC_RANDOM_H

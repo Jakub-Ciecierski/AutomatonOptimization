@@ -101,6 +101,7 @@ public:
     void setK(int k);
     void setTol(double tol);
     void setMaxIter(int max_iter);
+
 };
 
 

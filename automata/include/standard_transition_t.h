@@ -11,9 +11,8 @@
 
 class StandardTransitionTable: public TransitionTable {
 public:
+    StandardTransitionTable();
     StandardTransitionTable(string url);
-    StandardTransitionTable(TransitionTable& transitionTable);
-
     void print();
     int operator()(int symbol, int state);
 

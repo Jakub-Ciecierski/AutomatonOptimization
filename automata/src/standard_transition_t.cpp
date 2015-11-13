@@ -4,7 +4,11 @@
 
 #include "standard_transition_t.h"
 
+
+StandardTransitionTable::StandardTransitionTable() { }
+
 StandardTransitionTable::StandardTransitionTable(string url) : TransitionTable(url) { }
+
 
 int StandardTransitionTable::operator()(int symbol, int state) {
     try {

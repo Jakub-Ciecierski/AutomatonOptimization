@@ -12,14 +12,13 @@
 
 class PerSymbolTransitionTable: public StandardTransitionTable {
 public:
+    PerSymbolTransitionTable();
     PerSymbolTransitionTable(string url);
     void print();
     bool operator()(int state1, int symbol, int state2);
 
 protected:
     bool _isTransition(int state1, int symbol, int state2);
-
-private:
     void _printEntries();
     void _printPerSymbolTransitionTable(int symbol);
 };

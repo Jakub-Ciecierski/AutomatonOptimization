@@ -7,8 +7,14 @@
 
 #include <string>
 
+// Few remarks about whole project:
+// |--o   symbols take values from interval [1; _numberOfSymbols]
+// |--o   states are marked by values from interval [1; _numberOfStates]
+
 namespace global_settings {
-    std::string TOOL_URL = "test_jastrz.txt";
+//    std::string TOOL_URL = "test_jastrz.txt";
+//    int MIN_STATES = 1;
+//    int MAX_STATES = 6;
 }
 
 

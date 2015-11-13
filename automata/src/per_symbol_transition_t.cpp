@@ -4,7 +4,7 @@
 
 #include "per_symbol_transition_t.h"
 
-
+PerSymbolTransitionTable::PerSymbolTransitionTable() { }
 PerSymbolTransitionTable::PerSymbolTransitionTable(string url) : StandardTransitionTable(url) { }
 
 bool PerSymbolTransitionTable::operator()(int state1, int symbol, int state2) {

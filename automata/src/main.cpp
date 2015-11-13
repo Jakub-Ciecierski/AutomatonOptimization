@@ -2,13 +2,16 @@
 #define AC_MAIN_H
 
 
-#define LOG_TYPE ERROR_LOG
+#define LOG_TYPE DEBUG_LOG
 
 #include <iostream>
 #include <stdio.h>
 #include <vector>
-#include "random_generator.h"
+#include "utils.h"
 #include "global_settings.h"
+#include "pso.h"
+
+using namespace std;
 
 int main(int argc, char *argv[]) {
     printf("Main starting...\n");
@@ -18,8 +21,8 @@ int main(int argc, char *argv[]) {
         cout << "argc != 2\n";
         return EXIT_FAILURE;
     }
-    global_settings::TOOL_URL = argv[1];
-
+//    global_settings::TOOL_URL = argv[1];
+    PSO pso(argv[1], 5, 1);
     return EXIT_SUCCESS;
 }
 

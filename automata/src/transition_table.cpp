@@ -4,6 +4,8 @@
 
 #include "transition_table.h"
 
+TransitionTable::TransitionTable() { }
+
 TransitionTable::TransitionTable(string url) {
     ifstream file(url);
 
@@ -34,7 +36,7 @@ void TransitionTable::_loadAndLogNumberOfStates(istream &inputFileStream) {
 
 void TransitionTable::_loadAndLogNumberOfSymbols(istream &inputFileStream) {
     _numberOfSymbols = _loadOneSymbolFromFile(inputFileStream);
-    LOG_DEBUG("_numberOfSymbols loaded; value: " + to_string(_numberOfStates))
+    LOG_DEBUG("_numberOfSymbols loaded; value: " + to_string(_numberOfSymbols))
 }
 
 void TransitionTable::_loadAndLogDefaultTransitionTable(istream &inputFileStream) {
@@ -44,7 +46,7 @@ void TransitionTable::_loadAndLogDefaultTransitionTable(istream &inputFileStream
 
     _loadEntries(inputFileStream);
 
-    LOG_DEBUG("_entries loaded")
+    LOG_DEBUG("_entries loaded: " + _entriesToString());
 }
 
 int TransitionTable::_loadOneSymbolFromFile(istream &inputFileStream) {
@@ -56,7 +58,7 @@ int TransitionTable::_loadOneSymbolFromFile(istream &inputFileStream) {
 void TransitionTable::_loadEntries(istream &inputFileStream) {
     int val;
 
-    while(inputFileStream.good()) {
+    while (inputFileStream.good()) {
         val = _loadOneSymbolFromFile(inputFileStream);
         _entries.push_back(val);
     }
@@ -72,6 +74,14 @@ void TransitionTable::_printSpecifications() {
     cout << "symbols: " << _numberOfSymbols << endl;
 }
 
+string TransitionTable::_entriesToString() {
+    string entries = "";
+    for (auto i = _entries.begin(); i != _entries.end(); ++i) {
+        entries += (to_string(*i) + " ");
+    }
+    return entries;
+}
+
 void TransitionTable::_printEntries() {
     cout << "entries: ";
     for (auto i = _entries.begin(); i != _entries.end(); ++i)
@@ -79,3 +89,6 @@ void TransitionTable::_printEntries() {
     cout << endl;
 }
 
+int TransitionTable::getNumberOfSymbols() {
+    return _numberOfSymbols;
+}

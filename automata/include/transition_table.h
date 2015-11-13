@@ -18,14 +18,17 @@ using namespace std;
 
 class TransitionTable {
 public:
+    TransitionTable();
     TransitionTable(string url);
     void print();
+    int getNumberOfSymbols();
 
 protected:
     int _numberOfStates;
     int _numberOfSymbols;
     vector<int> _entries;
     void _printSpecifications();
+    string _entriesToString();
     void _printEntries();
 
 private:

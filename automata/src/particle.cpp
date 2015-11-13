@@ -9,6 +9,7 @@ Particle::Particle(int length, int minDim, int maxDim, int numberOfStates, int n
     LOG_INFO("Creating new particle...")
     _loadAndLogRandomPosition(length, minDim, maxDim);
     _loadAndLogDFA(numberOfStates, numberOfSymbols, _position);
+    _loadAndLogRandomVelocity((double)-maxDim, (double)maxDim);
     LOG_INFO("Following particle created: ...")
 }
 
@@ -60,3 +61,7 @@ vector<int> Particle::_castFromPositionToDFA(Point<double> position) {
 }
 
 
+void Particle::_loadAndLogRandomVelocity(double minDim, double maxDim) {
+    _velocity = utils::generateRandomNumber(minDim, maxDim);
+    LOG_DEBUG("_velocity randomized:" + to_string(_velocity));
+}

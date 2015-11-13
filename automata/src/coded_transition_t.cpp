@@ -20,7 +20,6 @@ CodedTransitionTable::CodedTransitionTable(int numberOfStates, int numberOfSymbo
 void CodedTransitionTable::_decodeEntries(vector<int> codedTransitionTable) {
     int size = _numberOfStates * _numberOfSymbols;
     _entries = utils::initVectorOfMinusOnes(size);
-    2+2;
 
     int shift = 0;
     for (int symbol = 0; symbol < _numberOfSymbols; symbol++) {

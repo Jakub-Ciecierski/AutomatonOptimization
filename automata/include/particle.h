@@ -25,9 +25,11 @@ public:
 
 private:
     int _length;
-    double _velocity;
+    Point<double> _velocity;
     double _maxVelocity;
     double _speedFactor;
+    int _numberOfSymbols;
+    int _numberOfStates;
 
     vector<int> _castFromPositionToDFA(Point<double> position);
 
@@ -42,6 +44,10 @@ private:
     void _loadAndLogRandomVelocity(double minDim, double maxDim);
 
     void _loadAndLogMaxVelocity(int numberOfStates, double speedFactor);
+
+    Point<double> _generateRandomPointInSphere(Point<double> centerOfGravity, Point<double> oldPosition);
+
+    void _checkBorderConditions(Point<double>& position);
 };
 
 #endif //AC_PARTICLE_H

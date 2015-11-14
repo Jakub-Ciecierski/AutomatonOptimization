@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <math.h>
 
 /**
  * Class template for Point
@@ -78,6 +79,12 @@ public:
      * Returns string with point's representations
      */
     std::string toString();
+
+    /*
+     * Static. general method for calculating euclidian distance between
+     * given points.
+     */
+    static double euclidianDistance(Point<T> p1, Point<T> p2);
 
     //-----------------------------------------------------------//
     //  OPERATORS

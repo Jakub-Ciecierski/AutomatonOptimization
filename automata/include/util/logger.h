@@ -33,7 +33,7 @@
 
 // Set logging type
 #ifndef LOG_TYPE
-#define LOG_TYPE        DEBUG_LOG
+#define LOG_TYPE        CALC_LOG
 #endif
 
 #define RED_SPACE(word)     RED_BOLD_TEXT("   |-----o ")

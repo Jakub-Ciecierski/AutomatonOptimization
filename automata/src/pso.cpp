@@ -112,7 +112,7 @@ void PSO::compute() {
         LOG_CALC("fitness:", to_string(_bestFitnessTracking));
 
         // Calculate lbest using K-Means and MCFiut
-
+        _lbestp = _pbestp;
         LOG_CALC("_lbestp",_lbestp.toString())
 
         // Update particles positions

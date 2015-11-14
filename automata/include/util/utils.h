@@ -8,12 +8,18 @@
 #include <random>
 #include <vector>
 #include <string>
+#include <words_processing/word.h>
 #include "word.h"
 
 namespace utils {
 
+    static bool seeded = false;
+
     inline void seed() {
-        srand(time(NULL));
+        if(!seeded) {
+            srand(time(NULL));
+            seeded = true;
+        }
     }
 
     template<class T>

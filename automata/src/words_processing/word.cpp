@@ -27,6 +27,10 @@ string Word::toString() {
     return utils::vectorToString(_entries);
 }
 
+void Word::clear() {
+    _entries.clear();
+}
+
 int Word::operator[](int i) const {
     return _entries[i];
 }

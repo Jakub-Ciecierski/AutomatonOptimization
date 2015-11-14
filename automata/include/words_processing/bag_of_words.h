@@ -21,6 +21,7 @@ public:
     vector<Word> getWordsOfLength(int length);
 
     void print();
+
     string wordsToString(vector<Word> words);
 
     int size();

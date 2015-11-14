@@ -29,6 +29,8 @@ public:
 
     string toString();
 
+    void clear();
+
     int operator[](int i) const;
 
     int &operator[](int i);

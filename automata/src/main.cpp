@@ -25,12 +25,12 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 //    PSO pso(argv[1], 5, 1);
-    WordsGenerator wg;
-
-    Word w1({1,1,1,0});
-    Word w2({1,0,0});
-
-    cout << wg.hammingDistance(w1,w2);
+    vector<int> alphabet = {1, 2, 3, 4};
+    WordsGenerator wordsGenerator(alphabet);
+    Word a = wordsGenerator._generateWordStartingWith(1,5);
+    Word b = wordsGenerator._generateWordStartingWith(2,5);
+    Word c = wordsGenerator._generateWordStartingWith(4,5);
+    cout <<a.toString() + " " + b.toString() + " " + c.toString() + "\n";
     return EXIT_SUCCESS;
 }
 

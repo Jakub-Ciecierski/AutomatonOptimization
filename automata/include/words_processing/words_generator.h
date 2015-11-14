@@ -9,20 +9,33 @@
 #include "global_settings.h"
 #include "bag_of_words.h"
 #include "word.h"
+#include "utils.h"
+#include <util/logger.h>
+
+using namespace global_settings;
 
 class WordsGenerator {
 public:
+    WordsGenerator(vector<int> alphabet);
+
     int hammingDistance(Word w1, Word w2) const;
 
+    Word _generateWordStartingWith(int symbol, int length);
+
+    void print();
 private:
     BagOfWords _omegaS;
     BagOfWords _omegaM;
     BagOfWords _omegaL;
+    vector<int> _alphabet;
 
-    bool _hammingCondition(Word word, int wordLength);
-    vector<Word> _getGeneratedWordsOfLength(int length);
+    Word _generateRandomWordOverAlphabet(int length);
 
-    vector<Word> _mergeVectors(vector<Word> v1, vector<Word> v2, vector<Word> v3);
+    bool _hammingConditionMet(Word word);
+
+    bool _checkHammingCondition(Word word, vector<Word> wordsToCompare);
+
+    void _checkGlobalConditions();
 };
 
 #endif //AC_WORDS_GENERATOR_H

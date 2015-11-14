@@ -52,6 +52,8 @@ private:
     double _fitnessFunction(Particle* p);
 
     Point<double> _calculatePBest(vector<Particle *> particles);
+
+    void _updateParticles(Point<double> pbestp, Point<double> lbestp);
 };
 
 #endif //AC_PSO_H

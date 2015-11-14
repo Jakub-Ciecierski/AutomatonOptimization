@@ -10,10 +10,13 @@
 #include "dfa.h"
 #include "math/point.h"
 #include "utils.h"
+#include "global_settings.h"
 
 class Particle {
 public:
     Particle(int numberOfStates, int numberOfSymbols, double speedFactor);
+
+    void update(Point<double> pbestp, Point<double> lbestp);
 
     ~Particle();
 

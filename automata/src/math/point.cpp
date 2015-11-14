@@ -258,6 +258,16 @@ bool Point<T>::operator!=(const Point<T>& p) const {
     return (equalPart != size1);
 }
 
+template <class T>
+Point<T> Point<T>::operator* (T x) {
+    Point<T> resultPoint;
+
+    for(unsigned int dim = 0; dim < elements.size(); dim++) {
+        resultPoint.addDimension(elements[dim] * x);
+    }
+
+    return resultPoint;
+}
 
 //-----------------------------------------------------------//
 //  EXPLICIT INSTANTIATING

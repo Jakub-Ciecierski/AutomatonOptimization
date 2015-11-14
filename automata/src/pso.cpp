@@ -116,7 +116,7 @@ void PSO::compute() {
         LOG_CALC("_lbestp",_lbestp.toString())
 
         // Update particles positions
-
+        _updateParticles(_pbestp, _lbestp);
 
     }
     LOG_INFO("Particle Swarm Optimization: scomputing ends.")
@@ -138,6 +138,12 @@ Point<double> PSO::_calculatePBest(vector<Particle *> particles) {
     _bestFitnessTracking = bestFitness;
 
     return pbestp;
+}
+
+void PSO::_updateParticles(Point<double> pbestp, Point<double> lbestp) {
+    for (auto particle : _particles) {
+        particle->update(pbestp, lbestp);
+    }
 }
 
 PSO::~PSO() {

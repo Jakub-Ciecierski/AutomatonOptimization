@@ -72,6 +72,11 @@ void Particle::_loadAndLogMaxVelocity(int numberOfStates, double speedFactor) {
     LOG_DEBUG("_maxVelocity set to:" + to_string(_maxVelocity));
 }
 
+void Particle::update(Point<double> pbestp, Point<double> lbestp) {
+    Point<double> oldPosition = _position;
+    Point<double> y_p1 = (pbestp - oldPosition) * global_settings::LEARNING_FACTOR;
+}
+
 string Particle::_positionToString() {
     string stringOut = "";
     for (int i = 0; i < _position.size(); i++) {

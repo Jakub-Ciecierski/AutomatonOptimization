@@ -125,6 +125,9 @@ public:
      * of corresponding elements is not equal
      */
     bool operator!=(const Point<T>& p) const;
+
+    /* Multiply every entry by a scalar */
+    Point<T> operator* (T x);
 };
 
 #endif //AC_POINT_H

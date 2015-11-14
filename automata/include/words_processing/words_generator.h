@@ -20,14 +20,17 @@ public:
 
     int hammingDistance(Word w1, Word w2) const;
 
-    Word _generateWordStartingWith(int symbol, int length);
+    void _fillBagWithWords(BagOfWords &bag, int numberOfWords, int minWordLength, int maxWordLength);
 
     void print();
+
 private:
     BagOfWords _omegaS;
     BagOfWords _omegaM;
     BagOfWords _omegaL;
     vector<int> _alphabet;
+
+    Word _generateWordStartingWith(int symbol, int length);
 
     Word _generateRandomWordOverAlphabet(int length);
 
@@ -36,6 +39,12 @@ private:
     bool _checkHammingCondition(Word word, vector<Word> wordsToCompare);
 
     void _checkGlobalConditions();
+
+    int _generateRandomSymbolFromAlphabet();
+
+    void _fillBags();
+
+    Word _generateWordWithHammingConditionMet(int minWordLength, int maxWordLength);
 };
 
 #endif //AC_WORDS_GENERATOR_H

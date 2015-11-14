@@ -27,10 +27,9 @@ int main(int argc, char *argv[]) {
 //    PSO pso(argv[1], 5, 1);
     vector<int> alphabet = {1, 2, 3, 4};
     WordsGenerator wordsGenerator(alphabet);
-    Word a = wordsGenerator._generateWordStartingWith(1,5);
-    Word b = wordsGenerator._generateWordStartingWith(2,5);
-    Word c = wordsGenerator._generateWordStartingWith(4,5);
-    cout <<a.toString() + " " + b.toString() + " " + c.toString() + "\n";
+
+    wordsGenerator.print();
+
     return EXIT_SUCCESS;
 }
 

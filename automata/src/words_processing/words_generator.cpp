@@ -8,6 +8,7 @@ WordsGenerator::WordsGenerator(vector<int> alphabet) : _alphabet(alphabet) {
     try {
         utils::seed();
         _checkGlobalConditions();
+        _fillBags();
     }
     catch (std::exception &e) {
         LOG_ERROR(e.what())
@@ -30,6 +31,41 @@ void WordsGenerator::_checkGlobalConditions() {
     }
 }
 
+void WordsGenerator::_fillBags() {
+    _fillBagWithWords(_omegaS, SIZE_S, MIN_LENG_S, MAX_LENG_S);
+    _fillBagWithWords(_omegaM, SIZE_M, MIN_LENG_M, MAX_LENG_M);
+    _fillBagWithWords(_omegaL, SIZE_L, MIN_LENG_L, MAX_LENG_L);
+}
+
+void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords, int minWordLength, int maxWordLength) {
+    bool moreWordsNeededThanSymbolsInAlphabet = numberOfWords > _alphabet.size();
+
+    if (moreWordsNeededThanSymbolsInAlphabet) {
+
+        // Create alphabet based words
+        for (int symbol = 1; symbol < _alphabet.size(); symbol++) {
+            int length = utils::generateRandomNumber(minWordLength, maxWordLength);
+            Word word = _generateWordStartingWith(symbol, length);
+            bag.addWord(word);
+        }
+
+        // Fill up rest of the space
+        int restOfTheSpaceSize = numberOfWords - _alphabet.size();
+        for (int i = 0; i < restOfTheSpaceSize; i++) {
+            Word word = _generateWordWithHammingConditionMet(minWordLength, maxWordLength);
+            bag.addWord(word);
+        }
+
+    } else {
+
+        // Produce as many alphabet words as words needed
+        for (int symbol = 1; symbol < numberOfWords; symbol++) {
+            int length = utils::generateRandomNumber(minWordLength, maxWordLength);
+            Word word = _generateWordStartingWith(symbol, length);
+            bag.addWord(word);
+        }
+    }
+}
 
 int WordsGenerator::hammingDistance(Word w1, Word w2) const {
     int distance = 0;
@@ -57,19 +93,32 @@ Word WordsGenerator::_generateWordStartingWith(int startingSymbol, int wordLengt
     return word;
 }
 
+Word WordsGenerator::_generateWordWithHammingConditionMet(int minWordLength, int maxWordLength) {
+    Word word;
+    do {
+        int length = utils::generateRandomNumber(minWordLength, maxWordLength);
+        word = _generateRandomWordOverAlphabet(length);
+    } while (!_hammingConditionMet(word));
+
+    return word;
+}
+
 Word WordsGenerator::_generateRandomWordOverAlphabet(int length) {
     Word word;
-    int firstSymbol = _alphabet[0];
-    int lastSymbol = _alphabet.size();
 
     for (int i = 0; i < length; i++) {
-        int randomSymbol = utils::generateRandomNumber(firstSymbol, lastSymbol);
+        int randomSymbol = _generateRandomSymbolFromAlphabet();
         word.appendSymbol(randomSymbol);
     }
 
     return word;
 }
 
+int WordsGenerator::_generateRandomSymbolFromAlphabet() {
+    int firstSymbol = _alphabet[0];
+    int lastSymbol = _alphabet.size();
+    return utils::generateRandomNumber(firstSymbol, lastSymbol);
+}
 
 // Check if word meets conditions regarding those already created
 bool WordsGenerator::_hammingConditionMet(Word word) {
@@ -89,7 +138,12 @@ bool WordsGenerator::_checkHammingCondition(Word word, vector<Word> wordsToCompa
     double acceptableHammingDistance = ((double) word.length()) / 2.0;
 
     for (auto i = wordsToCompare.begin(); i != wordsToCompare.end(); ++i) {
-        if (hammingDistance(word, *i) < acceptableHammingDistance) {
+        int distance = hammingDistance(word, *i);
+
+        if (distance < acceptableHammingDistance) {
+            LOG_DEBUG("word: " + word.toString() + " and " + (*i).toString()
+                      + " have wrong hamming distance: " + to_string(distance));
+            print();
             return false;
         }
     }
@@ -105,4 +159,5 @@ void WordsGenerator::print() {
     cout << "OMEG_L:\n";
     _omegaL.print();
 }
+
 

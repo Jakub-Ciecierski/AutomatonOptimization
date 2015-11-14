@@ -104,11 +104,12 @@ void PSO::compute() {
     for (int t = 0; t < MAX_ITER; t++) {
 
         LOG_INFO("Interation: " + to_string(t));
-        
+
         // Calculate pbest using Fitness Function
         _pbestp = _calculatePBest(_particles);
 
-        cout << "_pbestp: " << _pbestp.toString() << " || fitness: " << _bestFitnessTracking << endl;
+        LOG_CALC("_pbestp",_pbestp.toString())
+        LOG_CALC("fitness:", to_string(_bestFitnessTracking));
 
         // Calculate lbest using K-Means and MCFiut
 

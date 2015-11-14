@@ -44,6 +44,12 @@ namespace global_settings {
     extern int MIN_LENG_L;
     // Maximum word length in omega_{L}
     extern int MAX_LENG_L;
+
+    /* ------ CLUSTERING ----- */
+    // The convergence tolerance in kmeans
+    extern double KM_TOL;
+    // The maximum iterations of kmeans
+    extern int KM_MAX_ITER;
 }
 
 

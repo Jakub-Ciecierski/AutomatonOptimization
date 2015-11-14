@@ -73,10 +73,16 @@ namespace acm
         return mean;
     }
 
+    //-----------------------------------------------------------//
+    //  TEMPLATE DECLARATIONS
+    //-----------------------------------------------------------//
+
     template double distance(const Point<char>&, const Point<char>&);
     template double distance(const Point<int>&, const Point<int>&);
     template double distance(const Point<float>&, const Point<float>&);
     template double distance(const Point<double>&, const Point<double>&);
+
+    //-----------------------------------------------------------//
 
     template Point<char> centerOfMass(const std::vector<Point<char>>*);
     template Point<int> centerOfMass(const std::vector<Point<int>>*);

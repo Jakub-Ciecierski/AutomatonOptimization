@@ -119,6 +119,9 @@ public:
      * of corresponding elements is not equal
      */
     bool operator!=(const Point<T>& p) const;
+
+    template <typename TT>
+    friend std::ostream& operator<<(std::ostream& os, const Point<TT>& p);
 };
 
 #endif //AC_POINT_H

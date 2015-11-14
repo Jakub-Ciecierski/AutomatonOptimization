@@ -248,6 +248,34 @@ bool Point<T>::operator!=(const Point<T>& p) const {
     }
     return (equalPart != size1);
 }
+/*
+template <class T>
+std::ostream& Point<T>::operator<<(std::ostream& os, const Point<T>& p){
+    os << "[";
+    for(int i = 0;i < size(); i++) {
+        os << p[i];
+        if (i != size() - 1) {
+            os << ", ";
+        }
+    }
+    os << "]" << std::endl;
+
+    return os;
+}*/
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Point<T>& p){
+    os << "[";
+    for(int i = 0;i < p.size(); i++) {
+        os << p[i];
+        if (i != p.size() - 1) {
+            os << ", ";
+        }
+    }
+    os << "]" << std::endl;
+
+    return os;
+}
 
 
 //-----------------------------------------------------------//
@@ -258,3 +286,8 @@ template class Point<char>;
 template class Point<int>;
 template class Point<float>;
 template class Point<double>;
+
+template std::ostream& operator<<(std::ostream& os, const Point<char>& p);
+template std::ostream& operator<<(std::ostream& os, const Point<int>& p);
+template std::ostream& operator<<(std::ostream& os, const Point<float>& p);
+template std::ostream& operator<<(std::ostream& os, const Point<double>& p);

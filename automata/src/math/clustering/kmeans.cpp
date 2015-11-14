@@ -9,10 +9,12 @@
  *
  * http://stackoverflow.com/questions/8752837/undefined-reference-to-template-class-constructor
  */
+#include <random>
+#include <stdexcept>
 #include "kmeans.h"
 #include "geometry.h"   /* distance */
-#include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include "logger.h"
 
 //-----------------------------------------------------------//
 //  CONSTRUCTORS
@@ -24,8 +26,23 @@ KMeans<T>::KMeans(int k, double tol, int max_iter) :
 }
 
 template <class T>
-KMeans<T>::~KMeans() {
+KMeans<T>::KMeans(const KMeans& cpy){
+    this->k = cpy.k;
+    this->max_iter = cpy.max_iter;
+    this->tol = cpy.tol;
+    this->dataDimension = cpy.dataDimension;
 
+    this->clusterIndices = cpy.clusterIndices;
+    this->centroids = cpy.centroids;
+    this->previousCentroids = cpy.previousCentroids;
+
+    this->data = data;
+
+    this->clusters = cpy.clusters;
+}
+
+template <class T>
+KMeans<T>::~KMeans() {
 }
 
 
@@ -33,8 +50,17 @@ KMeans<T>::~KMeans() {
 //  PUBLIC METHODS
 //-----------------------------------------------------------//
 
+/*
+ * Starts the computations for kmeans.
+ *
+ * 1) Initiate cluster with kmeans_pp algorithm
+ *  1.1) Update the clusters, assigned each point to new clusters
+ * 2) Update centroids.
+ * 3) Update clusters
+ * 4) Repeat 2), 3) untill convereged or max iterations.
+ */
 template <class T>
-void KMeans<T>::compute(std::vector<Point<T>>* data) {
+void KMeans<T>::compute(const std::vector<Point<T>>* data) {
     int t;
 
     if((*data).size() == 0)
@@ -43,21 +69,41 @@ void KMeans<T>::compute(std::vector<Point<T>>* data) {
     this->data = data;
     this->dataDimension = (*data)[0].size();
 
+    LOG_DEBUG("Kmeans starting");
+
     // Start with initializing centroids and assigning points to them
-    initCentroids();
+    kmeans_pp();
     updateClusters();
 
     t = 0;
-    while(!isConverged() && t < max_iter){
+    while(!isConverged(t++)) {
         updateCentroids();
 
         updateClusters();
     }
+
+    // Create clusters dynamically.
+    this->createClusters();
+
+    LOG_DEBUG("Kmeans Finished");
 }
 
 //-----------------------------------------------------------//
 //  GETTERS / SETTERS
 //-----------------------------------------------------------//
+
+/*
+ * Returns i-th cluster.
+ * The valid range of i = [0, k-1]
+ */
+template <class T>
+std::vector<Point<T>> KMeans<T>::getCluster(int i){
+    if( i < 0 || i >= k)
+        throw std::invalid_argument("Index out of range");
+
+    return this->clusters[i];
+}
+
 
 template <class T>
 int KMeans<T>::getK() {
@@ -95,6 +141,8 @@ void KMeans<T>::setTol(double tol) {
 //  PRIVATE METHODS
 //-----------------------------------------------------------//
 
+// -----------------------------------------------------------------------------
+
 /*
  * Computes initial values for centroids.
  * The kmeans++ algorithm is used.
@@ -112,10 +160,13 @@ void KMeans<T>::setTol(double tol) {
  *
  */
 template <class T>
-void KMeans<T>::initCentroids(){
+void KMeans<T>::kmeans_pp(){
+    Point<T> center;
     int centroidCount;
     int dataSize;
+    int centerIndex;
 
+    LOG_DEBUG("Kmeans++ starting");
     srand(time(NULL));
 
     // Current centroid count, must reach value k
@@ -127,41 +178,62 @@ void KMeans<T>::initCentroids(){
 
     /* 1) Choose first center. */
     // Generates random number between [0, dataSize-1]
-    int centerIndex = rand() % (dataSize);
-    Point<T> center = (*data)[centerIndex];
+
+    centerIndex = rand() % (dataSize);
+    center = (*data)[centerIndex];
     this->centroids[centroidCount++] = center;
 
     while(centroidCount < k){
         /* 2) Compute D(x) */
+        this->chooseCentroid(centroidCount);
 
-        double sumOfSquaredDist= 0;
-        std::vector<double> squaredDist(dataSize);
-
-        // For each point find the distance to closest center.
-        for(int i = 0;i < dataSize; i++){
-            double minDistance;
-            int minIndex;
-
-            minIndex = 0;
-            minDistance = acm::distance(this->centroids[minIndex], (*data)[i]);
-
-            for(int j = 0;j < centroidCount; j++){
-                double distance = acm::distance(this->centroids[j], (*data)[i]);
-                if(minDistance >= distance ){
-                    minDistance = distance;
-                    minIndex = j;
-                }
-            }
-            squaredDist.push_back(minDistance*minDistance);
-            sumOfSquaredDist += minDistance * minDistance;
-        }
-
-        /* 3) Weighted Distribution TODO */
     }
-    for(int i = 0; i < k; i++){
-        centroids[i] = (*data)[i];
-    }
+
+    // Log
+    LOG_DEBUG("Finished kmeans++. Centroids:");
 }
+
+/*
+ * Chooses next centroid for kmeans++ algorithm.
+ *
+ * Computes the distance D(x) of each point x to its nearest centroid.
+ * Then chooses next centroid among data points based on discrete
+ * distribution with distribution propotional to D(x).
+ */
+template <class T>
+void KMeans<T>::chooseCentroid(int &centroidCount){
+    int dataSize = (*data).size();
+    std::vector<double> squaredDist(dataSize);
+
+    // For each point find the distance to closest center.
+    for(int i = 0;i < dataSize; i++){
+        double minDistance;
+        int minIndex;
+
+        minIndex = 0;
+        minDistance = acm::distance(this->centroids[minIndex], (*data)[i]);
+
+        for(int j = 0;j < centroidCount; j++){
+            double distance = acm::distance(this->centroids[j], (*data)[i]);
+            if(minDistance >= distance ){
+                minDistance = distance;
+                minIndex = j;
+            }
+        }
+        squaredDist[i] = (minDistance*minDistance);
+    }
+
+    /* 3) Weighted Distribution */
+
+    std::default_random_engine gen;
+    std::discrete_distribution<> dist(squaredDist.begin(), squaredDist.end());
+    int centerIndex = dist(gen);
+
+    this->centroids[centroidCount++] = (*data)[centerIndex];
+}
+
+// -----------------------------------------------------------------------------
+
 
 /*
  * Updating centroids.
@@ -171,6 +243,8 @@ void KMeans<T>::initCentroids(){
 template <class T>
 void KMeans<T>::updateCentroids(){
     int clusterSize;
+
+    LOG_DEBUG("Update Centroids Starting");
 
     // Save the previous centroids
     this->previousCentroids = this->centroids;
@@ -188,7 +262,11 @@ void KMeans<T>::updateCentroids(){
         centroid /= clusterSize;
         this->centroids[i] = centroid;
     }
+
+    LOG_DEBUG("Update Centroids Finished");
 }
+
+// -----------------------------------------------------------------------------
 
 /*
  * Cluster is updated. Each point in data finds the closest centroid.
@@ -199,6 +277,8 @@ void KMeans<T>::updateClusters(){
     int minClusterIndex;
     double distance, minClusterDistance;
     int dataSize;
+
+    LOG_DEBUG("Update Clusters Starting");
 
     dataSize = (*data).size();
 
@@ -225,17 +305,30 @@ void KMeans<T>::updateClusters(){
         }
         this->clusterIndices[minClusterIndex].push_back(i);
     }
-
+    LOG_DEBUG("Update Clusters Finished");
 }
+
+// -----------------------------------------------------------------------------
 
 /*
  * KMeans is converged when all centroids have not repositioned by more than
  * tol value since last iteration
  */
 template <class T>
-bool KMeans<T>::isConverged(){
+bool KMeans<T>::isConverged(const int& t){
     int flags;
     double distance;
+
+    LOG_DEBUG("Is Converged Starting");
+
+    if (t == 0) {
+        LOG_DEBUG("IsConverged, First iteration returning false");
+        return false;
+    }
+    if (t > max_iter) {
+        LOG_DEBUG("IsConverged, Reached Max iterations ");
+        return true;
+    }
 
     // When flags reaches value k, then all centroids have converged.
     flags = 0;
@@ -247,11 +340,46 @@ bool KMeans<T>::isConverged(){
             flags++;
     }
 
-    return flags == k;
+    LOG_DEBUG("Is Converged Finished");
+    if (flags == k){
+        LOG_DEBUG("IsConverged, converged");
+        return true;
+    }
+    else{
+        LOG_DEBUG("IsConverged, not converged");
+        return false;
+    }
 }
 
+// -----------------------------------------------------------------------------
+
+/*
+ * Creates clusters based on the indices.
+ */
+template <class T>
+void KMeans<T>::createClusters(){
+    this->clusters.clear();
+
+    LOG_DEBUG("Creating Clusters");
+
+    for(int i = 0; i < this->k ;i++){
+        std::vector<Point<T>> cluster;
+
+        for(unsigned int j = 0; j < clusterIndices[i].size(); j++){
+            int index = this->clusterIndices[i][j];
+
+            Point<T> p = (*data)[index];
+            cluster.push_back(p);
+        }
+        this->clusters.push_back(cluster);
+    }
+    LOG_DEBUG("Creating Clusters Finished");
+}
+
+// -----------------------------------------------------------------------------
+
 //-----------------------------------------------------------//
-//  EXPLICIT INSTANTIATING
+//  EXPLICIT TEMPLATE  INSTANTIATING
 //-----------------------------------------------------------//
 
 template class KMeans<char>;

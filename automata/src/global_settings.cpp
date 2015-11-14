@@ -24,4 +24,8 @@ namespace global_settings {
     int MAX_LENG_M          = 15;
     int MIN_LENG_L          = 16;
     int MAX_LENG_L          = 25;
+
+    /* ------ CLUSTERING ----- */
+    double KM_TOL = 0.0001f;
+    int KM_MAX_ITER = 1000;
 }

@@ -15,8 +15,8 @@ public:
 
     // symbols take values from interval [1; _numberOfSymbols]
     vector<int> alphabet;
-    int compute(vector<int> word);
-
+    int compute(Word word);
+    bool checkRelationInducedByLanguage(Word w1, Word w2);
 private:
     vector<int> _acquireAlphabetFromTransitionTable(CodedTransitionTable);
     CodedTransitionTable _codedTransitionTable;

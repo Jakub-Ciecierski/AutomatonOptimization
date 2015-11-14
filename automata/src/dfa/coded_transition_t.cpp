@@ -96,9 +96,10 @@ vector<int> CodedTransitionTable::getCodedTransitionTable() {
     return _codedTransitionTable;
 }
 
-int CodedTransitionTable::processWord(vector<int> word) {
+// TODO(dybisz) move this method to TransitionTable (base) class
+int CodedTransitionTable::processWord(Word word) {
     int currentState = 1;
-    for (unsigned int i = 0; i < word.size(); i++) {
+    for (unsigned int i = 0; i < word.length(); i++) {
         currentState = _accessTransitionTable(word[i], currentState);
     }
     return currentState;

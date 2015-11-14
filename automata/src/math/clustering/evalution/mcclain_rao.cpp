@@ -85,7 +85,8 @@ void McClainRao<T>::computeSumWithin() {
 
         for(int i = 0; i < size-1; i++){
             for(int j = i+1; j < size; j++){
-                this->sumWithin += acm::distance(cluster[i], cluster[j]);
+                this->sumWithin += acm::euclideanDistance(cluster[i],
+                                                          cluster[j]);
                 this->nw++;
             }
         }
@@ -112,7 +113,8 @@ void McClainRao<T>::computeSumBetween() {
             // For each pair of points from cluster1 and cluster2
             for(unsigned int i = 0;i < cluster1.size(); i++){
                 for(unsigned int j = 0; j < cluster2.size(); j++){
-                    this->sumBetween += acm::distance(cluster1[i], cluster2[j]);
+                    this->sumBetween += acm::euclideanDistance(cluster1[i],
+                                                               cluster2[j]);
                     this->nb++;
                 }
             }

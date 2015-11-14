@@ -12,6 +12,7 @@
 
 #include "point.h"
 #include <stdexcept>
+#include <util/utils.h>
 
 //-----------------------------------------------------------//
 //  DEFINITIONS
@@ -73,6 +74,14 @@ void Point<T>::addDimension(T element){
 template <class T>
 int Point<T>::size() const {
     return this->elements.size();
+}
+
+/*
+ * Returns string with point's representations
+ */
+template <class T>
+std::string Point<T>::toString() {
+    return utils::vectorToString(elements);
 }
 
 //-----------------------------------------------------------//
@@ -248,20 +257,6 @@ bool Point<T>::operator!=(const Point<T>& p) const {
     }
     return (equalPart != size1);
 }
-/*
-template <class T>
-std::ostream& Point<T>::operator<<(std::ostream& os, const Point<T>& p){
-    os << "[";
-    for(int i = 0;i < size(); i++) {
-        os << p[i];
-        if (i != size() - 1) {
-            os << ", ";
-        }
-    }
-    os << "]" << std::endl;
-
-    return os;
-}*/
 
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const Point<T>& p){
@@ -277,6 +272,16 @@ std::ostream& operator<<(std::ostream& os, const Point<T>& p){
     return os;
 }
 
+template <class T>
+Point<T> Point<T>::operator* (T x) {
+    Point<T> resultPoint;
+
+    for(unsigned int dim = 0; dim < elements.size(); dim++) {
+        resultPoint.addDimension(elements[dim] * x);
+    }
+
+    return resultPoint;
+}
 
 //-----------------------------------------------------------//
 //  EXPLICIT INSTANTIATING

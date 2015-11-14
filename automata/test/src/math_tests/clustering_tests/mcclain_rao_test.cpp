@@ -21,6 +21,7 @@
  * computes the clustering index for that data.
  */
 void mcclainRaoUniformEvaluation();
+
 /*
  * Generates uniform points, used in:
  * mcclain_rao_uniform_evaluation

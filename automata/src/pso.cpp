@@ -14,6 +14,7 @@ PSO::PSO(string toolUrl, int numberOfStates, int populationFactor) :
         _loadAndLogSwarmSize();
         _loadAndLogRandomParticles(_swarmSize);
         _loadAndLogWordsGenerator(_tool.alphabet);
+        _loadAndLogToolFitnessResults();
     }
     catch (std::exception &e) {
         LOG_ERROR(e.what())
@@ -63,8 +64,86 @@ void PSO::_loadAndLogWordsGenerator(vector<int> alphabet) {
     LOG_INFO("Pairs of Words generated");
 }
 
-void PSO::start() {
+void PSO::_loadAndLogToolFitnessResults() {
+    _toolFitnessResults = _generateToolFitnessResults();
+    LOG_INFO("Fitness function results for _tool calculated and saved.");
+}
 
+vector<int> PSO::_generateToolFitnessResults() {
+    vector<int> toolFitnessResults;
+    vector<PairOfWords> pairs = _wordsGenerator->getPairs();
+
+    // TODO(dybisz) check for errors
+
+    for (auto pair = pairs.begin(); pair != pairs.end(); ++pair) {
+        bool inRelation = _tool.checkRelationInducedByLanguage((*pair).word1, (*pair).word2);
+        int result = (inRelation) ? 1 : 0;
+        toolFitnessResults.push_back(result);
+    }
+
+    return toolFitnessResults;
+}
+
+double PSO::_fitnessFunction(Particle *p) {
+    vector<PairOfWords> pairs = _wordsGenerator->getPairs();
+    double count = 0;
+
+    for (int i = 0; i < pairs.size(); i++) {
+        Word w1 = pairs[i].word1;
+        Word w2 = pairs[i].word2;
+        bool inRelation = p->_particleRepresentation->checkRelationInducedByLanguage(w1, w2);
+        int result = (inRelation) ? 1 : 0;
+        count += (result == _toolFitnessResults[i]) ? 1 : 0;
+    }
+
+    return count / (double) pairs.size();
+}
+
+void PSO::compute() {
+    LOG_INFO("Particle Swarm Optimization: start computing...")
+    for (int t = 0; t < MAX_ITER; t++) {
+
+        LOG_INFO("Interation: " + to_string(t));
+
+        // Calculate pbest using Fitness Function
+        _pbestp = _calculatePBest(_particles);
+
+        LOG_CALC("_pbestp",_pbestp.toString())
+        LOG_CALC("fitness:", to_string(_bestFitnessTracking));
+
+        // Calculate lbest using K-Means and MCFiut
+        _lbestp = _pbestp;
+        LOG_CALC("_lbestp",_lbestp.toString())
+
+        // Update particles positions
+        _updateParticles(_pbestp, _lbestp);
+
+    }
+    LOG_INFO("Particle Swarm Optimization: scomputing ends.")
+}
+
+Point<double> PSO::_calculatePBest(vector<Particle *> particles) {
+    Point<double> pbestp;
+    double bestFitness = -1;
+
+    for (int i = 0; i < particles.size(); i++) {
+        double fitness = _fitnessFunction(particles[i]);
+
+        if (fitness > bestFitness) {
+            pbestp = particles[i]->_position;
+            bestFitness = fitness;
+        }
+
+    }
+    _bestFitnessTracking = bestFitness;
+
+    return pbestp;
+}
+
+void PSO::_updateParticles(Point<double> pbestp, Point<double> lbestp) {
+    for (auto particle : _particles) {
+        particle->update(pbestp, lbestp);
+    }
 }
 
 PSO::~PSO() {
@@ -75,5 +154,6 @@ PSO::~PSO() {
 
     delete _wordsGenerator;
 }
+
 
 

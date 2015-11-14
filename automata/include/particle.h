@@ -10,20 +10,26 @@
 #include "dfa.h"
 #include "math/point.h"
 #include "utils.h"
+#include "global_settings.h"
 
 class Particle {
 public:
     Particle(int numberOfStates, int numberOfSymbols, double speedFactor);
 
+    void update(Point<double> pbestp, Point<double> lbestp);
+
     ~Particle();
+
+    DFA *_particleRepresentation = NULL;
+    Point<double> _position;
 
 private:
     int _length;
-    double _velocity;
+    Point<double> _velocity;
     double _maxVelocity;
     double _speedFactor;
-    Point<double> _position;
-    DFA *_particleRepresentation = NULL;
+    int _numberOfSymbols;
+    int _numberOfStates;
 
     vector<int> _castFromPositionToDFA(Point<double> position);
 
@@ -38,6 +44,10 @@ private:
     void _loadAndLogRandomVelocity(double minDim, double maxDim);
 
     void _loadAndLogMaxVelocity(int numberOfStates, double speedFactor);
+
+    Point<double> _generateRandomPointInSphere(Point<double> centerOfGravity, Point<double> oldPosition);
+
+    void _checkBorderConditions(Point<double>& position);
 };
 
 #endif //AC_PARTICLE_H

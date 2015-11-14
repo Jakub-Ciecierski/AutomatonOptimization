@@ -15,7 +15,7 @@ namespace acm
      * Returns the distance between two points
      */
     template<typename T>
-    double distance(const Point<T>& p1, const Point<T>& p2){
+    double euclideanDistance(const Point<T> &p1, const Point<T> &p2){
         double dist;
         int size1, size2;
 
@@ -77,10 +77,12 @@ namespace acm
     //  TEMPLATE DECLARATIONS
     //-----------------------------------------------------------//
 
-    template double distance(const Point<char>&, const Point<char>&);
-    template double distance(const Point<int>&, const Point<int>&);
-    template double distance(const Point<float>&, const Point<float>&);
-    template double distance(const Point<double>&, const Point<double>&);
+    template double euclideanDistance(const Point<char> &, const Point<char> &);
+    template double euclideanDistance(const Point<int> &, const Point<int> &);
+    template double euclideanDistance(const Point<float> &,
+                                      const Point<float> &);
+    template double euclideanDistance(const Point<double> &,
+                                      const Point<double> &);
 
     //-----------------------------------------------------------//
 

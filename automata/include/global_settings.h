@@ -6,6 +6,7 @@
 #define AC_GLOBAL_SETTINGS_H
 
 #include <string>
+#include <cmath>
 
 // Few remarks about whole project:
 // |--o   symbols take values from interval [1; _numberOfSymbols]
@@ -22,6 +23,13 @@ namespace global_settings {
     extern int MIN_STATES;
     // Maximum number of states to check
     extern int MAX_STATES;
+    // Maximum iterations of PSO algorithm
+    extern int MAX_ITER;
+    // TODO comment
+    extern double LEARNING_FACTOR;
+    // TODO comment
+    extern double PARTICLE_VELOCITY;
+
 
     /* ------ WORDS GENERATION ----- */
     // Maximum number of testing words

@@ -10,6 +10,9 @@
 #include <string>
 #include <words_processing/word.h>
 #include "word.h"
+#include "point.h"
+#include <math.h>
+#include <stdexcept>
 
 namespace utils {
 
@@ -41,7 +44,7 @@ namespace utils {
         return vec123;
     }
 
-    // TODO fix this shit
+    // TODO(dybisz) fix this shit
     // In case of int generation, make endRange++.
     template<class T>
     inline T generateRandomNumber(T startRange, T endRange) {
@@ -63,6 +66,37 @@ namespace utils {
             output.push_back(-1);
         }
         return output;
+    }
+
+    template <class T>
+    static double euclidianDistance(Point<T> p1, Point<T> p2) {
+        Point<T> difference = p1 - p2;
+        T result = 0;
+
+        if (p1.size() != p2.size()){
+            throw std::invalid_argument("The dimensions must match");
+        }
+
+        for(int i = 0; i < p1.size(); i++) {
+            result += difference[i] * difference[i];
+        }
+
+        return sqrt(result);
+    }
+
+    template <class T>
+    static Point<T> generateRandomPoint(T dimensions, double min, double max) {
+        Point<T> point;
+
+        if (dimensions < 0){
+            throw std::invalid_argument("The dimensions <0");
+        }
+
+        for(int i = 0; i < dimensions; i++) {
+            point.addDimension(generateRandomNumber(min, max));
+        }
+
+        return point;
     }
 }
 

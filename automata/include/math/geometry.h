@@ -14,10 +14,10 @@ namespace acm
 {
 
     /*
-    * Returns the distance between two points
+    * Returns the euclidean distance between two points
     */
     template<typename T>
-    double distance(const Point<T>& p1, const Point<T>& p2);
+    double euclideanDistance(const Point<T> &p1, const Point<T> &p2);
 
     /*
      * Computes the mean point - the center of mass

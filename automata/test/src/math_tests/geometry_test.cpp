@@ -21,7 +21,7 @@ TEST(MathGeometry, Distance_Two_Points_Equal) {
     Point<int> p1(data1, size);
     Point<int> p2(data2, size);
 
-    actualDist = acm::distance(p1, p2);
+    actualDist = acm::euclideanDistance(p1, p2);
 
     EXPECT_EQ((int)expectedDist, (int)actualDist);
 }

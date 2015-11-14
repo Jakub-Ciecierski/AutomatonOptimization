@@ -23,7 +23,8 @@
 #define NO_LOG          0x00
 #define ERROR_LOG       0x01
 #define INFO_LOG        0x02
-#define DEBUG_LOG       0x03
+#define CALC_LOG        0x03
+#define DEBUG_LOG       0x04
 
 // Tags for logging types
 #define TAG_ERROR_LOG   "[ERROR]"
@@ -32,12 +33,13 @@
 
 // Set logging type
 #ifndef LOG_TYPE
-#define LOG_TYPE        DEBUG_LOG
+#define LOG_TYPE        CALC_LOG
 #endif
 
 #define RED_SPACE(word)     RED_BOLD_TEXT("   |-----o ")
 #define BLUE_SPACE(word)    BLUE_BOLD_TEXT("   |-----o ")
 #define GREEN_SPACE(word)   GREEN_BOLD_TEXT("   |-----o ")
+#define FREE_SPACE          "           "
 
 #define PRINT_ERROR(message) \
         std::cout << RED_BOLD_TEXT(TAG_ERROR_LOG) << std::endl << \
@@ -50,6 +52,8 @@
         std::cout << BLUE_BOLD_TEXT(TAG_INFO_LOG) << std::endl << \
                      BLUE_SPACE(TAG_INFO_LOG) << "[message]:  " << message << std::endl;
 
+#define PRINT_CALC(tag, values) \
+        std::cout << FREE_SPACE << "[" << tag << "]: " << values << std::endl;
 
 #define PRINT_DEBUG(message) \
         std::cout << GREEN_BOLD_TEXT(TAG_DEBUG_LOG) << std::endl << \
@@ -69,6 +73,12 @@
 #define LOG_INFO(message) PRINT_INFO(message)
 #else
 #define LOG_INFO(message)
+#endif
+
+#if LOG_TYPE >= CALC_LOG
+#define LOG_CALC(tag, message) PRINT_CALC(tag, message)
+#else
+#define LOG_CALC(tag, message)
 #endif
 
 #if LOG_TYPE >= DEBUG_LOG

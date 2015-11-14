@@ -15,26 +15,37 @@
 class PSO {
 public:
     PSO(string toolUrl, int numberOfStates, int populationFactor);
+
     ~PSO();
+
     void start();
 
 private:
     DFA _tool;
-    vector<Particle*> _particles;
-    WordsGenerator* _wordsGenerator;
+    vector<Particle *> _particles;
+    WordsGenerator *_wordsGenerator;
 
     int _psoNumberOfStates;
     int _numberOfSymbols;
     int _swarmSize;
     int _populationFactor;
-
+    vector<int> _toolFitnessResults;
 
     void _loadAndLogSwarmSize();
+
     int _calculateSwarmSize(int numberOfStates, int numberOfSymbols, int populationFactor);
+
     void _loadAndLogRandomParticles(int numberOfParticles);
-    vector<Particle*> _generateRandomParticles(int numberOfParticles);
+
+    vector<Particle *> _generateRandomParticles(int numberOfParticles);
 
     void _loadAndLogWordsGenerator(vector<int> alphabet);
+
+    void _loadAndLogToolFitnessResults();
+
+    vector<int> _generateToolFitnessResults();
+
+    double _fitnessFunction(Particle p);
 };
 
 #endif //AC_PSO_H

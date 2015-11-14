@@ -10,6 +10,7 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
+#include "word.h"
 
 class CodedTransitionTable: public PerSymbolTransitionTable {
 public:
@@ -17,7 +18,7 @@ public:
     CodedTransitionTable(int numberOfStates, int numberOfSymbols, vector<int> codedTransitionTable);
     void print();
     vector<int> getCodedTransitionTable();
-    int processWord(vector<int> word);
+    int processWord(Word word);
 
 private:
     vector<int> _codedTransitionTable;

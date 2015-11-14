@@ -14,7 +14,6 @@ Particle::Particle(int numberOfStates, int numberOfSymbols, double speedFactor) 
         _loadAndLogDFA(numberOfStates, numberOfSymbols, _position);
         _loadAndLogRandomVelocity(-numberOfStates, numberOfStates);
         _loadAndLogMaxVelocity(numberOfStates, _speedFactor);
-
     }
     catch (std::exception &e) {
         LOG_ERROR(e.what())

@@ -14,6 +14,7 @@ PSO::PSO(string toolUrl, int numberOfStates, int populationFactor) :
         _loadAndLogSwarmSize();
         _loadAndLogRandomParticles(_swarmSize);
         _loadAndLogWordsGenerator(_tool.alphabet);
+        _loadAndLogToolFitnessResults();
     }
     catch (std::exception &e) {
         LOG_ERROR(e.what())
@@ -61,6 +62,41 @@ vector<Particle *> PSO::_generateRandomParticles(int numberOfParticles) {
 void PSO::_loadAndLogWordsGenerator(vector<int> alphabet) {
     _wordsGenerator = new WordsGenerator(alphabet);
     LOG_INFO("Pairs of Words generated");
+}
+
+void PSO::_loadAndLogToolFitnessResults() {
+    _toolFitnessResults = _generateToolFitnessResults();
+    LOG_INFO("Fitness function results for _tool calculated and saved.");
+}
+
+vector<int> PSO::_generateToolFitnessResults() {
+    vector<int> toolFitnessResults;
+    vector<PairOfWords> pairs = _wordsGenerator->getPairs();
+
+    // TODO(dybisz) check for errors
+
+    for (auto pair = pairs.begin(); pair != pairs.end(); ++pair) {
+        bool inRelation = _tool.checkRelationInducedByLanguage((*pair).word1, (*pair).word2);
+        int result = (inRelation) ? 1 : 0;
+        toolFitnessResults.push_back(result);
+    }
+
+    return toolFitnessResults;
+}
+
+double PSO::_fitnessFunction(Particle p) {
+    vector<PairOfWords> pairs = _wordsGenerator->getPairs();
+    double count = 0;
+
+    for (int i = 0; i < pairs.size(); i++) {
+        Word w1 = pairs[i].word1;
+        Word w2 = pairs[i].word2;
+        bool inRelation = p._particleRepresentation->checkRelationInducedByLanguage(w1, w2);
+        int result = (inRelation) ? 1 : 0;
+        count += (result == _toolFitnessResults[i]) ? 1 : 0;
+    }
+
+    return count / (double) pairs.size();
 }
 
 void PSO::start() {

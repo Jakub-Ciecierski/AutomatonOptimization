@@ -14,8 +14,8 @@
 class Particle {
 public:
     Particle(int numberOfStates, int numberOfSymbols, double speedFactor);
-
     ~Particle();
+    DFA *_particleRepresentation = NULL;
 
 private:
     int _length;
@@ -23,7 +23,7 @@ private:
     double _maxVelocity;
     double _speedFactor;
     Point<double> _position;
-    DFA *_particleRepresentation = NULL;
+
 
     vector<int> _castFromPositionToDFA(Point<double> position);
 

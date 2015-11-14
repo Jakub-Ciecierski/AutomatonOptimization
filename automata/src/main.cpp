@@ -24,11 +24,11 @@ int main(int argc, char *argv[]) {
         cout << "argc != 2\n";
         return EXIT_FAILURE;
     }
-//    PSO pso(argv[1], 5, 1);
-    vector<int> alphabet = {1, 2, 3, 4};
-    WordsGenerator wordsGenerator(alphabet);
-
-    wordsGenerator.print();
+    PSO pso(argv[1], 5, 1);
+//    vector<int> alphabet = {1, 2};
+////    WordsGenerator wordsGenerator(alphabet);
+//
+//    wordsGenerator.print();
 
     return EXIT_SUCCESS;
 }

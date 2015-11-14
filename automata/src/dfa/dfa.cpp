@@ -2,15 +2,21 @@
 // Created by dybisz on 11/12/15.
 //
 
+#include <util/utils.h>
 #include "dfa.h"
 
 DFA::DFA(string url) : _codedTransitionTable(url) {
-    alphabet = _acquireAlphabetFromTransitionTable(_codedTransitionTable);
+    _loadAndLogAlphabet(_codedTransitionTable);
 }
 
 DFA::DFA(int numberOfStates, int numberOfSymbols, vector<int> codedTransitionTable) :
         _codedTransitionTable(numberOfStates, numberOfSymbols, codedTransitionTable) {
+    _loadAndLogAlphabet(_codedTransitionTable);
+}
+
+void DFA::_loadAndLogAlphabet(CodedTransitionTable codedTransitionTable) {
     alphabet = _acquireAlphabetFromTransitionTable(_codedTransitionTable);
+    LOG_INFO("Alphabet loaded: " + utils::vectorToString(alphabet));
 }
 
 // TODO(dybisz) google test
@@ -27,3 +33,4 @@ vector<int> DFA::_acquireAlphabetFromTransitionTable(CodedTransitionTable transi
 int DFA::compute(vector<int> word) {
     return _codedTransitionTable.processWord(word);
 }
+

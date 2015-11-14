@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include "dfa.h"
 #include "particle.h"
+#include "words_generator.h"
 
 class PSO {
 public:
@@ -19,16 +20,21 @@ public:
 
 private:
     DFA _tool;
+    vector<Particle*> _particles;
+    WordsGenerator* _wordsGenerator;
+
     int _psoNumberOfStates;
     int _numberOfSymbols;
     int _swarmSize;
     int _populationFactor;
-    vector<Particle*> _particles;
+
 
     void _loadAndLogSwarmSize();
     int _calculateSwarmSize(int numberOfStates, int numberOfSymbols, int populationFactor);
     void _loadAndLogRandomParticles(int numberOfParticles);
     vector<Particle*> _generateRandomParticles(int numberOfParticles);
+
+    void _loadAndLogWordsGenerator(vector<int> alphabet);
 };
 
 #endif //AC_PSO_H

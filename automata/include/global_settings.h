@@ -11,6 +11,7 @@
 // |--o   symbols take values from interval [1; _numberOfSymbols]
 // |--o   states are marked by values from interval [1; _numberOfStates]
 // |--o   actual values declared in global_settings.cpp (<3 c++)
+// |--o   alphabet is represented by integers from interval [_alphabet[0], _alphabet.size()]
 
 namespace global_settings {
 

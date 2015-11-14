@@ -24,6 +24,15 @@ vector<Word> BagOfWords::getWordsOfLength(int length) {
     }
 }
 
+vector<Word> BagOfWords::getAllWords() {
+    vector<Word> allWords;
+    for (auto kv: _bag) {
+        allWords = utils::concatenateVector(allWords, kv.second);
+    }
+    return allWords;
+}
+
+
 void BagOfWords::print() {
     string stringOut = "";
     std::vector<int> keys;

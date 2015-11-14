@@ -6,11 +6,13 @@
 #define AC_WORDS_GENERATOR_H
 
 #include <stdexcept>
+#include <util/logger.h>
 #include "global_settings.h"
 #include "bag_of_words.h"
 #include "word.h"
 #include "utils.h"
-#include <util/logger.h>
+#include "pair_of_words.h"
+
 
 using namespace global_settings;
 
@@ -22,6 +24,8 @@ public:
 
     void _fillBagWithWords(BagOfWords &bag, int numberOfWords, int minWordLength, int maxWordLength);
 
+    vector<PairOfWords> getPairs();
+
     void print();
 
 private:
@@ -29,6 +33,7 @@ private:
     BagOfWords _omegaM;
     BagOfWords _omegaL;
     vector<int> _alphabet;
+    vector<PairOfWords> _pairs;
 
     Word _generateWordStartingWith(int symbol, int length);
 
@@ -45,6 +50,12 @@ private:
     void _fillBags();
 
     Word _generateWordWithHammingConditionMet(int minWordLength, int maxWordLength);
+
+    void _generatePairs();
+
+    vector<Word> _collectAllWordsFromBags();
+
+    vector<PairOfWords> _combineIntoPairs(vector<Word> words);
 };
 
 #endif //AC_WORDS_GENERATOR_H

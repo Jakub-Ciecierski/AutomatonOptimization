@@ -20,9 +20,11 @@ public:
 
     vector<Word> getWordsOfLength(int length);
 
+    vector<Word> getAllWords();
+
     void print();
 
-    string wordsToString(vector<Word> words);
+    static string wordsToString(vector<Word> words);
 
     int size();
 

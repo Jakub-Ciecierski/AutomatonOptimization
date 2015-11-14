@@ -9,6 +9,7 @@ WordsGenerator::WordsGenerator(vector<int> alphabet) : _alphabet(alphabet) {
         utils::seed();
         _checkGlobalConditions();
         _fillBags();
+        _generatePairs();
     }
     catch (std::exception &e) {
         LOG_ERROR(e.what())
@@ -43,7 +44,7 @@ void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords, int m
     if (moreWordsNeededThanSymbolsInAlphabet) {
 
         // Create alphabet based words
-        for (int symbol = 1; symbol < _alphabet.size(); symbol++) {
+        for (int symbol = 1; symbol <= _alphabet.size(); symbol++) {
             int length = utils::generateRandomNumber(minWordLength, maxWordLength);
             Word word = _generateWordStartingWith(symbol, length);
             bag.addWord(word);
@@ -59,7 +60,7 @@ void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords, int m
     } else {
 
         // Produce as many alphabet words as words needed
-        for (int symbol = 1; symbol < numberOfWords; symbol++) {
+        for (int symbol = 1; symbol <= numberOfWords; symbol++) {
             int length = utils::generateRandomNumber(minWordLength, maxWordLength);
             Word word = _generateWordStartingWith(symbol, length);
             bag.addWord(word);
@@ -116,7 +117,7 @@ Word WordsGenerator::_generateRandomWordOverAlphabet(int length) {
 
 int WordsGenerator::_generateRandomSymbolFromAlphabet() {
     int firstSymbol = _alphabet[0];
-    int lastSymbol = _alphabet.size();
+    int lastSymbol = _alphabet.size() + 1;
     return utils::generateRandomNumber(firstSymbol, lastSymbol);
 }
 
@@ -142,13 +143,44 @@ bool WordsGenerator::_checkHammingCondition(Word word, vector<Word> wordsToCompa
 
         if (distance < acceptableHammingDistance) {
             LOG_DEBUG("word: " + word.toString() + " and " + (*i).toString()
-                      + " have wrong hamming distance: " + to_string(distance));
-            print();
+                      + " have wrong hamming distance: " + to_string(distance) +
+                      " starting over ...");
             return false;
         }
     }
 
     return true;
+}
+
+void WordsGenerator::_generatePairs() {
+    vector<Word> allWords = _collectAllWordsFromBags();
+    _pairs = _combineIntoPairs(allWords);
+}
+
+vector<Word> WordsGenerator::_collectAllWordsFromBags() {
+    vector<Word> wordsOmegaS = _omegaS.getAllWords();
+    vector<Word> wordsOmegaM = _omegaM.getAllWords();
+    vector<Word> wordsOmegaL = _omegaL.getAllWords();
+    vector<Word> allWords = utils::mergeVectors(wordsOmegaS, wordsOmegaM, wordsOmegaL);
+
+    return allWords;
+}
+
+vector<PairOfWords> WordsGenerator::_combineIntoPairs(vector<Word> words) {
+    vector<PairOfWords> pairs;
+
+    for (unsigned int i = 0; i < words.size(); i++) {
+        for (unsigned int j = 0; j < words.size(); j++) {
+            PairOfWords pairOfWords(words[i], words[j]);
+            pairs.push_back(pairOfWords);
+        }
+    }
+
+    return pairs;
+}
+
+vector<PairOfWords> WordsGenerator::getPairs() {
+    return _pairs;
 }
 
 void WordsGenerator::print() {
@@ -159,5 +191,6 @@ void WordsGenerator::print() {
     cout << "OMEG_L:\n";
     _omegaL.print();
 }
+
 
 

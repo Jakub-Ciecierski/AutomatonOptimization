@@ -20,6 +20,8 @@ public:
 private:
     vector<int> _acquireAlphabetFromTransitionTable(CodedTransitionTable);
     CodedTransitionTable _codedTransitionTable;
+
+    void _loadAndLogAlphabet(CodedTransitionTable codedTransitionTable);
 };
 
 #endif //AC_AUTOMATON_H

@@ -13,6 +13,7 @@ PSO::PSO(string toolUrl, int numberOfStates, int populationFactor) :
     try {
         _loadAndLogSwarmSize();
         _loadAndLogRandomParticles(_swarmSize);
+        _loadAndLogWordsGenerator(_tool.alphabet);
     }
     catch (std::exception &e) {
         LOG_ERROR(e.what())
@@ -42,19 +43,24 @@ void PSO::_loadAndLogRandomParticles(int numberOfParticles) {
 }
 
 // TODO(dybisz) google test
-vector<Particle*> PSO::_generateRandomParticles(int numberOfParticles) {
-    vector<Particle*> particles;
+vector<Particle *> PSO::_generateRandomParticles(int numberOfParticles) {
+    vector<Particle *> particles;
     double speedFactor = 0.5;
 
     if (numberOfParticles < 1) {
         throw invalid_argument("numberOfParticles < 1");
     }
 
-    for(int i = 0; i < numberOfParticles; i++ ) {
-        Particle* p = new Particle(_psoNumberOfStates, _numberOfSymbols, speedFactor);
+    for (int i = 0; i < numberOfParticles; i++) {
+        Particle *p = new Particle(_psoNumberOfStates, _numberOfSymbols, speedFactor);
         particles.push_back(p);
     }
     return particles;
+}
+
+void PSO::_loadAndLogWordsGenerator(vector<int> alphabet) {
+    _wordsGenerator = new WordsGenerator(alphabet);
+    LOG_INFO("Pairs of Words generated");
 }
 
 void PSO::start() {
@@ -66,4 +72,8 @@ PSO::~PSO() {
         delete (*particle);
     }
     _particles.clear();
+
+    delete _wordsGenerator;
 }
+
+

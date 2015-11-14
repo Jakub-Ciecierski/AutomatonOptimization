@@ -113,6 +113,7 @@ void PSO::compute() {
 
         // Calculate lbest using K-Means and MCFiut
 
+        LOG_CALC("_lbestp",_lbestp.toString())
 
         // Update particles positions
 

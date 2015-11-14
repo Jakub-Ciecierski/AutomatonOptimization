@@ -26,7 +26,7 @@ private:
     vector<Particle *> _particles;
     WordsGenerator *_wordsGenerator;
     Point<double> _pbestp;
-    Point<double> _lbestP;
+    Point<double> _lbestp;
 
     int _psoNumberOfStates;
     int _numberOfSymbols;

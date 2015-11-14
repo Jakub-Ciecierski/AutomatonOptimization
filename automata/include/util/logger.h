@@ -39,7 +39,7 @@
 #define RED_SPACE(word)     RED_BOLD_TEXT("   |-----o ")
 #define BLUE_SPACE(word)    BLUE_BOLD_TEXT("   |-----o ")
 #define GREEN_SPACE(word)   GREEN_BOLD_TEXT("   |-----o ")
-#define FREE_SPACE          "            "
+#define FREE_SPACE          "           "
 
 #define PRINT_ERROR(message) \
         std::cout << RED_BOLD_TEXT(TAG_ERROR_LOG) << std::endl << \

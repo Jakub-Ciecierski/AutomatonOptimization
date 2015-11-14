@@ -24,6 +24,7 @@ bool WordsGenerator::_hammingCondition(Word word, int wordLength) {
     vector<Word> wordsToConsider = _getGeneratedWordsOfLength(wordLength);
     // TODO(dybisz)
 }
+
 // TODO(dybisz)
 vector<Word> WordsGenerator::_getGeneratedWordsOfLength(int length) {
     vector<Word> wordsInOmegaS = _omegaS.getWordsOfLength(length);

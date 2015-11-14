@@ -1,5 +1,5 @@
 //
-// I do not suppose this header will not last long ...
+// I do not suppose this header will last long ...
 // Created by dybisz on 11/11/15.
 //
 

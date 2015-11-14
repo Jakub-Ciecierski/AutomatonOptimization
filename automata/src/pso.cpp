@@ -84,14 +84,14 @@ vector<int> PSO::_generateToolFitnessResults() {
     return toolFitnessResults;
 }
 
-double PSO::_fitnessFunction(Particle p) {
+double PSO::_fitnessFunction(Particle *p) {
     vector<PairOfWords> pairs = _wordsGenerator->getPairs();
     double count = 0;
 
     for (int i = 0; i < pairs.size(); i++) {
         Word w1 = pairs[i].word1;
         Word w2 = pairs[i].word2;
-        bool inRelation = p._particleRepresentation->checkRelationInducedByLanguage(w1, w2);
+        bool inRelation = p->_particleRepresentation->checkRelationInducedByLanguage(w1, w2);
         int result = (inRelation) ? 1 : 0;
         count += (result == _toolFitnessResults[i]) ? 1 : 0;
     }
@@ -102,11 +102,40 @@ double PSO::_fitnessFunction(Particle p) {
 void PSO::compute() {
     LOG_INFO("Particle Swarm Optimization: start computing...")
     for (int t = 0; t < MAX_ITER; t++) {
+
+        LOG_INFO("Interation: " + to_string(t));
+        
         // Calculate pbest using Fitness Function
+        _pbestp = _calculatePBest(_particles);
+
+        cout << "_pbestp: " << _pbestp.toString() << " || fitness: " << _bestFitnessTracking << endl;
+
         // Calculate lbest using K-Means and MCFiut
+
+
         // Update particles positions
+
+
     }
     LOG_INFO("Particle Swarm Optimization: scomputing ends.")
+}
+
+Point<double> PSO::_calculatePBest(vector<Particle *> particles) {
+    Point<double> pbestp;
+    double bestFitness = -1;
+
+    for (int i = 0; i < particles.size(); i++) {
+        double fitness = _fitnessFunction(particles[i]);
+
+        if (fitness > bestFitness) {
+            pbestp = particles[i]->_position;
+            bestFitness = fitness;
+        }
+
+    }
+    _bestFitnessTracking = bestFitness;
+
+    return pbestp;
 }
 
 PSO::~PSO() {
@@ -117,5 +146,6 @@ PSO::~PSO() {
 
     delete _wordsGenerator;
 }
+
 
 

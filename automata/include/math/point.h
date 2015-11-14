@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 /**
  * Class template for Point
@@ -72,6 +73,11 @@ public:
      * Returns the size (number of dimensions)
      */
     int size() const;
+
+    /*
+     * Returns string with point's representations
+     */
+    std::string toString();
 
     //-----------------------------------------------------------//
     //  OPERATORS

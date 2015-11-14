@@ -12,6 +12,7 @@
 
 #include "point.h"
 #include <stdexcept>
+#include <util/utils.h>
 
 //-----------------------------------------------------------//
 //  DEFINITIONS
@@ -73,6 +74,14 @@ void Point<T>::addDimension(T element){
 template <class T>
 int Point<T>::size() const {
     return this->elements.size();
+}
+
+/*
+ * Returns string with point's representations
+ */
+template <class T>
+std::string Point<T>::toString() {
+    return utils::vectorToString(elements);
 }
 
 //-----------------------------------------------------------//

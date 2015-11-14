@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <climits>
 #include "dfa.h"
 #include "particle.h"
 #include "words_generator.h"
@@ -24,11 +25,14 @@ private:
     DFA _tool;
     vector<Particle *> _particles;
     WordsGenerator *_wordsGenerator;
+    Point<double> _pbestp;
+    Point<double> _lbestP;
 
     int _psoNumberOfStates;
     int _numberOfSymbols;
     int _swarmSize;
     int _populationFactor;
+    double _bestFitnessTracking;
     vector<int> _toolFitnessResults;
 
     void _loadAndLogSwarmSize();
@@ -45,7 +49,9 @@ private:
 
     vector<int> _generateToolFitnessResults();
 
-    double _fitnessFunction(Particle p);
+    double _fitnessFunction(Particle* p);
+
+    Point<double> _calculatePBest(vector<Particle *> particles);
 };
 
 #endif //AC_PSO_H

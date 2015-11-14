@@ -22,6 +22,8 @@ namespace global_settings {
     extern int MIN_STATES;
     // Maximum number of states to check
     extern int MAX_STATES;
+    // Maximum iterations of PSO algorithm
+    extern int MAX_ITER;
 
     /* ------ WORDS GENERATION ----- */
     // Maximum number of testing words

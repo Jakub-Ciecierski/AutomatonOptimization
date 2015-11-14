@@ -25,10 +25,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
     PSO pso(argv[1], 5, 1);
-//    vector<int> alphabet = {1, 2};
-////    WordsGenerator wordsGenerator(alphabet);
-//
-//    wordsGenerator.print();
+    pso.compute();
 
     return EXIT_SUCCESS;
 }

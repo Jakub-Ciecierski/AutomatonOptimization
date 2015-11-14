@@ -12,6 +12,7 @@ namespace global_settings {
     std::string TOOL_URL    = "test_jastrz.txt";
     int MIN_STATES          = 1;
     int MAX_STATES          = 6;
+    int MAX_ITER            = 100;
 
     /* ------ WORDS GENERATION ----- */
     int R_MAX               = 30;

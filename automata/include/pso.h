@@ -18,7 +18,7 @@ public:
 
     ~PSO();
 
-    void start();
+    void compute();
 
 private:
     DFA _tool;

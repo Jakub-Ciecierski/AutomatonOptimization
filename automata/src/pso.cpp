@@ -99,8 +99,14 @@ double PSO::_fitnessFunction(Particle p) {
     return count / (double) pairs.size();
 }
 
-void PSO::start() {
-
+void PSO::compute() {
+    LOG_INFO("Particle Swarm Optimization: start computing...")
+    for (int t = 0; t < MAX_ITER; t++) {
+        // Calculate pbest using Fitness Function
+        // Calculate lbest using K-Means and MCFiut
+        // Update particles positions
+    }
+    LOG_INFO("Particle Swarm Optimization: scomputing ends.")
 }
 
 PSO::~PSO() {

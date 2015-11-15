@@ -7,11 +7,12 @@
 // Meaning of constants described in global_settings.h
 // This file is just for quick values manipulations
 namespace global_settings {
+    /* ------ OPTIMIZER SETTINGS ----- */
+    int MIN_STATES              = 1;
+    int MAX_STATES              = 6;
 
     /* ------ PSO SETTINGS ----- */
     std::string TOOL_URL        = "test_jastrz.txt";
-    int MIN_STATES              = 1;
-    int MAX_STATES              = 6;
     int MAX_ITER                = 100;
     double LEARNING_FACTOR      = 0.5 + log(2.0);
     double PARTICLE_VELOCITY    = 1.0 / (2.0 * log(2.0));

@@ -15,21 +15,21 @@
 // |--o   alphabet is represented by integers from interval [_alphabet[0], _alphabet.size()]
 
 namespace global_settings {
-
-    /* ------ PSO SETTINGS ----- */
-    // URL to file with tool automaton
-    extern std::string TOOL_URL;
+    /* ------ OPTIMIZER SETTINGS ----- */
     // Minimum states to check
     extern int MIN_STATES;
     // Maximum number of states to check
     extern int MAX_STATES;
+
+    /* ------ PSO SETTINGS ----- */
+    // URL to file with tool automaton
+    extern std::string TOOL_URL;
     // Maximum iterations of PSO algorithm
     extern int MAX_ITER;
     // TODO comment
     extern double LEARNING_FACTOR;
     // TODO comment
     extern double PARTICLE_VELOCITY;
-
 
     /* ------ WORDS GENERATION ----- */
     // Maximum number of testing words

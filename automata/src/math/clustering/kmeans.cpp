@@ -381,9 +381,9 @@ void KMeans<T>::createClusters(){
     for(int i = 0; i < this->k ;i++){
         std::vector<Point<T>*> cluster;
 
-        int size = clusterIndices[i].size();
+        unsigned int size = clusterIndices[i].size();
 
-        for(unsigned int j = 0; j < clusterIndices[i].size(); j++){
+        for(unsigned int j = 0; j < size; j++){
             int index = this->clusterIndices[i][j];
 
             Point<T>* p = (*data)[index];

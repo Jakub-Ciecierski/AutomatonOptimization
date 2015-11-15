@@ -62,14 +62,14 @@ void kmeansSmall2Clusters(){
         std::cout << "Cluster #" << c << std::endl;
 
         std::vector<Point<double>*> cluster = km.getCluster(c);
-        for(int i = 0; i < cluster.size(); i++){
+        for(unsigned int i = 0; i < cluster.size(); i++){
             std::cout << (*cluster[i]) << std::endl;
         }
     }
 
     std::cout << "Clearing memory" << std::endl;
 
-    for(int i = 0; i < data.size(); i++){
+    for(unsigned int i = 0; i < data.size(); i++){
         delete data[i];
     }
     data.clear();

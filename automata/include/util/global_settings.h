@@ -47,6 +47,10 @@ namespace global_settings {
     // n + ENCODING_DELTA
     extern double UPPER_BOUND_ERR;
 
+    // The factor of the maximum change in position that one particle can take
+    // during a single PSO iteration.
+    extern double SPEED_FACTOR;
+
     /* ------ WORDS GENERATION ----- */
     // Maximum number of testing words
     extern int R_MAX;

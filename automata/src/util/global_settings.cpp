@@ -18,6 +18,7 @@ namespace global_settings {
     double PARTICLE_VELOCITY    = 1.0 / (2.0 * log(2.0));
     double ENCODING_DELTA       = 0.5f;
     double UPPER_BOUND_ERR      = 0.001f;
+    double SPEED_FACTOR         = 0.1f;
 
     /* ------ WORDS GENERATION ----- */
     int R_MAX                   = 30;

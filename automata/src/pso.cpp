@@ -154,7 +154,7 @@ void PSO::_updateNeighbourhoods() {
 
     int start_k, end_k;
     start_k = 2;
-    end_k = 10;
+    end_k = 20;
 
     // Compute cluster evaluation.
     McClainRao<double> mc_r(start_k, end_k);

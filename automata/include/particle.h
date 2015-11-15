@@ -56,6 +56,10 @@ private:
     int _numberOfSymbols;
     int _numberOfStates;
 
+    // The maximum change in position that one particle can take
+    // during a single iteration.
+    double velocity_max;
+
     // The lower bound of interval
     double intervalMin;
     // The upper bound of interval

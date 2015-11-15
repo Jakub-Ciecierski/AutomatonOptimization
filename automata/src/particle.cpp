@@ -17,6 +17,9 @@ Particle::Particle(int numberOfStates, int numberOfSymbols, double speedFactor) 
                   + global_settings::ENCODING_DELTA
                   - global_settings::UPPER_BOUND_ERR;
 
+    velocity_max = ((double)numberOfStates/2) * global_settings::SPEED_FACTOR;
+
+    std::cout << "Velocity Max: [" << velocity_max << std::endl;
     std::cout << "Interval: [" << intervalMin << ", " << intervalMax << "]" << std::endl;
 
     try {
@@ -105,11 +108,42 @@ void Particle::update() {
     Point<double> y_p2 = (lbest - oldPosition) * (global_settings::LEARNING_FACTOR);
     Point<double> centerOfGravity = (oldPosition + y_p1 + y_p2) / 3.0;
     Point<double> randomPointInSphere = _generateRandomPointInSphere(centerOfGravity, oldPosition);
-    _position = _velocity * global_settings::PARTICLE_VELOCITY + randomPointInSphere;
+
+    // Don't make move bigger than velocity_max
+    Point<double> potentialPosition =
+            _velocity * global_settings::PARTICLE_VELOCITY
+            + randomPointInSphere;
+
+    for(int i = 0;i < potentialPosition.size(); i++){
+        int sign;
+
+        sign = 1;
+        double delta = (_position[i] - potentialPosition[i]);
+        if (delta < 0)
+            sign = -1;
+
+        delta *= delta;
+        delta = sqrt(delta);
+/*
+        std::cout << "Poten: " << potentialPosition << std::endl;
+        std::cout << "delta: " << delta << std::endl;
+        std::cout << "Before: " << oldPosition << std::endl;
+*/
+        if(delta > velocity_max){
+            _position[i] = _position[i] - (velocity_max*sign);
+        }
+        else{
+            _position[i] = potentialPosition[i];
+        }
+    }
+
     _velocity = _velocity * global_settings::PARTICLE_VELOCITY + randomPointInSphere - oldPosition;
 
     // Check border conditions
     _checkBorderConditions(_position);
+
+    //std::cout << "Before Position: " << oldPosition << std::endl;
+    //std::cout << "After Position: " << _position << std::endl;
 
     // Update automaton
     _loadAndLogDFA(_numberOfStates, _numberOfSymbols, _position);

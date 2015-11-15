@@ -106,7 +106,7 @@ void McClainRao<T>::computeSumBetween() {
     int k = km->getK();
 
     // For each distinct pair of clusters
-    for(int c1 = 0; c1 < k-1; c1++){
+    for(int c1 = 0; c1 < k-1; c1++) {
         std::vector<Point<T>> cluster1 = km->getCluster(c1);
         for(int c2 = c1+1; c2 < k; c2++){
             std::vector<Point<T>> cluster2 = km->getCluster(c2);

@@ -99,6 +99,13 @@ public:
     //  CONSTRUCTORS
     //-----------------------------------------------------------//
 
+    /*
+     * The start_k and end_k define a range for cluster evaluation, namely:
+     * [start_k, end_k].
+     *
+     * @start_k - The starting k.
+     * @end_k - The biggest value k possible, inclusive.
+     */
     McClainRao(int start_k, int end_k);
 
     ~McClainRao();
@@ -109,6 +116,8 @@ public:
 
     /*
      * Computes the McClain-Rao index
+     *
+     * @data - the data to compute cluster evaluation for.
      */
     void compute(const std::vector<Point<T>>* data);
 };

@@ -51,8 +51,7 @@ private:
     // Point to the data to be cluster
     const std::vector<Point<T>>* data;
 
-    // Vector of clusters, each contating points
-    // This should be a vector of pointers to points TODO
+    // Vector of clusters, each containing points
     std::vector<std::vector<Point<T>>> clusters;
 
     //-----------------------------------------------------------//
@@ -65,7 +64,9 @@ private:
     void kmeans_pp();
 
     /*
-     * Choose next centroid, used in kmeans_pp
+     * Choose next centroid, used in kmeans_pp.
+     *
+     * @centroidCount - Current number of centroids
      */
     void chooseCentroid(int &centroidCount);
 
@@ -81,6 +82,8 @@ private:
 
     /*
      * Checks whether the computation converged.
+     *
+     * @t - the current iteration number.
      */
     bool isConverged(const int& t);
 
@@ -91,7 +94,13 @@ public:
     //  CONSTRUCTORS
     //-----------------------------------------------------------//
 
+    /*
+     * @k - the number of clusters
+     * @tol - the tolerance of convergence.
+     * @max_iter - maximum number of iterations.
+     */
     KMeans(int k, double tol, int max_iter);
+
     KMeans(const KMeans& cpy);
 
     ~KMeans();
@@ -101,7 +110,9 @@ public:
     //-----------------------------------------------------------//
 
     /*
-     * Starts the computations
+     * Starts the computations.
+     *
+     * @data - the data to compute the kmeans for
      */
     void compute(const std::vector<Point<T>>* data);
 
@@ -111,7 +122,9 @@ public:
 
     /*
      * Returns i-th cluster.
-     * The valid range of i = [0, k-1]
+     * The valid range of i = [0, k-1].
+     *
+     * @i - the index of cluster
      */
     std::vector<Point<T>> getCluster(int i);
 

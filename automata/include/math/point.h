@@ -36,11 +36,16 @@ public:
 
     /*
      * Creates point with size dimensions
+     *
+     * @size - The amount of dimensions
      */
     Point(int size);
 
     /*
      * Creates a point from data.
+     *
+     * @data - The data from which point is created.
+     * @count - Number of elements in @data.
      */
     Point(T* data, int count);
 
@@ -62,6 +67,8 @@ public:
 
     /*
      * Adds another dimension with element value
+     *
+     * @element - The element to assign to the new dimension
      */
     void addDimension(T element);
 
@@ -84,6 +91,10 @@ public:
      * Static. general method for calculating euclidian distance between
      * given points.
      *
+     *
+     * @p1 - Point one.
+     * @p2 - Point two.
+     *
      * @Deprecated - Use the distance(x, y) function in <math/geometry.h>
      */
     static double euclidianDistance(Point<T> p1, Point<T> p2);
@@ -105,7 +116,7 @@ public:
     void operator+=(const Point<T>& p);
 
     /*
-     * Addsvalue t to each dimension.
+     * Adds value t to each dimension.
      * Watch out for implicit casting.
      */
     Point<T> operator+(const T& t);

@@ -9,8 +9,20 @@
 #include <vector>
 #include <random>
 
+/*
+ * Contains functions for random generation.
+ */
+
 namespace rnd
 {
+    /*
+     * Creates a vector of points generated using uniform distribution
+     *
+     * @count - the number of points.
+     * @dim - the dimension size of each point.
+     * @min - minimum value.
+     * @max - maximum value.
+     */
     template <typename T>
     std::vector<Point<T>> uniformPoints(int count, int dim, T min, T max);
 }

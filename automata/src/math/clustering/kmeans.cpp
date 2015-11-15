@@ -57,14 +57,17 @@ KMeans<T>::~KMeans() {
  *  1.1) Update the clusters, assigned each point to new clusters
  * 2) Update centroids.
  * 3) Update clusters
- * 4) Repeat 2), 3) untill convereged or max iterations.
+ * 4) Repeat 2), 3) until convergence or max iterations.
  */
 template <class T>
 void KMeans<T>::compute(const std::vector<Point<T>>* data) {
     int t;
 
-    if((*data).size() == 0)
+    if((*data).size() == 0){
+        LOG_ERROR("Empty Data");
         return;
+    }
+
 
     this->data = data;
     this->dataDimension = (*data)[0].size();
@@ -198,7 +201,7 @@ void KMeans<T>::kmeans_pp(){
  *
  * Computes the distance D(x) of each point x to its nearest centroid.
  * Then chooses next centroid among data points based on discrete
- * distribution with distribution propotional to D(x).
+ * distribution with distribution proportional to D(x).
  */
 template <class T>
 void KMeans<T>::chooseCentroid(int &centroidCount){
@@ -211,11 +214,11 @@ void KMeans<T>::chooseCentroid(int &centroidCount){
         int minIndex;
 
         minIndex = 0;
-        minDistance = acm::euclideanDistance(this->centroids[minIndex],
+        minDistance = math::euclideanDistance(this->centroids[minIndex],
                                              (*data)[i]);
 
         for(int j = 0;j < centroidCount; j++){
-            double distance = acm::euclideanDistance(this->centroids[j],
+            double distance = math::euclideanDistance(this->centroids[j],
                                                      (*data)[i]);
             if(minDistance >= distance ){
                 minDistance = distance;
@@ -293,12 +296,14 @@ void KMeans<T>::updateClusters(){
         Point<T> point = (*data)[i];
 
         minClusterIndex = 0;
-        minClusterDistance = acm::euclideanDistance(point,
-                                                    this->centroids[minClusterIndex]);
+        minClusterDistance =
+                math::euclideanDistance(point,
+                                        this->centroids[minClusterIndex]);
 
         // Find closest centroid
         for(int j = 0;j < k; j++){
-            distance = acm::euclideanDistance(point, this->centroids[j]);
+            distance = math::euclideanDistance(point,
+                                               this->centroids[j]);
 
             if(minClusterDistance >= distance){
                 minClusterDistance = distance;
@@ -335,7 +340,7 @@ bool KMeans<T>::isConverged(const int& t){
     // When flags reaches value k, then all centroids have converged.
     flags = 0;
     for(int i = 0;i < this->k; i++){
-        distance = acm::euclideanDistance(this->centroids[i],
+        distance = math::euclideanDistance(this->centroids[i],
                                           this->previousCentroids[i]);
 
         if(distance <= this->tol)

@@ -25,6 +25,9 @@ void mcclainRaoUniformEvaluation();
 /*
  * Generates uniform points, used in:
  * mcclain_rao_uniform_evaluation
+ *
+ * @count - The number of points.
+ * @dim - The dimension of each point
  */
 std::vector<Point<double>> generateUniformPoints_5Clusters(int count, int dim);
 std::vector<Point<double>> generateUniformPoints_4Clusters(int count, int dim);

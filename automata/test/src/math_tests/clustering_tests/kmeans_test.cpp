@@ -13,15 +13,15 @@
 //-----------------------------------------------------------//
 
 /*
- * Creates small set of data with 2 clusters
+ * Creates small set of data with 2 clusters and Kmeans object
  */
-void kmeansSmall2Clusters();
+KMeans<double> kmeansSmall2Clusters();
 
 //-----------------------------------------------------------//
 //  DEFINITIONS
 //-----------------------------------------------------------//
 
-void kmeansSmall2Clusters(){
+KMeans<double> kmeansSmall2Clusters(){
     int k, max_iter;
     double tol;
 
@@ -58,17 +58,7 @@ void kmeansSmall2Clusters(){
 
     KMeans<double> km(k, tol, max_iter);
 
-    km.compute(&data);
-    for(int i = 0; i < km.getK(); i++){
-
-        std::cout << "Cluster[" << i << "]" <<std::endl;
-        std::vector<Point<double>> cluster = km.getCluster(i);
-
-        for(unsigned int j = 0; j < cluster.size(); j++){
-            std::cout << cluster[j] << std::endl;
-        }
-    }
-
+    return km;
 }
 
 //-----------------------------------------------------------//
@@ -96,6 +86,9 @@ TEST(KMeans, GetK_GetMaxIter_GetTol) {
 }
 
 
-TEST(KMeans, Small_2Clusters) {
-    //kmeansSmall2Clusters();
+TEST(KMeans, GetCluster_OutOfRange_InvalidArgument) {
+    KMeans<double> km = kmeansSmall2Clusters();
+
+    EXPECT_THROW(km.getCluster(-1), std::invalid_argument);
+    EXPECT_THROW(km.getCluster(km.getK()), std::invalid_argument);
 }

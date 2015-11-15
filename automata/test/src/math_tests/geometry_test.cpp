@@ -21,7 +21,7 @@ TEST(MathGeometry, Distance_Two_Points_Equal) {
     Point<int> p1(data1, size);
     Point<int> p2(data2, size);
 
-    actualDist = acm::euclideanDistance(p1, p2);
+    actualDist = math::euclideanDistance(p1, p2);
 
     EXPECT_EQ((int)expectedDist, (int)actualDist);
 }
@@ -35,7 +35,7 @@ TEST(MathGeometry, CenterOfMass_EmptyContainer_EmptyPoint) {
 
     expectedSize = 0;
 
-    Point<int> actualPoint = acm::centerOfMass(&points);
+    Point<int> actualPoint = math::centerOfMass(&points);
     actualSize = actualPoint.size();
 
     EXPECT_EQ(expectedSize, actualSize);
@@ -60,7 +60,7 @@ TEST(MathGeometry, CenterOfMass_Points_Mean) {
         points[i] = p;
     }
 
-    Point<int> actualPoint = acm::centerOfMass(&points);
+    Point<int> actualPoint = math::centerOfMass(&points);
 
     EXPECT_EQ(expectedPoint, actualPoint);
 }

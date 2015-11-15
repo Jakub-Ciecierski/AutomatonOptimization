@@ -8,7 +8,7 @@
 #include <math.h>
 #include <vector>
 
-namespace acm
+namespace math
 {
 
     /*

@@ -10,17 +10,22 @@
 /*
  * Contains useful geometry functions
  */
-namespace acm
+namespace math
 {
 
     /*
-    * Returns the euclidean distance between two points
+    * Returns the euclidean distance between two points.
+     *
+     * @p1 - point one.
+     * @p2 - point two.
     */
     template<typename T>
     double euclideanDistance(const Point<T> &p1, const Point<T> &p2);
 
     /*
-     * Computes the mean point - the center of mass
+     * Computes the mean point - the center of mass.
+     *
+     * @points - the vector of points to compute center of mass for.
      */
     template<typename T>
     Point<T> centerOfMass(const std::vector<Point<T>>* points);

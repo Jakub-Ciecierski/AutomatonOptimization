@@ -91,7 +91,7 @@ double PSO::_fitnessFunction(Particle *p) {
     vector<PairOfWords> pairs = _wordsGenerator->getPairs();
     double count = 0;
 
-    for (int i = 0; i < pairs.size(); i++) {
+    for (unsigned int i = 0; i < pairs.size(); i++) {
         Word w1 = pairs[i].word1;
         Word w2 = pairs[i].word2;
         bool inRelation = p->_particleRepresentation->checkRelationInducedByLanguage(w1, w2);
@@ -124,7 +124,7 @@ void PSO::compute() {
 
 void PSO::_calculatePBest(vector<Particle *> particles) {
 
-    for (int i = 0; i < particles.size(); i++) {
+    for (unsigned int i = 0; i < particles.size(); i++) {
         double fitness = _fitnessFunction(particles[i]);
 
         if (fitness > particles[i]->bestFitness) {
@@ -178,7 +178,7 @@ void PSO::_updateNeighbourhoods() {
         double bestFitness = _particles[bestIndex]->bestFitness;
 
         // Find lbest
-        for(int i = 0; i < clusterIndices.size(); i++){
+        for(unsigned int i = 0; i < clusterIndices.size(); i++){
             int index = clusterIndices[i];
 
             if(bestFitness < _particles[index]->bestFitness){
@@ -191,7 +191,7 @@ void PSO::_updateNeighbourhoods() {
             << _particles[bestIndex]->_position <<std::endl;
 
         // Assign lbest to each particle
-        for(int i = 0; i < clusterIndices.size(); i++){
+        for(unsigned int i = 0; i < clusterIndices.size(); i++){
             int index = clusterIndices[i];
             _particles[index]->lbest = _particles[bestIndex]->_position;
         }
@@ -203,7 +203,7 @@ void PSO::_updateNeighbourhoods() {
 vector<Point<double>*> PSO::_particlesToPoints(vector<Particle*> _particles){
     vector<Point<double>*> points;
 
-    for(int i = 0;i < _particles.size(); i++){
+    for(unsigned int i = 0;i < _particles.size(); i++){
         points.push_back(&(_particles[i]->_position));
     }
 

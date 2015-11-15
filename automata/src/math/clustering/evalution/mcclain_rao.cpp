@@ -52,22 +52,13 @@ void McClainRao<T>::compute(const std::vector<Point<T>*>* data) {
         // Compute the sum between
         computeSumBetween();
 
-        if(this->nw == 0 || this->nb == 0)
-            C = 1.0f;
-        else
-            C = (this->sumWithin/this->nw) / (this->sumBetween/this->nb);
+        // Compute the index.
+        C = computeIndex();
 
         std::cout << "mc-r(" << k << ") = " << C << std::endl;
 
-        std::cout << "sumWithin = " << this->sumWithin
-        << " nw = " << this->nw << std::endl;
-
-        std::cout << "sumBetween = " << this->sumBetween
-        << " nb = " << this->nb << std::endl;
-
         if(best_C > C || best_C == -1){
             best_C = C;
-
             best_km = new KMeans<T>(*km);
         }
 
@@ -99,6 +90,12 @@ void McClainRao<T>::computeSumWithin() {
         std::vector<Point<T>*> cluster = km->getCluster(c);
         int size = cluster.size();
 
+        // If some cluster is empty. return with bad result
+        if(size == 0) {
+            this->nw = 0;
+            return;
+        }
+
         for(int i = 0; i < size-1; i++){
             for(int j = i+1; j < size; j++){
                 this->sumWithin += math::euclideanDistance(*cluster[i],
@@ -124,10 +121,16 @@ void McClainRao<T>::computeSumBetween() {
     // For each distinct pair of clusters
     for(int c1 = 0; c1 < k-1; c1++) {
         std::vector<Point<T>*> cluster1 = km->getCluster(c1);
-        std::cout << "Cluster(" << c1 << ") size = "
-        << cluster1.size() << std::endl;
+
         for(int c2 = c1+1; c2 < k; c2++){
             std::vector<Point<T>*> cluster2 = km->getCluster(c2);
+
+            // If some cluster is empty. return with bad result
+            if(cluster1.size() == 0 || cluster2.size() == 0){
+                this->nb = 0;
+                return;
+            }
+
             // For each pair of points from cluster1 and cluster2
             for(unsigned int i = 0;i < cluster1.size(); i++){
                 for(unsigned int j = 0; j < cluster2.size(); j++){
@@ -139,6 +142,19 @@ void McClainRao<T>::computeSumBetween() {
         }
     }
     LOG_DEBUG("McR: SumBetween Finished");
+}
+
+template <class T>
+double McClainRao<T>::computeIndex(){
+    double C;
+
+    // If at least one cluster was empty, set the result to worst one.
+    if(this->nw == 0 || this->nb == 0)
+        C = 1.0f;
+    else
+        C = (this->sumWithin/this->nw) / (this->sumBetween/this->nb);
+
+    return C;
 }
 
 //-----------------------------------------------------------//

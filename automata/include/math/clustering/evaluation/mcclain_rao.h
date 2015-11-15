@@ -41,6 +41,9 @@
  * ---------------------------------------------------------------------------
  *
  * The smaller value of index C the better clustering.
+ *
+ * The Index is set 1.0 (worst possible) when at least one of the clusters
+ * is empty.
  */
 template <class T>
 class McClainRao {
@@ -94,6 +97,12 @@ private:
      */
     void computeSumBetween();
 
+    /*
+     * Computes the McClain-Rao index.
+     * Using:
+     *      C = (Sw / Nw) / (Sb / Nb)
+     */
+    double computeIndex();
 public:
     //-----------------------------------------------------------//
     //  CONSTRUCTORS

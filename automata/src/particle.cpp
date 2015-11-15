@@ -11,9 +11,19 @@ Particle::Particle(int numberOfStates, int numberOfSymbols, double speedFactor) 
         _numberOfSymbols(numberOfSymbols),
         _speedFactor(speedFactor){
     LOG_INFO("Creating new particle...");
+
+    intervalMin = global_settings::ENCODING_DELTA;
+    intervalMax = numberOfStates
+                  + global_settings::ENCODING_DELTA
+                  - global_settings::UPPER_BOUND_ERR;
+
+    std::cout << "Interval: [" << intervalMin << ", " << intervalMax << "]" << std::endl;
+
     try {
 
-        _loadAndLogRandomPosition(_length, 1, numberOfStates);
+        _loadAndLogRandomPosition(_length,
+                                  intervalMin,
+                                  intervalMax);
         _loadAndLogDFA(numberOfStates, numberOfSymbols, _position);
         _loadAndLogRandomVelocity(-numberOfStates, numberOfStates);
         _loadAndLogMaxVelocity(numberOfStates, _speedFactor);
@@ -48,16 +58,26 @@ void Particle::_loadAndLogDFA(int numberOfStates, int numberOfSymbols, Point<dou
     _particleRepresentation = new DFA(numberOfStates, numberOfSymbols, roundedPosition);
 }
 
-// TODO(dybisz) KUBA CHANGE IT TO SOMETHING REASONABLE PLX
+/*
+ * Encodes position to automaton.
+ */
 vector<int> Particle::_castFromPositionToDFA(Point<double> position) {
 
     vector<int> casted;
     for (int i = 0; i < position.size(); i++) {
-        int val = (int) position[i];
-        casted.push_back(val);
+        int encodedValue;
+        double delta;
+
+        encodedValue = (int)position[i];
+        delta = position[i] - encodedValue;
+        if (delta >= global_settings::ENCODING_DELTA)
+            encodedValue++;
+
+        casted.push_back(encodedValue);
     }
 
-    LOG_DEBUG("_position casted to: " + utils::vectorToString(casted));
+    std::cout << "Before cast: " << position << std::endl;
+    std::cout << "After cast: " << utils::vectorToString(casted) << std::endl;
 
     return casted;
 }
@@ -116,17 +136,17 @@ Particle::~Particle() {
     delete _particleRepresentation;
 }
 
-// TODO interval as global var
+
 void Particle::_checkBorderConditions(Point<double>& position) {
     for(int i = 0; i < position.size(); i++) {
 
-        if(position[i] < 1) {
-            position[i] = 1;
+        if(position[i] < intervalMin) {
+            position[i] = intervalMin;
             _velocity[i] = 0;
         }
 
-        if(position[i] > _numberOfStates) {
-            position[i] = _numberOfStates;
+        if(position[i] > intervalMax) {
+            position[i] = intervalMax;
             _velocity[i] = 0;
         }
 

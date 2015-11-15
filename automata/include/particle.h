@@ -56,6 +56,11 @@ private:
     int _numberOfSymbols;
     int _numberOfStates;
 
+    // The lower bound of interval
+    double intervalMin;
+    // The upper bound of interval
+    double intervalMax;
+
     vector<int> _castFromPositionToDFA(Point<double> position);
 
     void _loadAndLogRandomPosition(int length, double dim, double maxDim);

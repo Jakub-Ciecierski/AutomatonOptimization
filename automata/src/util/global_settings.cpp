@@ -16,6 +16,8 @@ namespace global_settings {
     int MAX_ITER                = 100;
     double LEARNING_FACTOR      = 0.5 + log(2.0);
     double PARTICLE_VELOCITY    = 1.0 / (2.0 * log(2.0));
+    double ENCODING_DELTA       = 0.5f;
+    double UPPER_BOUND_ERR      = 0.001f;
 
     /* ------ WORDS GENERATION ----- */
     int R_MAX                   = 30;

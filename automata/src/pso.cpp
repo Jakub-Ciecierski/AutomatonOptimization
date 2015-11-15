@@ -109,7 +109,7 @@ void PSO::compute() {
         LOG_INFO("Interation: " + to_string(t));
 
         // Calculate pbest using Fitness Function
-        _calculatePBest(_particles);
+        _calculatePBestAndFitness(_particles);
 
         // Update neighbourhood and compute lbest
         _updateNeighbourhoods();
@@ -122,12 +122,12 @@ void PSO::compute() {
     LOG_INFO("Particle Swarm Optimization: scomputing ends.")
 }
 
-void PSO::_calculatePBest(vector<Particle *> particles) {
+void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
 
     for (unsigned int i = 0; i < particles.size(); i++) {
         double fitness = _fitnessFunction(particles[i]);
 
-        if (fitness > particles[i]->bestFitness) {
+        if (particles[i]->bestFitness < fitness) {
             particles[i]->pbest = particles[i]->_position;
             particles[i]->bestFitness = fitness;
         }

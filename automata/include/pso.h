@@ -74,7 +74,7 @@ private:
 
     double _fitnessFunction(Particle* p);
 
-    void _calculatePBest(vector<Particle *> particles);
+    void _calculatePBestAndFitness(vector<Particle *> particles);
 
     void _updateParticles();
 

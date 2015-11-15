@@ -30,6 +30,22 @@ namespace global_settings {
     extern double LEARNING_FACTOR;
     // TODO comment
     extern double PARTICLE_VELOCITY;
+    // When encoding particle back to automaton
+    // each dimension must be casted down to integer value.
+    // If p[i] > x.5 then take the ceiling.
+    // otherwise take the floor.
+    // Formally:
+    //      encodedValue = (int)p[i]
+    //      delta = p[i] - encodedValue
+    //      if delta > ENCODING_DELTA
+    //          encodedValue++
+    //
+    extern double ENCODING_DELTA;
+
+    // Becouse of the nature of the encoding the
+    // upper interval bound must a bit less than:
+    // n + ENCODING_DELTA
+    extern double UPPER_BOUND_ERR;
 
     /* ------ WORDS GENERATION ----- */
     // Maximum number of testing words

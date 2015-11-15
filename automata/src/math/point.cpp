@@ -267,7 +267,7 @@ std::ostream& operator<<(std::ostream& os, const Point<T>& p){
             os << ", ";
         }
     }
-    os << "]" << std::endl;
+    os << "]";
 
     return os;
 }

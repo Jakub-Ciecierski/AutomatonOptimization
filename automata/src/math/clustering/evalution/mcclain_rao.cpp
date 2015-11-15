@@ -27,7 +27,8 @@ McClainRao<T>::~McClainRao(){
  * Starts the computation for mcclain-rao index
  */
 template <class T>
-void McClainRao<T>::compute(const std::vector<Point<T>>* data) {
+void McClainRao<T>::compute(const std::vector<Point<T>*>* data) {
+    double C;
     this->data = data;
     this->best_C = -1;
 
@@ -51,9 +52,18 @@ void McClainRao<T>::compute(const std::vector<Point<T>>* data) {
         // Compute the sum between
         computeSumBetween();
 
-        double C = (this->sumWithin/this->nw) / (this->sumBetween/this->nb);
+        if(this->nw == 0 || this->nb == 0)
+            C = 1.0f;
+        else
+            C = (this->sumWithin/this->nw) / (this->sumBetween/this->nb);
 
         std::cout << "mc-r(" << k << ") = " << C << std::endl;
+
+        std::cout << "sumWithin = " << this->sumWithin
+        << " nw = " << this->nw << std::endl;
+
+        std::cout << "sumBetween = " << this->sumBetween
+        << " nb = " << this->nb << std::endl;
 
         if(best_C > C || best_C == -1){
             best_C = C;
@@ -66,6 +76,12 @@ void McClainRao<T>::compute(const std::vector<Point<T>>* data) {
     std::cout << "Best K: " << best_km->getK() << std::endl;
     LOG_DEBUG("Mcclain-Rao Finished");
 }
+
+template <class T>
+KMeans<T>* McClainRao<T>::getBestClustering(){
+    return this->best_km;
+}
+
 
 //-----------------------------------------------------------//
 //  PRIVATE METHODS
@@ -80,13 +96,13 @@ void McClainRao<T>::computeSumWithin() {
 
     // For each cluster
     for(int c = 0; c < km->getK(); c++){
-        std::vector<Point<T>> cluster = km->getCluster(c);
+        std::vector<Point<T>*> cluster = km->getCluster(c);
         int size = cluster.size();
 
         for(int i = 0; i < size-1; i++){
             for(int j = i+1; j < size; j++){
-                this->sumWithin += math::euclideanDistance(cluster[i],
-                                                          cluster[j]);
+                this->sumWithin += math::euclideanDistance(*cluster[i],
+                                                          *cluster[j]);
                 this->nw++;
             }
         }
@@ -107,14 +123,16 @@ void McClainRao<T>::computeSumBetween() {
 
     // For each distinct pair of clusters
     for(int c1 = 0; c1 < k-1; c1++) {
-        std::vector<Point<T>> cluster1 = km->getCluster(c1);
+        std::vector<Point<T>*> cluster1 = km->getCluster(c1);
+        std::cout << "Cluster(" << c1 << ") size = "
+        << cluster1.size() << std::endl;
         for(int c2 = c1+1; c2 < k; c2++){
-            std::vector<Point<T>> cluster2 = km->getCluster(c2);
+            std::vector<Point<T>*> cluster2 = km->getCluster(c2);
             // For each pair of points from cluster1 and cluster2
             for(unsigned int i = 0;i < cluster1.size(); i++){
                 for(unsigned int j = 0; j < cluster2.size(); j++){
-                    this->sumBetween += math::euclideanDistance(cluster1[i],
-                                                               cluster2[j]);
+                    this->sumBetween += math::euclideanDistance(*cluster1[i],
+                                                               *cluster2[j]);
                     this->nb++;
                 }
             }

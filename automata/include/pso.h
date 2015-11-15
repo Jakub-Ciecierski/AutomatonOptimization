@@ -49,14 +49,13 @@ private:
     DFA _tool;
     vector<Particle *> _particles;
     WordsGenerator *_wordsGenerator;
-    Point<double> _pbestp;
-    Point<double> _lbestp;
 
     int _psoNumberOfStates;
     int _numberOfSymbols;
     int _swarmSize;
     int _populationFactor;
-    double _bestFitnessTracking;
+    // Best fitness value overall, global best
+    double _globalBestFitness;
     vector<int> _toolFitnessResults;
 
     void _loadAndLogSwarmSize();
@@ -75,20 +74,28 @@ private:
 
     double _fitnessFunction(Particle* p);
 
-    Point<double> _calculatePBest(vector<Particle *> particles);
+    void _calculatePBest(vector<Particle *> particles);
 
-    void _updateParticles(Point<double> pbestp, Point<double> lbestp);
+    void _updateParticles();
 
     /*
      * Updates the state of neighbourhoods.
      * The data set in the form of all particles
      * are subjected to cluster analysis.
+     *
      * 1) Find the optimal number of clusters k.
      * 2) Compute kmeans for that k.
      * 3) Each cluster is a single neighbourhood.
      *
      */
     void _updateNeighbourhoods();
+
+    /*
+     * Returns vector of points corresponding to the vector of particles
+     *
+     * @_particles - The vector of particles to get points from
+     */
+    vector<Point<double>*> _particlesToPoints(vector<Particle*> _particles);
 };
 
 #endif //AC_PSO_H

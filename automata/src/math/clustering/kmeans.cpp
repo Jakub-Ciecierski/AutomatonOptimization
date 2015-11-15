@@ -43,6 +43,7 @@ KMeans<T>::KMeans(const KMeans& cpy){
 
 template <class T>
 KMeans<T>::~KMeans() {
+    data = NULL;
 }
 
 
@@ -60,7 +61,7 @@ KMeans<T>::~KMeans() {
  * 4) Repeat 2), 3) until convergence or max iterations.
  */
 template <class T>
-void KMeans<T>::compute(const std::vector<Point<T>>* data) {
+void KMeans<T>::compute(const std::vector<Point<T>*>* data) {
     int t;
 
     if((*data).size() == 0){
@@ -68,9 +69,8 @@ void KMeans<T>::compute(const std::vector<Point<T>>* data) {
         return;
     }
 
-
     this->data = data;
-    this->dataDimension = (*data)[0].size();
+    this->dataDimension = (*(*data)[0]).size();
 
     LOG_DEBUG("Kmeans starting");
 
@@ -100,11 +100,20 @@ void KMeans<T>::compute(const std::vector<Point<T>>* data) {
  * The valid range of i = [0, k-1]
  */
 template <class T>
-std::vector<Point<T>> KMeans<T>::getCluster(int i){
+std::vector<Point<T>*> KMeans<T>::getCluster(int i){
     if( i < 0 || i >= k)
         throw std::invalid_argument("Index out of range");
 
     return this->clusters[i];
+}
+
+template <class T>
+
+std::vector<int> KMeans<T>::getClusterIndices(int i){
+    if( i < 0 || i >= k)
+        throw std::invalid_argument("Index out of range");
+
+    return this->clusterIndices[i];
 }
 
 
@@ -183,7 +192,7 @@ void KMeans<T>::kmeans_pp(){
     // Generates random number between [0, dataSize-1]
 
     centerIndex = rand() % (dataSize);
-    center = (*data)[centerIndex];
+    center = *((*data)[centerIndex]);
     this->centroids[centroidCount++] = center;
 
     while(centroidCount < k){
@@ -215,11 +224,11 @@ void KMeans<T>::chooseCentroid(int &centroidCount){
 
         minIndex = 0;
         minDistance = math::euclideanDistance(this->centroids[minIndex],
-                                             (*data)[i]);
+                                             *((*data)[i]));
 
         for(int j = 0;j < centroidCount; j++){
             double distance = math::euclideanDistance(this->centroids[j],
-                                                     (*data)[i]);
+                                                     *((*data)[i]));
             if(minDistance >= distance ){
                 minDistance = distance;
                 minIndex = j;
@@ -234,7 +243,7 @@ void KMeans<T>::chooseCentroid(int &centroidCount){
     std::discrete_distribution<> dist(squaredDist.begin(), squaredDist.end());
     int centerIndex = dist(gen);
 
-    this->centroids[centroidCount++] = (*data)[centerIndex];
+    this->centroids[centroidCount++] = *((*data)[centerIndex]);
 }
 
 // -----------------------------------------------------------------------------
@@ -261,7 +270,7 @@ void KMeans<T>::updateCentroids(){
 
         for(int j = 0; j < clusterSize; j++){
             int l = this->clusterIndices[i][j];
-            centroid += (*data)[l];
+            centroid += *((*data)[l]);
         }
 
         centroid /= clusterSize;
@@ -293,7 +302,7 @@ void KMeans<T>::updateClusters(){
 
     // For each point in data, find its closest centroid
     for(int i = 0;i < dataSize;i++){
-        Point<T> point = (*data)[i];
+        Point<T> point = *((*data)[i]);
 
         minClusterIndex = 0;
         minClusterDistance =
@@ -370,12 +379,12 @@ void KMeans<T>::createClusters(){
     LOG_DEBUG("Creating Clusters");
 
     for(int i = 0; i < this->k ;i++){
-        std::vector<Point<T>> cluster;
+        std::vector<Point<T>*> cluster;
 
         for(unsigned int j = 0; j < clusterIndices[i].size(); j++){
             int index = this->clusterIndices[i][j];
 
-            Point<T> p = (*data)[index];
+            Point<T>* p = (*data)[index];
             cluster.push_back(p);
         }
         this->clusters.push_back(cluster);

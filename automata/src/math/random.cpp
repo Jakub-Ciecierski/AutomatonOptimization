@@ -8,8 +8,8 @@
 namespace rnd
 {
     template <typename T>
-    std::vector<Point<T>> uniformPoints(int count, int dim, T min, T max){
-        std::vector<Point<T>> points(count);
+    std::vector<Point<T>*> uniformPoints(int count, int dim, T min, T max){
+        std::vector<Point<T>*> points(count);
 
         std::random_device                  rand_dev;
         std::mt19937                        gen(rand_dev());
@@ -17,10 +17,11 @@ namespace rnd
 
         // Generate count points
         for(int i = 0;i < count; i++){
-            Point<T> p(dim);
+            Point<T>* p = new Point<T>(dim);
+
             // Generate each dimension.
             for(int j = 0; j < dim; j++){
-                p[j] = dist(gen);
+                (*p)[j] = dist(gen);
             }
             points[i] = p;
         }
@@ -31,19 +32,19 @@ namespace rnd
     //  TEMPLATE DECLARATIONS
     //-----------------------------------------------------------//
 
-    template std::vector<Point<char>> uniformPoints(int count,
+    template std::vector<Point<char>*> uniformPoints(int count,
                                                       int dim,
                                                       char min, char max);
 
-    template std::vector<Point<int>> uniformPoints(int count,
+    template std::vector<Point<int>*> uniformPoints(int count,
                                                     int dim,
                                                     int min, int max);
 
-    template std::vector<Point<float>> uniformPoints(int count,
+    template std::vector<Point<float>*> uniformPoints(int count,
                                                       int dim,
                                                       float min, float max);
 
-    template std::vector<Point<double>> uniformPoints(int count,
+    template std::vector<Point<double>*> uniformPoints(int count,
                                                       int dim,
                                                       double min, double max);
 }

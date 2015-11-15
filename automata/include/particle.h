@@ -32,12 +32,21 @@ class Particle {
 public:
     Particle(int numberOfStates, int numberOfSymbols, double speedFactor);
 
-    void update(Point<double> pbestp, Point<double> lbestp);
+    void update();
 
     ~Particle();
 
     DFA *_particleRepresentation = NULL;
     Point<double> _position;
+
+    // Position of reaching its personal best fitness value.
+    Point<double> pbest;
+    // Position of some other particle reaching the best
+    // fitness value among all particles within a neighbourhood.
+    Point<double> lbest;
+
+    // Best fitness value obtained by itself so far.
+    double bestFitness;
 
 private:
     int _length;

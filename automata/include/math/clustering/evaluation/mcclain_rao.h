@@ -55,7 +55,7 @@ private:
     int end_k;
 
     // Point to the data to be evaluated.
-    const std::vector<Point<T>>* data;
+    const std::vector<Point<T>*>* data;
 
     // The clustering tool
     KMeans<T>* km;
@@ -119,7 +119,13 @@ public:
      *
      * @data - the data to compute cluster evaluation for.
      */
-    void compute(const std::vector<Point<T>>* data);
+    void compute(const std::vector<Point<T>*>* data);
+
+    /*
+     * Returns the best KMeans clustering.
+     * The best in terms of having the best clustering index.
+     */
+    KMeans<T>* getBestClustering();
 };
 
 

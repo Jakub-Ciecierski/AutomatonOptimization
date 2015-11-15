@@ -3,6 +3,7 @@
 //
 
 #include "pso.h"
+#include "mcclain_rao.h"
 
 PSO::PSO(string toolUrl, int numberOfStates, int populationFactor) :
         _tool(toolUrl),
@@ -19,6 +20,8 @@ PSO::PSO(string toolUrl, int numberOfStates, int populationFactor) :
     catch (std::exception &e) {
         LOG_ERROR(e.what())
     }
+
+    _globalBestFitness = 0;
 }
 
 void PSO::_loadAndLogSwarmSize() {
@@ -106,50 +109,105 @@ void PSO::compute() {
         LOG_INFO("Interation: " + to_string(t));
 
         // Calculate pbest using Fitness Function
-        _pbestp = _calculatePBest(_particles);
+        _calculatePBest(_particles);
 
-        LOG_CALC("_pbestp",_pbestp.toString())
-        LOG_CALC("fitness:", to_string(_bestFitnessTracking));
-
-        // Calculate lbest using K-Means and MCFiut
-        _lbestp = _pbestp;
-        LOG_CALC("_lbestp",_lbestp.toString())
+        // Update neighbourhood and compute lbest
+        _updateNeighbourhoods();
 
         // Update particles positions
-        _updateParticles(_pbestp, _lbestp);
+        _updateParticles();
 
+        std::cout << "Global Best Fintess: " << _globalBestFitness << std::endl;
     }
     LOG_INFO("Particle Swarm Optimization: scomputing ends.")
 }
 
-Point<double> PSO::_calculatePBest(vector<Particle *> particles) {
-    Point<double> pbestp;
-    double bestFitness = -1;
+void PSO::_calculatePBest(vector<Particle *> particles) {
 
     for (int i = 0; i < particles.size(); i++) {
         double fitness = _fitnessFunction(particles[i]);
 
-        if (fitness > bestFitness) {
-            pbestp = particles[i]->_position;
-            bestFitness = fitness;
+        if (fitness > particles[i]->bestFitness) {
+            particles[i]->pbest = particles[i]->_position;
+            particles[i]->bestFitness = fitness;
         }
 
+        if (_globalBestFitness < fitness){
+            _globalBestFitness = fitness;
+        }
     }
-    _bestFitnessTracking = bestFitness;
-
-    return pbestp;
 }
 
-void PSO::_updateParticles(Point<double> pbestp, Point<double> lbestp) {
+void PSO::_updateParticles() {
+    std::cout << "Particles count: " << _particles.size() << std::endl;
     for (auto particle : _particles) {
-        particle->update(pbestp, lbestp);
+        std::cout << "Particles count: " << _particles.size() << std::endl;
+        particle->update();
     }
 }
 
+/*
+ * Updates the neighbourhood.
+ */
 void PSO::_updateNeighbourhoods() {
     LOG_INFO("Update Neighbourhood Starting");
 
+    int start_k, end_k;
+    start_k = 2;
+    end_k = 10;
+
+    // Compute cluster evaluation.
+    McClainRao<double> mc_r(start_k, end_k);
+
+    // Get vector of points from vector of particles.
+    // Must preserve the indexing !!!
+    vector<Point<double>*> points = _particlesToPoints(_particles);
+
+    mc_r.compute(&points);
+
+    // Get the most optimal clustering
+    KMeans<double>* km = mc_r.getBestClustering();
+
+    std::cout << "Neighbourhood Count: " << km->getK() << std::endl;
+
+    // For each neighbourhood (cluster), find the lbest
+    for(int c = 0; c < km->getK(); c++){
+        std::vector<int> clusterIndices = km->getClusterIndices(c);
+
+        int bestIndex = clusterIndices[0];
+        double bestFitness = _particles[bestIndex]->bestFitness;
+
+        // Find lbest
+        for(int i = 0; i < clusterIndices.size(); i++){
+            int index = clusterIndices[i];
+
+            if(bestFitness < _particles[index]->bestFitness){
+                bestFitness = _particles[index]->bestFitness;
+                bestIndex = index;
+            }
+        }
+
+        std::cout << "lbest(" << c << ") = "
+            << _particles[bestIndex]->_position <<std::endl;
+
+        // Assign lbest to each particle
+        for(int i = 0; i < clusterIndices.size(); i++){
+            int index = clusterIndices[i];
+            _particles[index]->lbest = _particles[bestIndex]->_position;
+        }
+    }
+
     LOG_INFO("Update Neighbourhood Finished");
+}
+
+vector<Point<double>*> PSO::_particlesToPoints(vector<Particle*> _particles){
+    vector<Point<double>*> points;
+
+    for(int i = 0;i < _particles.size(); i++){
+        points.push_back(&(_particles[i]->_position));
+    }
+
+    return points;
 }
 
 PSO::~PSO() {

@@ -29,10 +29,10 @@ void mcclainRaoUniformEvaluation();
  * @count - The number of points.
  * @dim - The dimension of each point
  */
-std::vector<Point<double>> generateUniformPoints_5Clusters(int count, int dim);
-std::vector<Point<double>> generateUniformPoints_4Clusters(int count, int dim);
-std::vector<Point<double>> generateUniformPoints_3Clusters(int count, int dim);
-std::vector<Point<double>> generateUniformPoints_2Clusters(int count, int dim);
+std::vector<Point<double>*> generateUniformPoints_5Clusters(int count, int dim);
+std::vector<Point<double>*> generateUniformPoints_4Clusters(int count, int dim);
+std::vector<Point<double>*> generateUniformPoints_3Clusters(int count, int dim);
+std::vector<Point<double>*> generateUniformPoints_2Clusters(int count, int dim);
 
 //-----------------------------------------------------------//
 //  DEFINITIONS
@@ -40,13 +40,13 @@ std::vector<Point<double>> generateUniformPoints_2Clusters(int count, int dim);
 
 void mcclainRaoUniformEvaluation(){
     int start_k, end_k;
-    std::vector<Point<double>> data;
+    std::vector<Point<double>*> data;
 
     start_k = 2;
     end_k = 10;
 
-    int count = 1000;
-    int dim = 100;
+    int count = 100;
+    int dim = 10;
 
     //-----------------------------------------------------------//
 
@@ -87,9 +87,16 @@ void mcclainRaoUniformEvaluation(){
 
     McClainRao<double> mc_r2(start_k, end_k);
     mc_r2.compute(&data);
+
+    // Clear memory
+    for (std::vector<Point<double>*>::iterator it = data.begin() ; it != data.end(); ++it)
+    {
+        delete (*it);
+    }
+    data.clear();
 }
 
-std::vector<Point<double>> generateUniformPoints_5Clusters(int count, int dim){
+std::vector<Point<double>*> generateUniformPoints_5Clusters(int count, int dim){
     const int cluster_count = 5;
 
     double min1 = 0.0f;
@@ -107,10 +114,10 @@ std::vector<Point<double>> generateUniformPoints_5Clusters(int count, int dim){
     double min5 = 40.0f;
     double max5 = 45.0f;
 
-    std::vector<Point<double>> data;
+    std::vector<Point<double>*> data;
 
     // Cluster 1
-    std::vector<Point<double>> cluster1 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster1 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min1, max1
@@ -118,7 +125,7 @@ std::vector<Point<double>> generateUniformPoints_5Clusters(int count, int dim){
     data.insert(data.end(), cluster1.begin(), cluster1.end());
 
     // Cluster 2
-    std::vector<Point<double>> cluster2 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster2 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min2, max2
@@ -126,7 +133,7 @@ std::vector<Point<double>> generateUniformPoints_5Clusters(int count, int dim){
     data.insert(data.end(), cluster2.begin(), cluster2.end());
 
     // Cluster 3
-    std::vector<Point<double>> cluster3 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster3 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min3, max3
@@ -134,7 +141,7 @@ std::vector<Point<double>> generateUniformPoints_5Clusters(int count, int dim){
     data.insert(data.end(), cluster3.begin(), cluster3.end());
 
     // Cluster 4
-    std::vector<Point<double>> cluster4 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster4 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min4, max4
@@ -142,20 +149,18 @@ std::vector<Point<double>> generateUniformPoints_5Clusters(int count, int dim){
     data.insert(data.end(), cluster4.begin(), cluster4.end());
 
     // Cluster 5
-    std::vector<Point<double>> cluster5 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster5 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min5, max5
             );
     data.insert(data.end(), cluster5.begin(), cluster5.end());
+
     return data;
 }
 
-std::vector<Point<double>> generateUniformPoints_4Clusters(int count, int dim){
+std::vector<Point<double>*> generateUniformPoints_4Clusters(int count, int dim){
     const int cluster_count = 4;
-
-    count = 1000;
-    dim = 20;
 
     double min1 = 0.0f;
     double max1 = 5.0f;
@@ -170,10 +175,10 @@ std::vector<Point<double>> generateUniformPoints_4Clusters(int count, int dim){
     double max4 = 35.0f;
 
 
-    std::vector<Point<double>> data;
+    std::vector<Point<double>*> data;
 
     // Cluster 1
-    std::vector<Point<double>> cluster1 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster1 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min1, max1
@@ -181,7 +186,7 @@ std::vector<Point<double>> generateUniformPoints_4Clusters(int count, int dim){
     data.insert(data.end(), cluster1.begin(), cluster1.end());
 
     // Cluster 2
-    std::vector<Point<double>> cluster2 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster2 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min2, max2
@@ -189,7 +194,7 @@ std::vector<Point<double>> generateUniformPoints_4Clusters(int count, int dim){
     data.insert(data.end(), cluster2.begin(), cluster2.end());
 
     // Cluster 3
-    std::vector<Point<double>> cluster3 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster3 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min3, max3
@@ -197,7 +202,7 @@ std::vector<Point<double>> generateUniformPoints_4Clusters(int count, int dim){
     data.insert(data.end(), cluster3.begin(), cluster3.end());
 
     // Cluster 4
-    std::vector<Point<double>> cluster4 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster4 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min4, max4
@@ -207,11 +212,8 @@ std::vector<Point<double>> generateUniformPoints_4Clusters(int count, int dim){
     return data;
 }
 
-std::vector<Point<double>> generateUniformPoints_3Clusters(int count, int dim){
+std::vector<Point<double>*> generateUniformPoints_3Clusters(int count, int dim){
     const int cluster_count = 3;
-
-    count = 1000;
-    dim = 20;
 
     double min1 = 0.0f;
     double max1 = 5.0f;
@@ -223,10 +225,10 @@ std::vector<Point<double>> generateUniformPoints_3Clusters(int count, int dim){
     double max3 = 25.0f;
 
 
-    std::vector<Point<double>> data;
+    std::vector<Point<double>*> data;
 
     // Cluster 1
-    std::vector<Point<double>> cluster1 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster1 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min1, max1
@@ -234,7 +236,7 @@ std::vector<Point<double>> generateUniformPoints_3Clusters(int count, int dim){
     data.insert(data.end(), cluster1.begin(), cluster1.end());
 
     // Cluster 2
-    std::vector<Point<double>> cluster2 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster2 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min2, max2
@@ -242,7 +244,7 @@ std::vector<Point<double>> generateUniformPoints_3Clusters(int count, int dim){
     data.insert(data.end(), cluster2.begin(), cluster2.end());
 
     // Cluster 3
-    std::vector<Point<double>> cluster3 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster3 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min3, max3
@@ -252,11 +254,8 @@ std::vector<Point<double>> generateUniformPoints_3Clusters(int count, int dim){
     return data;
 }
 
-std::vector<Point<double>> generateUniformPoints_2Clusters(int count, int dim){
+std::vector<Point<double>*> generateUniformPoints_2Clusters(int count, int dim){
     const int cluster_count = 2;
-
-    count = 1000;
-    dim = 20;
 
     double min1 = 0.0f;
     double max1 = 5.0f;
@@ -265,10 +264,10 @@ std::vector<Point<double>> generateUniformPoints_2Clusters(int count, int dim){
     double max2 = 15.0f;
 
 
-    std::vector<Point<double>> data;
+    std::vector<Point<double>*> data;
 
     // Cluster 1
-    std::vector<Point<double>> cluster1 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster1 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min1, max1
@@ -276,7 +275,7 @@ std::vector<Point<double>> generateUniformPoints_2Clusters(int count, int dim){
     data.insert(data.end(), cluster1.begin(), cluster1.end());
 
     // Cluster 2
-    std::vector<Point<double>> cluster2 = rnd::uniformPoints
+    std::vector<Point<double>*> cluster2 = rnd::uniformPoints
             (
                     count / cluster_count,
                     dim, min2, max2

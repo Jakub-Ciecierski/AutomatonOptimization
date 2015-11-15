@@ -12,6 +12,22 @@
 #include "utils.h"
 #include "global_settings.h"
 
+/*
+ * Particle is used to travel through the solution space in PSO algorithm.
+ *
+ * Each particle contains:
+ *      1) Best fitness value obtained by itself so far.
+ *          Fitness value represents the quality of the solution.
+ *          Fitness value is computed by Fitness function by PSO.
+ *
+ *      2.1) Current Velocity.
+ *      2.2) Current Position.
+ *
+ *      3.1) pbest - Position of reaching its personal best fitness value.
+ *          (pbest stands for previous best, or personal best.)
+ *      3.2) lbest - Position of some other particle reaching the best
+ *          fitness value among all particles within a neighbourhood.
+ */
 class Particle {
 public:
     Particle(int numberOfStates, int numberOfSymbols, double speedFactor);

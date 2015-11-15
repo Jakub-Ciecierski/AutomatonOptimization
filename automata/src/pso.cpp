@@ -146,6 +146,12 @@ void PSO::_updateParticles(Point<double> pbestp, Point<double> lbestp) {
     }
 }
 
+void PSO::_updateNeighbourhoods() {
+    LOG_INFO("Update Neighbourhood Starting");
+
+    LOG_INFO("Update Neighbourhood Finished");
+}
+
 PSO::~PSO() {
     for (auto particle = _particles.begin(); particle != _particles.end(); ++particle) {
         delete (*particle);

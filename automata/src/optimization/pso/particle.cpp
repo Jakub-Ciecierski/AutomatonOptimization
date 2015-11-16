@@ -28,6 +28,7 @@ Particle::Particle(int numberOfStates, int numberOfSymbols) :
     }
 
     bestFitness = 0;
+    fitness = 0;
 
     LOG_INFO("Following particle was created: ..."); // TODO(dybisz) change to  neat summary
 }

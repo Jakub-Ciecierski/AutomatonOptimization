@@ -46,14 +46,19 @@ public:
 
     void compute();
 
+    std::vector<Particle*> results();
+
 private:
     vector<Particle *> _particles;
     WordsGenerator *_wordsGenerator;
 
-    // Pointer to best particle within the whole PSO space.
-    Particle* bestParticle;
     // Best fitness value overall, global best
     double _globalBestFitness;
+
+    // The best particles thus far.
+    // Recall that it might happen that some particles are equally good
+    // in terms of fitness value.
+    std::vector<Particle*> _bestParticles;
 
     int _psoNumberOfStates;
     int _numberOfSymbols;
@@ -72,6 +77,8 @@ private:
     double _fitnessFunction(Particle* p);
 
     void _calculatePBestAndFitness(vector<Particle *> particles);
+
+    void _calculateGBestFitness(Particle* particle);
 
     void _updateParticles();
 

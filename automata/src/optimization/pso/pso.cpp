@@ -4,6 +4,7 @@
 
 #include "pso.h"
 #include "mcclain_rao.h"
+#include <algorithm>
 
 PSO::PSO(int numberOfStates, int numberOfSymbols,
             vector<int>* toolRelationResults, WordsGenerator* wordsGenerator) :
@@ -95,25 +96,55 @@ void PSO::compute() {
     LOG_INFO("Particle Swarm Optimization: scomputing ends.")
 }
 
+std::vector<Particle*> PSO::results(){
+    return this->_bestParticles;
+}
+
 void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
 
     for (unsigned int i = 0; i < particles.size(); i++) {
-        double fitness = _fitnessFunction(particles[i]);
 
-        if (particles[i]->bestFitness < fitness) {
+        double prevFitness = particles[i]->fitness;
+        particles[i]->fitness = _fitnessFunction(particles[i]);
+
+        double delta = particles[i]->fitness - prevFitness;
+        std::cout <<  "P(" << i << ")" <<
+                " New Fitness: " << particles[i]->fitness <<
+                " delta: " << delta << std::endl;
+
+        // Check if particle is in new pbest
+        if (particles[i]->bestFitness < particles[i]->fitness ) {
             particles[i]->pbest = particles[i]->_position;
-            particles[i]->bestFitness = fitness;
+            particles[i]->bestFitness = particles[i]->fitness ;
         }
 
-        if (_globalBestFitness < fitness){
-            _globalBestFitness = fitness;
-        }
+        // Update global best fitness value
+        _calculateGBestFitness(particles[i]);
     }
 }
 
 void PSO::_updateParticles() {
     for (auto particle : _particles) {
         particle->update();
+    }
+}
+
+void PSO::_calculateGBestFitness(Particle* particle){
+    // Check if another particle has global fitness
+    if (_globalBestFitness == particle->fitness ) {
+        // If that particle is not already here
+        if (std::find(_bestParticles.begin(), _bestParticles.end(),
+                      particle) == _bestParticles.end()) {
+            _bestParticles.push_back(particle);
+        }
+    }
+
+    else if (_globalBestFitness < particle->fitness ){
+        _bestParticles.clear();
+
+        _globalBestFitness = particle->fitness;
+
+        _bestParticles.push_back(particle);
     }
 }
 
@@ -159,11 +190,12 @@ void PSO::_updateNeighbourhoods() {
     }
 }
 
-vector<Point<double>*> PSO::_particlesToPoints(vector<Particle*> _particles){
-    vector<Point<double>*> points;
+vector<Point<double>*> PSO::_particlesToPoints(vector<Particle*> particles){
+    unsigned int size = particles.size();
+    vector<Point<double>*> points(size);
 
-    for(unsigned int i = 0;i < _particles.size(); i++){
-        points.push_back(&(_particles[i]->_position));
+    for(unsigned int i = 0;i < size; i++){
+        points[i] = (&(particles[i]->_position));
     }
 
     return points;
@@ -173,6 +205,7 @@ bool PSO::isConverged(const int &t){
     return (t > global_settings::MAX_ITER ||
             _globalBestFitness >= global_settings::FITNESS_TOLERANCE);
 }
+
 
 PSO::~PSO() {
     for (auto particle = _particles.begin(); particle != _particles.end(); ++particle) {

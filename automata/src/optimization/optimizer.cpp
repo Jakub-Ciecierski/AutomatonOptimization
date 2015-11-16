@@ -30,7 +30,7 @@ void Optimizer::start() {
     int r = tool.alphabet.size();
     // 3) Run PSO instances
     for(int s = global_settings::MIN_STATES;
-            s < global_settings::MAX_STATES; s++){
+            s <= global_settings::MAX_STATES; s++){
         runPSO(s, r);
     }
 
@@ -67,6 +67,14 @@ void Optimizer::runPSO(int s, int r) {
     pso = new PSO(s, r, &_toolRelationResults, _wordsGenerator);
 
     pso->compute();
+
+    std::vector<Particle*> results = pso->results();
+
+    for(unsigned int i = 0;i < results.size(); i++) {
+        cout << "Result(" << i << "): Fitness = "
+        << results[i]->bestFitness << "\n"
+        << "pbest = " << results[i]->pbest << std::endl;
+    }
 
     delete pso;
 }

@@ -48,6 +48,9 @@ public:
     // Best fitness value obtained by itself so far.
     double bestFitness;
 
+    // Current Fitness value;
+    double fitness;
+
 private:
     int _length;
     Point<double> _velocity;

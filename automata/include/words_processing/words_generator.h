@@ -6,7 +6,7 @@
 #define AC_WORDS_GENERATOR_H
 
 #include <stdexcept>
-#include <util/logger.h>
+#include "logger.h"
 #include "global_settings.h"
 #include "bag_of_words.h"
 #include "word.h"

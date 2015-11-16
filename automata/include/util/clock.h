@@ -30,8 +30,6 @@ namespace clk
      * Returns current second from the system.
      */
     double currentSecond();
-
-    void my_test();
 }
 
 #endif //AC_CLOCK_H

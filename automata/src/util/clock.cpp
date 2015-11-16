@@ -37,10 +37,6 @@ namespace clk
         return delta;
     }
 
-    void my_test(){
-        std::cout << "my_test\n";
-    }
-
     //-----------------------------------------------------------//
 
     /*

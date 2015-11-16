@@ -129,12 +129,12 @@ void Particle::update_pso11() {
 
     // Don't make move bigger than velocity_max
     Point<double> toPosition =
-            _velocity * global_settings::PARTICLE_VELOCITY
+            _velocity * global_settings::PARTICLE_VEL_WEIGHT
             + randomPointInSphere;
 
     _moveParticle(toPosition);
 
-    _velocity = _velocity * global_settings::PARTICLE_VELOCITY + randomPointInSphere - oldPosition;
+    _velocity = _velocity * global_settings::PARTICLE_VEL_WEIGHT + randomPointInSphere - oldPosition;
 }
 
 void Particle::update() {

@@ -77,8 +77,8 @@ double PSO::_fitnessFunction(Particle *p) {
 
 void PSO::compute() {
     LOG_INFO("Particle Swarm Optimization: start computing...")
-    for (int t = 0; t < MAX_ITER; t++) {
-
+    int t = 0;
+    while(!isConverged(t++)){
         LOG_INFO("Interation: " + to_string(t));
 
         // Calculate pbest using Fitness Function
@@ -121,12 +121,9 @@ void PSO::_updateParticles() {
  * Updates the neighbourhood.
  */
 void PSO::_updateNeighbourhoods() {
-    int start_k, end_k;
-    start_k = 2;
-    end_k = 4;
-
     // Compute cluster evaluation.
-    McClainRao<double> mc_r(start_k, end_k);
+    McClainRao<double> mc_r(global_settings::START_K,
+                            global_settings::END_K);
 
     // Get vector of points from vector of particles.
     // Must preserve the indexing !!!
@@ -170,6 +167,11 @@ vector<Point<double>*> PSO::_particlesToPoints(vector<Particle*> _particles){
     }
 
     return points;
+}
+
+bool PSO::isConverged(const int &t){
+    return (t > global_settings::MAX_ITER ||
+            _globalBestFitness >= global_settings::FITNESS_TOLERANCE);
 }
 
 PSO::~PSO() {

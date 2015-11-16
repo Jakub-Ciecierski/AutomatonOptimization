@@ -29,7 +29,8 @@ namespace global_settings {
     // TODO comment
     extern double LEARNING_FACTOR;
     // TODO comment
-    extern double PARTICLE_VELOCITY;
+    extern double PARTICLE_VEL_WEIGHT;
+
     // When encoding particle back to automaton
     // each dimension must be casted down to integer value.
     // If p[i] > x.5 then take the ceiling.
@@ -53,6 +54,10 @@ namespace global_settings {
 
     // The swarm size is scaled by this factor
     extern double POPULATION_FACTOR;
+
+    // Look for fitness value no bigger than FITNESS_TOLERANCE
+    // Possible values: [0, 1], where 1 is the most optimal DFA.
+    extern double FITNESS_TOLERANCE;
 
     /* ------ WORDS GENERATION ----- */
     // Maximum number of testing words
@@ -81,6 +86,11 @@ namespace global_settings {
     extern double KM_TOL;
     // The maximum iterations of kmeans
     extern int KM_MAX_ITER;
+
+    // Starting number of cluster to evaluate.
+    extern int START_K;
+    // Finishing number of cluster to evaluate.
+    extern int END_K;
 }
 
 

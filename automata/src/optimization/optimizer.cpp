@@ -41,6 +41,7 @@ void Optimizer::start() {
 //-----------------------------------------------------------//
 
 void Optimizer::generateWords() {
+    LOG_INFO("Generating Pairs of Words");
     _wordsGenerator = new WordsGenerator(tool.alphabet);
     LOG_INFO("Pairs of Words generated");
 }

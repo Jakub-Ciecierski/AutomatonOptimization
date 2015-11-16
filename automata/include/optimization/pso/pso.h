@@ -52,13 +52,14 @@ private:
 
     // Pointer to best particle within the whole PSO space.
     Particle* bestParticle;
+    // Best fitness value overall, global best
+    double _globalBestFitness;
 
     int _psoNumberOfStates;
     int _numberOfSymbols;
     int _swarmSize;
-    // Best fitness value overall, global best
-    double _globalBestFitness;
-    vector<int>*_toolRelationResults;
+
+    vector<int>* _toolRelationResults;
 
     void _loadAndLogSwarmSize();
 
@@ -73,6 +74,15 @@ private:
     void _calculatePBestAndFitness(vector<Particle *> particles);
 
     void _updateParticles();
+
+    /*
+     * Checks whether PSO should stop.
+     * The ending criteria is based on maximum number of iterations
+     * and the FITNESS_TOLERANCE value.
+     *
+     * @t - the iteration number
+     */
+    bool isConverged(const int &t);
 
     /*
      * Updates the state of neighbourhoods.

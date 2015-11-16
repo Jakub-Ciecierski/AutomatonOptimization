@@ -101,8 +101,54 @@ void Particle::_loadAndLogMaxVelocity(int numberOfStates, double speedFactor) {
     LOG_DEBUG("_maxVelocity set to:" + to_string(_maxVelocity));
 }
 
-// TODO clean up
-void Particle::update() {
+void Particle::update_naive(){
+    Point<double> oldPosition = _position;
+    double mu1, mu2;
+
+    mu1 = utils::generateRandomNumber(0.0f, 1.0f);
+    mu2 = utils::generateRandomNumber(0.0f, 1.0f);
+
+    std::cout << "mu1: " << mu1 << std::endl;
+    std::cout << "mu2: " << mu2 << std::endl;
+
+    Point<double> potentialPosition = _position + _velocity;
+
+    for(int i = 0; i < _position.size(); i++){
+        int sign;
+
+        sign = 1;
+        double delta = (_position[i] - potentialPosition[i]);
+        if (delta < 0)
+            sign = -1;
+
+        delta *= delta;
+        delta = sqrt(delta);
+
+        if(delta > velocity_max){
+            _position[i] = _position[i] - (velocity_max*sign);
+        }
+        else{
+            _position[i] = potentialPosition[i];
+        }
+/*
+        std::cout << "Pot: " << potentialPosition << std::endl;
+        std::cout << "Old: " << oldPosition<< std::endl;
+        std::cout << "New: " << _position<< std::endl;
+        std::cout << "delta: " << delta << " velocity_max: "
+                << velocity_max << std::endl;
+        std::cout << std::endl;*/
+    }
+
+    _velocity = _velocity
+                    + (pbest - oldPosition)
+                        * (global_settings::LEARNING_FACTOR * mu1)
+                    + (lbest - oldPosition)
+                        * (global_settings::LEARNING_FACTOR * mu2);
+
+
+}
+
+void Particle::update_pso11() {
     Point<double> oldPosition = _position;
     Point<double> y_p1 = (pbest - oldPosition) * global_settings::LEARNING_FACTOR;
     Point<double> y_p2 = (lbest - oldPosition) * (global_settings::LEARNING_FACTOR);
@@ -124,11 +170,7 @@ void Particle::update() {
 
         delta *= delta;
         delta = sqrt(delta);
-/*
-        std::cout << "Poten: " << potentialPosition << std::endl;
-        std::cout << "delta: " << delta << std::endl;
-        std::cout << "Before: " << oldPosition << std::endl;
-*/
+
         if(delta > velocity_max){
             _position[i] = _position[i] - (velocity_max*sign);
         }
@@ -138,16 +180,16 @@ void Particle::update() {
     }
 
     _velocity = _velocity * global_settings::PARTICLE_VELOCITY + randomPointInSphere - oldPosition;
+}
 
-    // Check border conditions
+// TODO clean up
+void Particle::update() {
+    update_naive();
+
     _checkBorderConditions(_position);
-
-    //std::cout << "Before Position: " << oldPosition << std::endl;
-    //std::cout << "After Position: " << _position << std::endl;
 
     // Update automaton
     _loadAndLogDFA(_numberOfStates, _numberOfSymbols, _position);
-
 }
 
 // TODO for large n's it will be rather slow

@@ -139,9 +139,10 @@ void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
 }
 
 void PSO::_updateParticles() {
+    utils::seed();
+
     std::cout << "Particles count: " << _particles.size() << std::endl;
     for (auto particle : _particles) {
-        std::cout << "Particles count: " << _particles.size() << std::endl;
         particle->update();
     }
 }

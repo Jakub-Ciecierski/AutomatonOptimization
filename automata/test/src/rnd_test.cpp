@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <random>
+#include <utils.h>
 #include "random.h"
 
 //-----------------------------------------------------------//
@@ -57,3 +58,4 @@ TEST(Random, Uniform_Real_Distribution) {
 
     rnd::uniformPoints(count, dim, min, max);
 }
+

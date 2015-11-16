@@ -15,6 +15,8 @@ Point<double> RandomSphere::generatePointWithin() {
     Point<double> pointInSphere;
     do {
         pointInSphere = utils::generateRandomPoint(_dimensions, -_radius, _radius);
+        //cout << "radius: " << _radius << endl;
+            //cout << "pointInSphere: " << pointInSphere  << endl;
     } while(_outsideTheSphere(pointInSphere));
 
     return pointInSphere;

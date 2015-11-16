@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
         cout << "argc != 2\n";
         return EXIT_FAILURE;
     }
-    PSO pso(argv[1], 6, 2);
+    PSO pso(argv[1], 4, 10);
     pso.compute();
 
     return EXIT_SUCCESS;

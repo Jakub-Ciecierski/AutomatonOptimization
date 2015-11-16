@@ -65,6 +65,15 @@ private:
     // The upper bound of interval
     double intervalMax;
 
+    /*
+     * The update method of PSO11 - using random sphere
+     */
+    void update_pso11();
+    /*
+     * The naive update method
+     */
+    void update_naive();
+
     vector<int> _castFromPositionToDFA(Point<double> position);
 
     void _loadAndLogRandomPosition(int length, double dim, double maxDim);

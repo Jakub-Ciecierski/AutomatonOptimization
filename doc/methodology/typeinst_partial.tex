@@ -467,18 +467,18 @@ Concerning given example, $F = \frac{3}{5} = 0.6$. One needs to note that this f
 
 % Naive approach
 
-%The naive approach of updating the particles' positions was proposed in the original PSO algorithm~\cite{pso_origin}.
+The naive approach of updating the particles' positions was proposed in the original PSO algorithm~\cite{pso_origin}.
 
-%\begin{equation}
-%		V_p(t+1) = V_p(t) + c_1 * \mu_1 *(pbest_p - X_p(t)) + c_2 * \mu_2 *(lbest_p - X_p(t))
-%	\end{equation}
-%	
-%	\begin{equation}
-%		X_p(t+1) = X_p(t) + V_p(t)
-%	\end{equation}
-%	where:\\
-%	$c_1, c_2$ are the constant learning factors.\\
-%	$\mu_1, \mu_2$ are random numbers in the range [0,1]. {\color{red} TODO What distribution function - uniform ?} \\
+\begin{equation}
+		V_p(t+1) = V_p(t) + c_1 * \mu_1 *(pbest_p - X_p(t)) + c_2 * \mu_2 *(lbest_p - X_p(t))
+	\end{equation}
+
+	\begin{equation}
+		X_p(t+1) = X_p(t) + V_p(t)
+	\end{equation}
+	where:\\
+	$c_1, c_2$ are the constant learning factors.\\
+	$\mu_1, \mu_2$ are random numbers in the range [0,1]. {\color{red} TODO What distribution function - uniform ?} \\
 
 The following method of updating the particles has its origins in the Standard Particle Swarm Optimization version 2011 presented in~\cite{pso_11}
 

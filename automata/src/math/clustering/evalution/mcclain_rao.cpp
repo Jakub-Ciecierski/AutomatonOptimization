@@ -55,7 +55,7 @@ void McClainRao<T>::compute(const std::vector<Point<T>*>* data) {
         // Compute the index.
         C = computeIndex();
 
-        std::cout << "mc-r(" << k << ") = " << C << std::endl;
+        //std::cout << "mc-r(" << k << ") = " << C << std::endl;
 
         if(best_C > C || best_C == -1){
             best_C = C;

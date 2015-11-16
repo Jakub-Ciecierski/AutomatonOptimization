@@ -5,17 +5,15 @@
 #include "pso.h"
 #include "mcclain_rao.h"
 
-PSO::PSO(string toolUrl, int numberOfStates, int populationFactor) :
-        _tool(toolUrl),
+PSO::PSO(int numberOfStates, int numberOfSymbols,
+            vector<int>* toolRelationResults, WordsGenerator* wordsGenerator) :
+        _wordsGenerator(wordsGenerator),
         _psoNumberOfStates(numberOfStates),
-        _numberOfSymbols(_tool.alphabet.size()),
-        _populationFactor(populationFactor) {
-
+        _numberOfSymbols(numberOfSymbols),
+        _toolRelationResults(toolRelationResults) {
     try {
         _loadAndLogSwarmSize();
         _loadAndLogRandomParticles(_swarmSize);
-        _loadAndLogWordsGenerator(_tool.alphabet);
-        _loadAndLogToolFitnessResults();
     }
     catch (std::exception &e) {
         LOG_ERROR(e.what())
@@ -25,13 +23,14 @@ PSO::PSO(string toolUrl, int numberOfStates, int populationFactor) :
 }
 
 void PSO::_loadAndLogSwarmSize() {
-    _swarmSize = _calculateSwarmSize(_psoNumberOfStates, _numberOfSymbols, _populationFactor);
+    _swarmSize = _calculateSwarmSize(_psoNumberOfStates, _numberOfSymbols);
     LOG_DEBUG("_swarmSize calculated: " + to_string(_swarmSize));
 }
 
 // TODO(dybisz) google test
-int PSO::_calculateSwarmSize(int numberOfStates, int numberOfSymbols, int populationFactor) {
-    int swarmSize = numberOfStates * numberOfSymbols * populationFactor;
+int PSO::_calculateSwarmSize(int numberOfStates, int numberOfSymbols) {
+    int swarmSize = numberOfStates * numberOfSymbols *
+            global_settings::POPULATION_FACTOR;
 
     if (swarmSize < 1) {
         throw invalid_argument("swarmSize < 1");
@@ -49,42 +48,16 @@ void PSO::_loadAndLogRandomParticles(int numberOfParticles) {
 // TODO(dybisz) google test
 vector<Particle *> PSO::_generateRandomParticles(int numberOfParticles) {
     vector<Particle *> particles;
-    double speedFactor = 0.5;
 
     if (numberOfParticles < 1) {
         throw invalid_argument("numberOfParticles < 1");
     }
 
     for (int i = 0; i < numberOfParticles; i++) {
-        Particle *p = new Particle(_psoNumberOfStates, _numberOfSymbols, speedFactor);
+        Particle *p = new Particle(_psoNumberOfStates, _numberOfSymbols);
         particles.push_back(p);
     }
     return particles;
-}
-
-void PSO::_loadAndLogWordsGenerator(vector<int> alphabet) {
-    _wordsGenerator = new WordsGenerator(alphabet);
-    LOG_INFO("Pairs of Words generated");
-}
-
-void PSO::_loadAndLogToolFitnessResults() {
-    _toolFitnessResults = _generateToolFitnessResults();
-    LOG_INFO("Fitness function results for _tool calculated and saved.");
-}
-
-vector<int> PSO::_generateToolFitnessResults() {
-    vector<int> toolFitnessResults;
-    vector<PairOfWords> pairs = _wordsGenerator->getPairs();
-
-    // TODO(dybisz) check for errors
-
-    for (auto pair = pairs.begin(); pair != pairs.end(); ++pair) {
-        bool inRelation = _tool.checkRelationInducedByLanguage((*pair).word1, (*pair).word2);
-        int result = (inRelation) ? 1 : 0;
-        toolFitnessResults.push_back(result);
-    }
-
-    return toolFitnessResults;
 }
 
 double PSO::_fitnessFunction(Particle *p) {
@@ -96,7 +69,7 @@ double PSO::_fitnessFunction(Particle *p) {
         Word w2 = pairs[i].word2;
         bool inRelation = p->_particleRepresentation->checkRelationInducedByLanguage(w1, w2);
         int result = (inRelation) ? 1 : 0;
-        count += (result == _toolFitnessResults[i]) ? 1 : 0;
+        count += (result == (*_toolRelationResults)[i]) ? 1 : 0;
     }
 
     return count / (double) pairs.size();
@@ -139,9 +112,6 @@ void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
 }
 
 void PSO::_updateParticles() {
-    utils::seed();
-
-    std::cout << "Particles count: " << _particles.size() << std::endl;
     for (auto particle : _particles) {
         particle->update();
     }
@@ -151,11 +121,9 @@ void PSO::_updateParticles() {
  * Updates the neighbourhood.
  */
 void PSO::_updateNeighbourhoods() {
-    LOG_INFO("Update Neighbourhood Starting");
-
     int start_k, end_k;
     start_k = 2;
-    end_k = 20;
+    end_k = 4;
 
     // Compute cluster evaluation.
     McClainRao<double> mc_r(start_k, end_k);
@@ -168,8 +136,6 @@ void PSO::_updateNeighbourhoods() {
 
     // Get the most optimal clustering
     KMeans<double>* km = mc_r.getBestClustering();
-
-    std::cout << "Neighbourhood Count: " << km->getK() << std::endl;
 
     // For each neighbourhood (cluster), find the lbest
     for(int c = 0; c < km->getK(); c++){
@@ -188,17 +154,12 @@ void PSO::_updateNeighbourhoods() {
             }
         }
 
-        std::cout << "lbest(" << c << ") = "
-            << _particles[bestIndex]->_position <<std::endl;
-
         // Assign lbest to each particle
         for(unsigned int i = 0; i < clusterIndices.size(); i++){
             int index = clusterIndices[i];
             _particles[index]->lbest = _particles[bestIndex]->_position;
         }
     }
-
-    LOG_INFO("Update Neighbourhood Finished");
 }
 
 vector<Point<double>*> PSO::_particlesToPoints(vector<Particle*> _particles){
@@ -216,8 +177,6 @@ PSO::~PSO() {
         delete (*particle);
     }
     _particles.clear();
-
-    delete _wordsGenerator;
 }
 
 

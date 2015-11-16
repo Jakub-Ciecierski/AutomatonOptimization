@@ -5,31 +5,23 @@
 #include <random_sphere.h>
 #include "particle.h"
 
-Particle::Particle(int numberOfStates, int numberOfSymbols, double speedFactor) :
-        _length(numberOfStates * numberOfSymbols),
-        _numberOfStates(numberOfStates),
+Particle::Particle(int numberOfStates, int numberOfSymbols) :
         _numberOfSymbols(numberOfSymbols),
-        _speedFactor(speedFactor){
+        _numberOfStates(numberOfStates){
     LOG_INFO("Creating new particle...");
 
-    intervalMin = global_settings::ENCODING_DELTA;
-    intervalMax = numberOfStates
-                  + global_settings::ENCODING_DELTA
-                  - global_settings::UPPER_BOUND_ERR;
+    _length = _numberOfSymbols * _numberOfStates;
 
-    velocity_max = ((double)numberOfStates/2) * global_settings::SPEED_FACTOR;
-
-    std::cout << "Velocity Max: [" << velocity_max << std::endl;
-    std::cout << "Interval: [" << intervalMin << ", " << intervalMax << "]" << std::endl;
+    // Must be called before other _loads :(
+    _loadInterval();
 
     try {
-
         _loadAndLogRandomPosition(_length,
-                                  intervalMin,
-                                  intervalMax);
+                                  _intervalMin,
+                                  _intervalMax);
         _loadAndLogDFA(numberOfStates, numberOfSymbols, _position);
         _loadAndLogRandomVelocity(-numberOfStates, numberOfStates);
-        _loadAndLogMaxVelocity(numberOfStates, _speedFactor);
+        _loadAndLogMaxVelocity(numberOfStates);
     }
     catch (std::exception &e) {
         LOG_ERROR(e.what())
@@ -42,7 +34,7 @@ Particle::Particle(int numberOfStates, int numberOfSymbols, double speedFactor) 
 
 void Particle::_loadAndLogRandomPosition(int length, double minDim, double maxDim) {
     _position = _generateRandomPosition(length, minDim, maxDim);
-    LOG_DEBUG("Particle' position created: " + _positionToString());
+    LOG_CALC("_position", "[" + _positionToString() + "]");
 }
 
 Point<double> Particle::_generateRandomPosition(int length, double minDim, double maxDim) {
@@ -58,7 +50,8 @@ Point<double> Particle::_generateRandomPosition(int length, double minDim, doubl
 
 void Particle::_loadAndLogDFA(int numberOfStates, int numberOfSymbols, Point<double> position) {
     vector<int> roundedPosition = _castFromPositionToDFA(position);
-    _particleRepresentation = new DFA(numberOfStates, numberOfSymbols, roundedPosition);
+    _particleRepresentation = new DFA(numberOfStates, numberOfSymbols,
+                                      roundedPosition);
 }
 
 /*
@@ -79,9 +72,6 @@ vector<int> Particle::_castFromPositionToDFA(Point<double> position) {
         casted.push_back(encodedValue);
     }
 
-    std::cout << "Before cast: " << position << std::endl;
-    std::cout << "After cast: " << utils::vectorToString(casted) << std::endl;
-
     return casted;
 }
 
@@ -90,16 +80,26 @@ void Particle::_loadAndLogRandomVelocity(double minDim, double maxDim) {
     LOG_CALC("_velocity", _velocity.toString());
 }
 
-
-void Particle::_loadAndLogMaxVelocity(int numberOfStates, double speedFactor) {
-    _maxVelocity = (((double)numberOfStates) / 2.0 ) * speedFactor;
+void Particle::_loadAndLogMaxVelocity(int numberOfStates) {
+    _maxVelocity = (((double)numberOfStates) / 2.0 )
+                    * global_settings::SPEED_FACTOR;
 
     if(_maxVelocity > numberOfStates) {
-        throw invalid_argument("_maxVelocity: " + to_string(_maxVelocity) + " <= numberOfStates");
+        throw invalid_argument("This must be true: _maxVelocity: "
+                               + to_string(_maxVelocity)
+                               + " <= numberOfStates");
     }
 
     LOG_DEBUG("_maxVelocity set to:" + to_string(_maxVelocity));
 }
+
+void Particle::_loadInterval(){
+    _intervalMin = global_settings::ENCODING_DELTA;
+    _intervalMax = _numberOfStates + global_settings::ENCODING_DELTA
+                   - global_settings::UPPER_BOUND_ERR;
+}
+
+// ----------------------------------------------------------------------------
 
 void Particle::update_naive(){
     Point<double> oldPosition = _position;
@@ -108,46 +108,18 @@ void Particle::update_naive(){
     mu1 = utils::generateRandomNumber(0.0f, 1.0f);
     mu2 = utils::generateRandomNumber(0.0f, 1.0f);
 
-    std::cout << "mu1: " << mu1 << std::endl;
-    std::cout << "mu2: " << mu2 << std::endl;
+    Point<double> toPosition = _position + _velocity;
 
-    Point<double> potentialPosition = _position + _velocity;
-
-    for(int i = 0; i < _position.size(); i++){
-        int sign;
-
-        sign = 1;
-        double delta = (_position[i] - potentialPosition[i]);
-        if (delta < 0)
-            sign = -1;
-
-        delta *= delta;
-        delta = sqrt(delta);
-
-        if(delta > velocity_max){
-            _position[i] = _position[i] - (velocity_max*sign);
-        }
-        else{
-            _position[i] = potentialPosition[i];
-        }
-/*
-        std::cout << "Pot: " << potentialPosition << std::endl;
-        std::cout << "Old: " << oldPosition<< std::endl;
-        std::cout << "New: " << _position<< std::endl;
-        std::cout << "delta: " << delta << " velocity_max: "
-                << velocity_max << std::endl;
-        std::cout << std::endl;*/
-    }
+    _moveParticle(toPosition);
 
     _velocity = _velocity
                     + (pbest - oldPosition)
                         * (global_settings::LEARNING_FACTOR * mu1)
                     + (lbest - oldPosition)
                         * (global_settings::LEARNING_FACTOR * mu2);
-
-
 }
 
+// TODO clean up
 void Particle::update_pso11() {
     Point<double> oldPosition = _position;
     Point<double> y_p1 = (pbest - oldPosition) * global_settings::LEARNING_FACTOR;
@@ -156,40 +128,46 @@ void Particle::update_pso11() {
     Point<double> randomPointInSphere = _generateRandomPointInSphere(centerOfGravity, oldPosition);
 
     // Don't make move bigger than velocity_max
-    Point<double> potentialPosition =
+    Point<double> toPosition =
             _velocity * global_settings::PARTICLE_VELOCITY
             + randomPointInSphere;
 
-    for(int i = 0;i < potentialPosition.size(); i++){
-        int sign;
-
-        sign = 1;
-        double delta = (_position[i] - potentialPosition[i]);
-        if (delta < 0)
-            sign = -1;
-
-        delta *= delta;
-        delta = sqrt(delta);
-
-        if(delta > velocity_max){
-            _position[i] = _position[i] - (velocity_max*sign);
-        }
-        else{
-            _position[i] = potentialPosition[i];
-        }
-    }
+    _moveParticle(toPosition);
 
     _velocity = _velocity * global_settings::PARTICLE_VELOCITY + randomPointInSphere - oldPosition;
 }
 
-// TODO clean up
 void Particle::update() {
+    // Choose update method
     update_naive();
 
     _checkBorderConditions(_position);
 
     // Update automaton
     _loadAndLogDFA(_numberOfStates, _numberOfSymbols, _position);
+}
+
+// ----------------------------------------------------------------------------
+
+void Particle::_moveParticle(Point<double> toPos){
+    for(int i = 0;i < toPos.size(); i++){
+        int sign;
+
+        sign = 1;
+        double delta = (_position[i] - toPos[i]);
+        if (delta < 0)
+            sign = -1;
+
+        delta *= delta;
+        delta = sqrt(delta);
+
+        if(delta > _maxVelocity){
+            _position[i] = _position[i] - (_maxVelocity*sign);
+        }
+        else{
+            _position[i] = toPos[i];
+        }
+    }
 }
 
 // TODO for large n's it will be rather slow
@@ -216,13 +194,13 @@ Particle::~Particle() {
 void Particle::_checkBorderConditions(Point<double>& position) {
     for(int i = 0; i < position.size(); i++) {
 
-        if(position[i] < intervalMin) {
-            position[i] = intervalMin;
+        if(position[i] < _intervalMin) {
+            position[i] = _intervalMin;
             _velocity[i] = 0;
         }
 
-        if(position[i] > intervalMax) {
-            position[i] = intervalMax;
+        if(position[i] > _intervalMax) {
+            position[i] = _intervalMax;
             _velocity[i] = 0;
         }
 

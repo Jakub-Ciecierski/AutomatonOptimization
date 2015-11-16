@@ -16,7 +16,7 @@ DFA::DFA(int numberOfStates, int numberOfSymbols, vector<int> codedTransitionTab
 
 void DFA::_loadAndLogAlphabet(CodedTransitionTable codedTransitionTable) {
     alphabet = _acquireAlphabetFromTransitionTable(_codedTransitionTable);
-    LOG_INFO("Alphabet loaded: " + utils::vectorToString(alphabet));
+    //LOG_INFO("Alphabet loaded: " + utils::vectorToString(alphabet));
 }
 
 // TODO(dybisz) google test

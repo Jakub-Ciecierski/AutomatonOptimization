@@ -30,7 +30,7 @@
  */
 class Particle {
 public:
-    Particle(int numberOfStates, int numberOfSymbols, double speedFactor);
+    Particle(int numberOfStates, int numberOfSymbols);
 
     void update();
 
@@ -51,19 +51,17 @@ public:
 private:
     int _length;
     Point<double> _velocity;
-    double _maxVelocity;
-    double _speedFactor;
-    int _numberOfSymbols;
-    int _numberOfStates;
 
     // The maximum change in position that one particle can take
     // during a single iteration.
-    double velocity_max;
+    double _maxVelocity;
+    int _numberOfSymbols;
+    int _numberOfStates;
 
     // The lower bound of interval
-    double intervalMin;
+    double _intervalMin;
     // The upper bound of interval
-    double intervalMax;
+    double _intervalMax;
 
     /*
      * The update method of PSO11 - using random sphere
@@ -73,6 +71,12 @@ private:
      * The naive update method
      */
     void update_naive();
+
+    /*
+     * Moves the particle to toPoint, bounding the move by
+     * maximum of velocity_max distance.
+     */
+    void _moveParticle(Point<double> toPoint);
 
     vector<int> _castFromPositionToDFA(Point<double> position);
 
@@ -86,7 +90,9 @@ private:
 
     void _loadAndLogRandomVelocity(double minDim, double maxDim);
 
-    void _loadAndLogMaxVelocity(int numberOfStates, double speedFactor);
+    void _loadAndLogMaxVelocity(int numberOfStates);
+
+    void _loadInterval();
 
     Point<double> _generateRandomPointInSphere(Point<double> centerOfGravity, Point<double> oldPosition);
 

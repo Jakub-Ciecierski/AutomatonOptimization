@@ -37,7 +37,7 @@
  *
  */
 class Optimizer {
-
+private:
     //-----------------------------------------------------------//
     //  PRIVATE FIELDS
     //-----------------------------------------------------------//
@@ -46,11 +46,13 @@ class Optimizer {
     PSO* pso;
 
     // The DFA tool used to compute R-L.
-    DFA* tool;
+    DFA tool;
 
     // Generates the sample set of words Omega
     WordsGenerator* _wordsGenerator;
 
+    //
+    vector<int> _toolRelationResults;
     //-----------------------------------------------------------//
     //  PRIVATE METHODS
     //-----------------------------------------------------------//
@@ -70,14 +72,20 @@ class Optimizer {
 
     /*
      * 3) Runs PSO instances.
+     *
+     * @s - number of states
+     * @r - number of symbols in alphabet.
      */
-    void runPSO();
+    void runPSO(int s, int r);
 
+public:
     //-----------------------------------------------------------//
     //  CONSTRUCTORS
     //-----------------------------------------------------------//
 
-    Optimizer();
+    Optimizer(string toolUrl);
+
+    ~Optimizer();
 
     //-----------------------------------------------------------//
     //  PUBLIC METHODS

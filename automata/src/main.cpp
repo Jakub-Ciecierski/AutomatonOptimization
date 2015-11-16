@@ -7,6 +7,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <vector>
+#include <optimizer.h>
 #include "utils.h"
 #include "global_settings.h"
 #include "pso.h"
@@ -24,8 +25,9 @@ int main(int argc, char *argv[]) {
         cout << "argc != 2\n";
         return EXIT_FAILURE;
     }
-    PSO pso(argv[1], 4, 10);
-    pso.compute();
+
+    Optimizer opt(argv[1]);
+    opt.start();
 
     return EXIT_SUCCESS;
 }

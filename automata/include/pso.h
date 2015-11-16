@@ -39,38 +39,34 @@
  */
 class PSO {
 public:
-    PSO(string toolUrl, int numberOfStates, int populationFactor);
+    PSO(int numberOfStates, int numberOfSymbols,
+        vector<int>* toolRelationResults, WordsGenerator* wordsGenerator);
 
     ~PSO();
 
     void compute();
 
 private:
-    DFA _tool;
     vector<Particle *> _particles;
     WordsGenerator *_wordsGenerator;
+
+    // Pointer to best particle within the whole PSO space.
+    Particle* bestParticle;
 
     int _psoNumberOfStates;
     int _numberOfSymbols;
     int _swarmSize;
-    int _populationFactor;
     // Best fitness value overall, global best
     double _globalBestFitness;
-    vector<int> _toolFitnessResults;
+    vector<int>*_toolRelationResults;
 
     void _loadAndLogSwarmSize();
 
-    int _calculateSwarmSize(int numberOfStates, int numberOfSymbols, int populationFactor);
+    int _calculateSwarmSize(int numberOfStates, int numberOfSymbols);
 
     void _loadAndLogRandomParticles(int numberOfParticles);
 
     vector<Particle *> _generateRandomParticles(int numberOfParticles);
-
-    void _loadAndLogWordsGenerator(vector<int> alphabet);
-
-    void _loadAndLogToolFitnessResults();
-
-    vector<int> _generateToolFitnessResults();
 
     double _fitnessFunction(Particle* p);
 

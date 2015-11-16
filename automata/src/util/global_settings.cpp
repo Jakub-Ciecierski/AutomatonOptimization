@@ -8,8 +8,8 @@
 // This file is just for quick values manipulations
 namespace global_settings {
     /* ------ OPTIMIZER SETTINGS ----- */
-    int MIN_STATES              = 1;
-    int MAX_STATES              = 6;
+    int MIN_STATES              = 4;
+    int MAX_STATES              = 10;
 
     /* ------ PSO SETTINGS ----- */
     std::string TOOL_URL        = "test_jastrz.txt";
@@ -19,6 +19,7 @@ namespace global_settings {
     double ENCODING_DELTA       = 0.5f;
     double UPPER_BOUND_ERR      = 0.001f;
     double SPEED_FACTOR         = 0.1f;
+    double POPULATION_FACTOR    = 2.0f;
 
     /* ------ WORDS GENERATION ----- */
     int R_MAX                   = 30;

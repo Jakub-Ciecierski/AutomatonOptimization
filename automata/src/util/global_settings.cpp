@@ -23,16 +23,16 @@ namespace global_settings {
     double FITNESS_TOLERANCE    = 1.0f;
 
     /* ------ WORDS GENERATION ----- */
-    int R_MAX                   = 30;
-    int SIZE_S                  = 10;
-    int SIZE_M                  = 10;
-    int SIZE_L                  = 10;
-    int MIN_LENG_S              = 1;
-    int MAX_LENG_S              = 5;
-    int MIN_LENG_M              = 6;
-    int MAX_LENG_M              = 15;
-    int MIN_LENG_L              = 16;
-    int MAX_LENG_L              = 25;
+    int R_MAX                   = 300;
+    int SIZE_S                  = 100;
+    int SIZE_M                  = 100;
+    int SIZE_L                  = 100;
+    int MIN_LENG_S              = 2;
+    int MAX_LENG_S              = 39;
+    int MIN_LENG_M              = 40;
+    int MAX_LENG_M              = 69;
+    int MIN_LENG_L              = 70;
+    int MAX_LENG_L              = 100;
     
     /* ------ CLUSTERING ----- */
     double KM_TOL               = 0.0001f;

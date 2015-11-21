@@ -14,6 +14,7 @@
 #include "word.h"
 #include "bag_of_words.h"
 #include "words_generator.h"
+#include "plotkin_bound.h"
 
 using namespace std;
 
@@ -28,6 +29,19 @@ int main(int argc, char *argv[]) {
 
     Optimizer opt(argv[1]);
     opt.start();
+
+    PlotkinBound plotkinBound;
+//    int res1 = plotkinBound.calculate(2, 2, 1);
+//    LOG_CALC("res1", res1);
+
+//    int res2 = plotkinBound.calculate(2, 5, 2);
+//    LOG_CALC("res2", res2);
+//
+//    int res3 = plotkinBound.calculate(2, 4, 4 / 2);
+//    LOG_CALC("res3", res3);
+//
+//    int res4 = plotkinBound.calculate(2 ,6 , 6/2);
+//    LOG_CALC("res4", res4);
 
     return EXIT_SUCCESS;
 }

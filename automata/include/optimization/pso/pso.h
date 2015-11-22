@@ -65,6 +65,9 @@ private:
     int _psoNumberOfStates;
     int _numberOfSymbols;
     int _swarmSize;
+    // Values needed to print
+    int _numberOfLinesToReset;
+    int _lastNumberOfClusters;
 
     vector<int>* _toolRelationResults;
 
@@ -111,6 +114,8 @@ private:
      * @_particles - The vector of particles to get points from
      */
     vector<Point<double>*> _particlesToPoints(vector<Particle*> _particles);
+
+    void _infoPrint(int t);
 };
 
 #endif //AC_PSO_H

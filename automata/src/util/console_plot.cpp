@@ -38,15 +38,22 @@ void ConsolePlot::_updateBar(int t, double value) {
     }
 }
 
-void ConsolePlot::print() {
-    cout << FREE_SPACE << "    ^" << endl;
+int ConsolePlot::print() {
+    int numberOfLinesOccupied = 0;
+    char arrowHead1[] = "\u25B2";
+    cout << FREE_SPACE << "   " << "[F]"<< endl;
+    cout << FREE_SPACE << "    " << arrowHead1<< endl;
+    numberOfLinesOccupied+=2;
     for(int h = _graphHeight - 1; h >= 0 ; h--) {
-        cout << FREE_SPACE << _axisMarked(h) <<"|";
+        char line[] = "\u2528";
+        cout << FREE_SPACE << _axisMarked(h) <<line;
         for(int t =  0; t < _graphWidth; t++) {
             int v =  _graph[t][h];
 
             if(v == 1) {
-                cout << GREEN_TEXT("\u25A0");
+                // "\u2588" FULL BLOCK
+                // "\u25FC" SQUARES LARGE
+                cout << GREEN_TEXT("\u2588");
             }
             else {
                 cout << " ";
@@ -54,7 +61,21 @@ void ConsolePlot::print() {
 
         }
         cout << endl;
+        numberOfLinesOccupied++;
     }
+
+    char elbow[] = "\u2517";
+    cout << FREE_SPACE << "    "<<elbow;
+    for(int i =0; i < _graphWidth * (2.0/3.0); i++) {
+        char str[] = "\u2501";
+        cout << str;
+    }
+    char arrowHead2[] = "\u25B6";
+    cout << arrowHead2 <<" [t]"<< endl;
+    numberOfLinesOccupied++;
+
+
+    return numberOfLinesOccupied;
 }
 
 string ConsolePlot::_axisMarked(int h ) {

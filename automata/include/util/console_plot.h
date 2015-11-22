@@ -19,7 +19,7 @@ public:
 
     void update(int t, double value);
 
-    void print();
+    int print();
 
 private:
     vector<vector<int>> _graph;

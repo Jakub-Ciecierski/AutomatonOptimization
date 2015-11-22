@@ -5,14 +5,16 @@
 #include "pso.h"
 #include "mcclain_rao.h"
 #include <algorithm>
+#include <unistd.h>
 
 PSO::PSO(int numberOfStates, int numberOfSymbols,
-            vector<int>* toolRelationResults, WordsGenerator* wordsGenerator) :
+         vector<int> *toolRelationResults, WordsGenerator *wordsGenerator) :
         _wordsGenerator(wordsGenerator),
-        _consolePlot(100,20),
+        _consolePlot(100, 20),
         _psoNumberOfStates(numberOfStates),
         _numberOfSymbols(numberOfSymbols),
-        _toolRelationResults(toolRelationResults) {
+        _toolRelationResults(toolRelationResults),
+        _numberOfLinesToReset(0) {
     try {
         _loadAndLogSwarmSize();
         _loadAndLogRandomParticles(_swarmSize);
@@ -32,7 +34,7 @@ void PSO::_loadAndLogSwarmSize() {
 // TODO(dybisz) google test
 int PSO::_calculateSwarmSize(int numberOfStates, int numberOfSymbols) {
     int swarmSize = numberOfStates * numberOfSymbols *
-            global_settings::POPULATION_FACTOR;
+                    global_settings::POPULATION_FACTOR;
 
     if (swarmSize < 1) {
         throw invalid_argument("swarmSize < 1");
@@ -80,8 +82,8 @@ double PSO::_fitnessFunction(Particle *p) {
 void PSO::compute() {
     LOG_INFO("Particle Swarm Optimization: start computing...")
     int t = 0;
-    while(!isConverged(t++)){
-        LOG_INFO("Interation: " + to_string(t));
+    while (!isConverged(t++)) {
+//        LOG_INFO("Interation: " + to_string(t));
 
         // Calculate pbest using Fitness Function
         _calculatePBestAndFitness(_particles);
@@ -93,18 +95,16 @@ void PSO::compute() {
         _updateParticles();
 
         // Plot results so far
-        cout << endl;
-        _consolePlot.update(t-1, _globalBestFitness);
-        _consolePlot.print();
-        cout << endl;
+        _infoPrint(t);
 
         // Indicate console
-        LOG_CALC("Global Best Fitness",_globalBestFitness );
+//        LOG_CALC("Global Best Fitness",_globalBestFitness );
     }
     LOG_INFO("Particle Swarm Optimization: scomputing ends.")
+    _numberOfLinesToReset = 0;
 }
 
-std::vector<Particle*> PSO::results(){
+std::vector<Particle *> PSO::results() {
     return this->_bestParticles;
 }
 
@@ -115,18 +115,15 @@ void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
         double prevFitness = particles[i]->fitness;
         particles[i]->fitness = _fitnessFunction(particles[i]);
 
-        double delta = particles[i]->fitness - prevFitness;
-//        std::cout <<  "P(" << i << ")" <<
-//                " New Fitness: " << particles[i]->fitness <<
-//                " delta: " << delta << std::endl;
-        LOG_CALC("P_" + to_string(i),"---");
-        LOG_CALC("New Fitness",particles[i]->fitness );
-        LOG_CALC("delta",delta );
+//        double delta = particles[i]->fitness - prevFitness;
+//        LOG_CALC("P_" + to_string(i),"---");
+//        LOG_CALC("New Fitness",particles[i]->fitness );
+//        LOG_CALC("delta",delta );
 
         // Check if particle is in new pbest
-        if (particles[i]->bestFitness < particles[i]->fitness ) {
+        if (particles[i]->bestFitness < particles[i]->fitness) {
             particles[i]->pbest = particles[i]->_position;
-            particles[i]->bestFitness = particles[i]->fitness ;
+            particles[i]->bestFitness = particles[i]->fitness;
         }
 
         // Update global best fitness value
@@ -140,9 +137,9 @@ void PSO::_updateParticles() {
     }
 }
 
-void PSO::_calculateGBestFitness(Particle* particle){
+void PSO::_calculateGBestFitness(Particle *particle) {
     // Check if another particle has global fitness
-    if (_globalBestFitness == particle->fitness ) {
+    if (_globalBestFitness == particle->fitness) {
         // If that particle is not already here
         if (std::find(_bestParticles.begin(), _bestParticles.end(),
                       particle) == _bestParticles.end()) {
@@ -150,7 +147,7 @@ void PSO::_calculateGBestFitness(Particle* particle){
         }
     }
 
-    else if (_globalBestFitness < particle->fitness ){
+    else if (_globalBestFitness < particle->fitness) {
         _bestParticles.clear();
 
         _globalBestFitness = particle->fitness;
@@ -169,50 +166,50 @@ void PSO::_updateNeighbourhoods() {
 
     // Get vector of points from vector of particles.
     // Must preserve the indexing !!!
-    vector<Point<double>*> points = _particlesToPoints(_particles);
+    vector<Point<double> *> points = _particlesToPoints(_particles);
 
     mc_r.compute(&points);
 
     // Get the most optimal clustering
-    KMeans<double>* km = mc_r.getBestClustering();
-
+    KMeans<double> *km = mc_r.getBestClustering();
+    _lastNumberOfClusters = km->getK();
     // For each neighbourhood (cluster), find the lbest
-    for(int c = 0; c < km->getK(); c++){
+    for (int c = 0; c < km->getK(); c++) {
         std::vector<int> clusterIndices = km->getClusterIndices(c);
 
         int bestIndex = clusterIndices[0];
         double bestFitness = _particles[bestIndex]->bestFitness;
 
         // Find lbest
-        for(unsigned int i = 0; i < clusterIndices.size(); i++){
+        for (unsigned int i = 0; i < clusterIndices.size(); i++) {
             int index = clusterIndices[i];
 
-            if(bestFitness < _particles[index]->bestFitness){
+            if (bestFitness < _particles[index]->bestFitness) {
                 bestFitness = _particles[index]->bestFitness;
                 bestIndex = index;
             }
         }
 
         // Assign lbest to each particle
-        for(unsigned int i = 0; i < clusterIndices.size(); i++){
+        for (unsigned int i = 0; i < clusterIndices.size(); i++) {
             int index = clusterIndices[i];
             _particles[index]->lbest = _particles[bestIndex]->_position;
         }
     }
 }
 
-vector<Point<double>*> PSO::_particlesToPoints(vector<Particle*> particles){
+vector<Point<double> *> PSO::_particlesToPoints(vector<Particle *> particles) {
     unsigned int size = particles.size();
-    vector<Point<double>*> points(size);
+    vector<Point<double> *> points(size);
 
-    for(unsigned int i = 0;i < size; i++){
+    for (unsigned int i = 0; i < size; i++) {
         points[i] = (&(particles[i]->_position));
     }
 
     return points;
 }
 
-bool PSO::isConverged(const int &t){
+bool PSO::isConverged(const int &t) {
     return (t > global_settings::MAX_ITER ||
             _globalBestFitness >= global_settings::FITNESS_TOLERANCE);
 }
@@ -226,4 +223,31 @@ PSO::~PSO() {
 }
 
 
+void PSO::_infoPrint(int t) {
+
+    // Clean previous entry
+    for (int i = 0; i < _numberOfLinesToReset; i++) {
+        cout << "\e[A\r";
+    }
+
+    int numberOfLinesToReset = 0;
+    cout << endl;
+    numberOfLinesToReset++;
+
+    _consolePlot.update(t - 1, _globalBestFitness);
+    numberOfLinesToReset +=_consolePlot.print();
+    cout << endl;
+    numberOfLinesToReset++;
+
+    LOG_CALC("t",t );
+    numberOfLinesToReset++;
+
+    LOG_CALC("K",_lastNumberOfClusters);
+    numberOfLinesToReset++;
+
+    LOG_CALC("Global Best Fitness",_globalBestFitness );
+    numberOfLinesToReset++;
+
+    _numberOfLinesToReset = numberOfLinesToReset;
+}
 

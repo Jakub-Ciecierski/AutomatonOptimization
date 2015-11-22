@@ -91,6 +91,14 @@ namespace global_settings {
     extern int START_K;
     // Finishing number of cluster to evaluate.
     extern int END_K;
+
+
+    /* ------ LOGGER ----- */
+    // Main directory of logs
+    extern std::string LOG_MAIN_DIR;
+
+    // Directory of current computation instance
+    extern std::string LOG_CURR_DIR;
 }
 
 

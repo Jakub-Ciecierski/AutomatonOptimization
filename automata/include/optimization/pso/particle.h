@@ -8,7 +8,7 @@
 #include <vector>
 #include <stdexcept>
 #include "dfa.h"
-#include "math/point.h"
+#include "point.h"
 #include "utils.h"
 #include "global_settings.h"
 

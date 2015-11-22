@@ -39,4 +39,8 @@ namespace global_settings {
     int KM_MAX_ITER             = 1000;
     int START_K                 = 2;
     int END_K                   = 4;
+
+    /* ------ LOGGER ----- */
+    std::string LOG_MAIN_DIR    = "./log";
+    std::string LOG_CURR_DIR    = "";
 }

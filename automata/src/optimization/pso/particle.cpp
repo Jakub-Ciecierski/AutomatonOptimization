@@ -140,7 +140,8 @@ void Particle::update_pso11() {
 
 void Particle::update() {
     // Choose update method
-    update_naive();
+//    update_naive();
+    update_pso11();
 
     _checkBorderConditions(_position);
 

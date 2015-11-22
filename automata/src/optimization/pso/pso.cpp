@@ -71,7 +71,12 @@ double PSO::_fitnessFunction(Particle *p) {
     for (unsigned int i = 0; i < pairs.size(); i++) {
         Word w1 = pairs[i].word1;
         Word w2 = pairs[i].word2;
+//        cout << "CALC DIRaaaaaaaaaaaaaa1\n";
+        // HAHA MAM XD
         bool inRelation = p->_particleRepresentation->checkRelationInducedByLanguage(w1, w2);
+//        int pState = p->_particleRepresentation->compute()
+
+//        cout << "CALC DIRaaaaaaaaaaaaaa2\n";
         int result = (inRelation) ? 1 : 0;
         count += (result == (*_toolRelationResults)[i]) ? 1 : 0;
     }
@@ -84,21 +89,18 @@ void PSO::compute() {
     int t = 0;
     while (!isConverged(t++)) {
 //        LOG_INFO("Interation: " + to_string(t));
-
+//        cout << "aaaaaaaaaaaaaaaaaa0\n";
         // Calculate pbest using Fitness Function
         _calculatePBestAndFitness(_particles);
-
+//        cout << "aaaaaaaaaaaaaaaaaaaaaaaaaa1\n";
         // Update neighbourhood and compute lbest
         _updateNeighbourhoods();
-
+//        cout << "aaaaaaaaaaaaaaaaaaaa2\n";
         // Update particles positions
         _updateParticles();
-
+//        cout << "aaaaaaaaaaaaaaaaaaaaaa3\n";
         // Plot results so far
         _infoPrint(t);
-
-        // Indicate console
-//        LOG_CALC("Global Best Fitness",_globalBestFitness );
     }
     LOG_INFO("Particle Swarm Optimization: scomputing ends.")
     _numberOfLinesToReset = 0;
@@ -113,8 +115,9 @@ void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
     for (unsigned int i = 0; i < particles.size(); i++) {
 
         double prevFitness = particles[i]->fitness;
+//        cout << "FIR DIRaaaaaaaaaaaaaa1\n";
         particles[i]->fitness = _fitnessFunction(particles[i]);
-
+//        cout << "FIR DIRaaaaaaaaaaaaaa2\n";
 //        double delta = particles[i]->fitness - prevFitness;
 //        LOG_CALC("P_" + to_string(i),"---");
 //        LOG_CALC("New Fitness",particles[i]->fitness );
@@ -125,9 +128,10 @@ void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
             particles[i]->pbest = particles[i]->_position;
             particles[i]->bestFitness = particles[i]->fitness;
         }
-
+//        cout << "FIR DIRaaaaaaaaaaaaaa3\n";
         // Update global best fitness value
         _calculateGBestFitness(particles[i]);
+//        cout << "FIR DIRaaaaaaaaaaaaaa4\n";
     }
 }
 
@@ -243,6 +247,9 @@ void PSO::_infoPrint(int t) {
     numberOfLinesToReset++;
 
     LOG_CALC("K",_lastNumberOfClusters);
+    numberOfLinesToReset++;
+
+    LOG_CALC("States Considered",_psoNumberOfStates );
     numberOfLinesToReset++;
 
     LOG_CALC("Global Best Fitness",_globalBestFitness );

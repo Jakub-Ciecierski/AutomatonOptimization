@@ -88,7 +88,6 @@ void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords) {
             bag.addWord(word);
         }
     }
-    bag.print();
 }
 
 int WordsGenerator::hammingDistance(Word w1, Word w2) const {
@@ -123,8 +122,6 @@ Word WordsGenerator::_generateWordWithHammingConditionMet(BagOfWords &bag) {
     do {
         int length = bag.getRandomAvailableLength(_alphabet.size());
         word = _generateRandomWordOverAlphabet(length);
-//        cout << "considered word: " << word.toString() << endl;
-//        bag.print();
     } while (!_hammingConditionMet(word));
 
     return word;

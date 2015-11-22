@@ -31,10 +31,15 @@ int StandardTransitionTable::_accessTransitionTable(int symbol, int state) {
     }
 
     if (state < 1 || state > _numberOfStates) {
-        throw invalid_argument("state out of ranges <=> (state < 0 || state > _numberOfStates)");
+        string s = "";
+        s += "state out of ranges <=> (state < 0 || state > _numberOfStates) ";
+        s += "state: ";
+        s += to_string(state);
+        throw invalid_argument(s);
     }
 
     int index = (state - 1) * _numberOfSymbols + (symbol - 1);
+//    cout << index << " _entries:" << _entriesToString() << endl;
     return _entries[index];
 }
 

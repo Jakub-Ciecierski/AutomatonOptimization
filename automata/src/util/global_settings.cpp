@@ -13,7 +13,7 @@ namespace global_settings {
 
     /* ------ PSO SETTINGS ----- */
     std::string TOOL_URL        = "test_jastrz.txt";
-    int MAX_ITER                = 50;
+    int MAX_ITER                = 100;
     double LEARNING_FACTOR      = 0.5 + log(2.0);
     double PARTICLE_VEL_WEIGHT  = 1.0 / (2.0 * log(2.0));
     double ENCODING_DELTA       = 0.5f;
@@ -23,16 +23,16 @@ namespace global_settings {
     double FITNESS_TOLERANCE    = 1.0f;
 
     /* ------ WORDS GENERATION ----- */
-    int R_MAX                   = 100;
-    int SIZE_S                  = 30;
-    int SIZE_M                  = 30;
-    int SIZE_L                  = 30;
-    int MIN_LENG_S              = 2;
-    int MAX_LENG_S              = 14;
-    int MIN_LENG_M              = 40;
-    int MAX_LENG_M              = 69;
-    int MIN_LENG_L              = 70;
-    int MAX_LENG_L              = 100;
+    int R_MAX                   = 300;
+    int SIZE_S                  = 100;
+    int SIZE_M                  = 100;
+    int SIZE_L                  = 100;
+    int MIN_LENG_S              = 20;
+    int MAX_LENG_S              = 140;
+    int MIN_LENG_M              = 400;
+    int MAX_LENG_M              = 690;
+    int MIN_LENG_L              = 700;
+    int MAX_LENG_L              = 1000;
     
     /* ------ CLUSTERING ----- */
     double KM_TOL               = 0.0001f;
@@ -42,5 +42,5 @@ namespace global_settings {
 
     /* ------ LOGGER ----- */
     std::string LOG_MAIN_DIR    = "./log";
-    std::string LOG_CURR_DIR    = "";
+    std::string LOG_CURR_DIR    = "TEST";
 }

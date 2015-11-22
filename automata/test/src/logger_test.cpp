@@ -22,4 +22,11 @@
 
 TEST(Logger, Init) {
     logger::initLog();
+
+    logger::log("My name is:", "Kuba", "Age:", 23);
+    logger::log("My name is:", "Not Kuba", "Age:", 103);
+}
+
+TEST(Logger, InitClass) {
+
 }

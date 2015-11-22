@@ -8,7 +8,7 @@
 // This file is just for quick values manipulations
 namespace global_settings {
     /* ------ OPTIMIZER SETTINGS ----- */
-    int MIN_STATES              = 9;
+    int MIN_STATES              = 4;
     int MAX_STATES              = 10;
 
     /* ------ PSO SETTINGS ----- */

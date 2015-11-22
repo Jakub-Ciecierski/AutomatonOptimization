@@ -9,6 +9,7 @@
 PSO::PSO(int numberOfStates, int numberOfSymbols,
             vector<int>* toolRelationResults, WordsGenerator* wordsGenerator) :
         _wordsGenerator(wordsGenerator),
+        _consolePlot(100,20),
         _psoNumberOfStates(numberOfStates),
         _numberOfSymbols(numberOfSymbols),
         _toolRelationResults(toolRelationResults) {
@@ -91,7 +92,14 @@ void PSO::compute() {
         // Update particles positions
         _updateParticles();
 
-        std::cout << "Global Best Fintess: " << _globalBestFitness << std::endl;
+        // Plot results so far
+        cout << endl;
+        _consolePlot.update(t-1, _globalBestFitness);
+        _consolePlot.print();
+        cout << endl;
+
+        // Indicate console
+        LOG_CALC("Global Best Fitness",_globalBestFitness );
     }
     LOG_INFO("Particle Swarm Optimization: scomputing ends.")
 }
@@ -108,9 +116,12 @@ void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
         particles[i]->fitness = _fitnessFunction(particles[i]);
 
         double delta = particles[i]->fitness - prevFitness;
-        std::cout <<  "P(" << i << ")" <<
-                " New Fitness: " << particles[i]->fitness <<
-                " delta: " << delta << std::endl;
+//        std::cout <<  "P(" << i << ")" <<
+//                " New Fitness: " << particles[i]->fitness <<
+//                " delta: " << delta << std::endl;
+        LOG_CALC("P_" + to_string(i),"---");
+        LOG_CALC("New Fitness",particles[i]->fitness );
+        LOG_CALC("delta",delta );
 
         // Check if particle is in new pbest
         if (particles[i]->bestFitness < particles[i]->fitness ) {

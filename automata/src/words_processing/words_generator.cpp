@@ -4,7 +4,10 @@
 
 #include "words_generator.h"
 
-WordsGenerator::WordsGenerator(vector<int> alphabet) : _alphabet(alphabet) {
+WordsGenerator::WordsGenerator(vector<int> alphabet) : _alphabet(alphabet),
+                                                       _omegaS(MIN_LENG_S, MAX_LENG_S),
+                                                       _omegaM(MIN_LENG_M, MAX_LENG_M),
+                                                       _omegaL(MIN_LENG_L, MAX_LENG_L) {
     try {
         utils::seed();
         _checkGlobalConditions();
@@ -30,42 +33,62 @@ void WordsGenerator::_checkGlobalConditions() {
     if (MAX_LENG_M >= MIN_LENG_L) {
         throw invalid_argument("MAX_LENG_M > MIN_LENG_L; words from omega_M might be longer than those in omega_L");
     }
+
+    int possibleNumberOfWords = _omegaS.numberOfPossibleWords(_alphabet.size());
+    if (SIZE_S > possibleNumberOfWords) {
+        throw invalid_argument("SIZE_S to big - class can not generate as many words. "
+                               "If You want to keep current settings, just change SIZE_S to be < "
+                               + to_string(possibleNumberOfWords));
+    }
+
+    possibleNumberOfWords =_omegaM.numberOfPossibleWords(_alphabet.size());
+    if (SIZE_M > possibleNumberOfWords) {
+        throw invalid_argument("SIZE_S to big - class can not generate as many words. "
+                                       "If You want to keep current settings, just change SIZE_S to be < "
+                               + to_string(possibleNumberOfWords));
+    }
+
+    possibleNumberOfWords = _omegaL.numberOfPossibleWords(_alphabet.size());
+    if (SIZE_L > possibleNumberOfWords) {
+        throw invalid_argument("SIZE_S to big - class can not generate as many words. "
+                                       "If You want to keep current settings, just change SIZE_S to be < "
+                               + to_string(possibleNumberOfWords));
+    }
 }
 
 void WordsGenerator::_fillBags() {
-    _fillBagWithWords(_omegaS, SIZE_S, MIN_LENG_S, MAX_LENG_S);
-    _fillBagWithWords(_omegaM, SIZE_M, MIN_LENG_M, MAX_LENG_M);
-    _fillBagWithWords(_omegaL, SIZE_L, MIN_LENG_L, MAX_LENG_L);
+    _fillBagWithWords(_omegaS, SIZE_S);
+    _fillBagWithWords(_omegaM, SIZE_M);
+    _fillBagWithWords(_omegaL, SIZE_L);
 }
 
-void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords, int minWordLength, int maxWordLength) {
+void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords) {
     bool moreWordsNeededThanSymbolsInAlphabet = numberOfWords > _alphabet.size();
-
     if (moreWordsNeededThanSymbolsInAlphabet) {
 
         // Create alphabet based words
         for (int symbol = 1; symbol <= _alphabet.size(); symbol++) {
-            int length = utils::generateRandomNumber(minWordLength, maxWordLength);
-            Word word = _generateWordStartingWith(symbol, length);
+            int length = utils::generateRandomNumber(bag.getMinWordLength(), bag.getMaxWordLength());
+            Word word = _generateWordStartingWith(bag, symbol, length);
             bag.addWord(word);
         }
 
         // Fill up rest of the space
         int restOfTheSpaceSize = numberOfWords - _alphabet.size();
         for (int i = 0; i < restOfTheSpaceSize; i++) {
-            Word word = _generateWordWithHammingConditionMet(minWordLength, maxWordLength);
+            Word word = _generateWordWithHammingConditionMet(bag);
             bag.addWord(word);
         }
 
     } else {
-
         // Produce as many alphabet words as words needed
         for (int symbol = 1; symbol <= numberOfWords; symbol++) {
-            int length = utils::generateRandomNumber(minWordLength, maxWordLength);
-            Word word = _generateWordStartingWith(symbol, length);
+            int length = utils::generateRandomNumber(bag.getMinWordLength(), bag.getMaxWordLength());
+            Word word = _generateWordStartingWith(bag, symbol, length);
             bag.addWord(word);
         }
     }
+    bag.print();
 }
 
 int WordsGenerator::hammingDistance(Word w1, Word w2) const {
@@ -84,21 +107,24 @@ int WordsGenerator::hammingDistance(Word w1, Word w2) const {
     return distance;
 }
 
-Word WordsGenerator::_generateWordStartingWith(int startingSymbol, int wordLength) {
+Word WordsGenerator::_generateWordStartingWith(BagOfWords &bag, int startingSymbol, int wordLength) {
     Word word;
     do {
-        word = _generateRandomWordOverAlphabet(wordLength);
+        int length = bag.getRandomAvailableLength(_alphabet.size());
+        word = _generateRandomWordOverAlphabet(length);
         word[0] = startingSymbol;
     } while (!_hammingConditionMet(word));
 
     return word;
 }
 
-Word WordsGenerator::_generateWordWithHammingConditionMet(int minWordLength, int maxWordLength) {
+Word WordsGenerator::_generateWordWithHammingConditionMet(BagOfWords &bag) {
     Word word;
     do {
-        int length = utils::generateRandomNumber(minWordLength, maxWordLength);
+        int length = bag.getRandomAvailableLength(_alphabet.size());
         word = _generateRandomWordOverAlphabet(length);
+//        cout << "considered word: " << word.toString() << endl;
+//        bag.print();
     } while (!_hammingConditionMet(word));
 
     return word;
@@ -123,20 +149,28 @@ int WordsGenerator::_generateRandomSymbolFromAlphabet() {
 
 // Check if word meets conditions regarding those already created
 bool WordsGenerator::_hammingConditionMet(Word word) {
-    vector<Word> wordsInOmegaS = _omegaS.getWordsOfLength(word.length());
-    vector<Word> wordsInOmegaM = _omegaS.getWordsOfLength(word.length());
-    vector<Word> wordsInOmegaL = _omegaS.getWordsOfLength(word.length());
+    vector<Word> wordsInSpecificOmega;
+    int wordLength = word.length();
 
-    // && ish short-circuit - if first element is false, there is
-    // no need for extra calculations
-    return _checkHammingCondition(word, wordsInOmegaS) &&
-           _checkHammingCondition(word, wordsInOmegaM) &&
-           _checkHammingCondition(word, wordsInOmegaL);
+    if (_omegaS.canWordBelongToTheBag(wordLength)) {
+        wordsInSpecificOmega = _omegaS.getWordsOfLength(word.length());
+    } else if (_omegaM.canWordBelongToTheBag(wordLength)) {
+        wordsInSpecificOmega = _omegaS.getWordsOfLength(word.length());
+    } else if (_omegaL.canWordBelongToTheBag(wordLength)) {
+        wordsInSpecificOmega = _omegaS.getWordsOfLength(word.length());
+    } else {
+        throw invalid_argument("word: " + word.toString()
+                               + " can not belong to any bag, because its length is to big.");
+    }
+
+    return _checkHammingCondition(word, wordsInSpecificOmega);
 }
 
 bool WordsGenerator::_checkHammingCondition(Word word, vector<Word> wordsToCompare) {
 
-    double acceptableHammingDistance = ((double) word.length()) / 2.0;
+    int acceptableHammingDistance = _calculateAcceptableHammingDistance(word.length());
+
+    if (acceptableHammingDistance < 1) acceptableHammingDistance = 1;
 
     for (auto i = wordsToCompare.begin(); i != wordsToCompare.end(); ++i) {
         int distance = hammingDistance(word, *i);
@@ -150,6 +184,11 @@ bool WordsGenerator::_checkHammingCondition(Word word, vector<Word> wordsToCompa
     }
 
     return true;
+}
+
+
+int WordsGenerator::_calculateAcceptableHammingDistance(int length) {
+    return length / 2;
 }
 
 void WordsGenerator::_generatePairs() {

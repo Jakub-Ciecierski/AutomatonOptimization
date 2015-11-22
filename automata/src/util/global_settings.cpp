@@ -9,11 +9,11 @@
 namespace global_settings {
     /* ------ OPTIMIZER SETTINGS ----- */
     int MIN_STATES              = 4;
-    int MAX_STATES              = 4;
+    int MAX_STATES              = 10;
 
     /* ------ PSO SETTINGS ----- */
     std::string TOOL_URL        = "test_jastrz.txt";
-    int MAX_ITER                = 200;
+    int MAX_ITER                = 50;
     double LEARNING_FACTOR      = 0.5 + log(2.0);
     double PARTICLE_VEL_WEIGHT  = 1.0 / (2.0 * log(2.0));
     double ENCODING_DELTA       = 0.5f;
@@ -23,16 +23,16 @@ namespace global_settings {
     double FITNESS_TOLERANCE    = 1.0f;
 
     /* ------ WORDS GENERATION ----- */
-    int R_MAX                   = 30;
-    int SIZE_S                  = 10;
-    int SIZE_M                  = 10;
-    int SIZE_L                  = 10;
-    int MIN_LENG_S              = 1;
-    int MAX_LENG_S              = 5;
-    int MIN_LENG_M              = 6;
-    int MAX_LENG_M              = 15;
-    int MIN_LENG_L              = 16;
-    int MAX_LENG_L              = 25;
+    int R_MAX                   = 100;
+    int SIZE_S                  = 30;
+    int SIZE_M                  = 30;
+    int SIZE_L                  = 30;
+    int MIN_LENG_S              = 2;
+    int MAX_LENG_S              = 14;
+    int MIN_LENG_M              = 40;
+    int MAX_LENG_M              = 69;
+    int MIN_LENG_L              = 70;
+    int MAX_LENG_L              = 100;
     
     /* ------ CLUSTERING ----- */
     double KM_TOL               = 0.0001f;

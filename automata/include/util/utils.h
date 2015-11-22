@@ -74,7 +74,7 @@ namespace utils {
         T result = 0;
 
         if (p1.size() != p2.size()){
-            throw std::invalid_argument("The dimensions must match");
+            throw std::invalid_argument("The dimensions must match : utils.h");
         }
 
         for(int i = 0; i < p1.size(); i++) {
@@ -98,6 +98,10 @@ namespace utils {
 
         return point;
     }
+
+//    static double power(double base, double exponent) {
+//        return pow(base, exponent);
+//    }
 }
 
 #endif //AC_RANDOM_GENERATOR_H

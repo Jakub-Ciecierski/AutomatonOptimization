@@ -12,6 +12,7 @@
 #include "dfa.h"
 #include "particle.h"
 #include "words_generator.h"
+#include "console_plot.h"
 
 /*
  * Particle Swarm Optimization.
@@ -51,6 +52,7 @@ public:
 private:
     vector<Particle *> _particles;
     WordsGenerator *_wordsGenerator;
+    ConsolePlot _consolePlot;
 
     // Best fitness value overall, global best
     double _globalBestFitness;

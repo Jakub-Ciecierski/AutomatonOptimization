@@ -13,7 +13,6 @@
 #include "utils.h"
 #include "pair_of_words.h"
 
-
 using namespace global_settings;
 
 class WordsGenerator {
@@ -22,7 +21,7 @@ public:
 
     int hammingDistance(Word w1, Word w2) const;
 
-    void _fillBagWithWords(BagOfWords &bag, int numberOfWords, int minWordLength, int maxWordLength);
+    void _fillBagWithWords(BagOfWords &bag, int numberOfWords);
 
     vector<PairOfWords> getPairs();
 
@@ -43,19 +42,27 @@ private:
 
     bool _checkHammingCondition(Word word, vector<Word> wordsToCompare);
 
+    // To generalize method of calculating minimal hamming distance
+    // between consecutively generated words.
+    int _calculateAcceptableHammingDistance(int length);
+
     void _checkGlobalConditions();
 
     int _generateRandomSymbolFromAlphabet();
 
     void _fillBags();
 
-    Word _generateWordWithHammingConditionMet(int minWordLength, int maxWordLength);
+    Word _generateWordWithHammingConditionMet(BagOfWords &minWordLength);
 
     void _generatePairs();
 
     vector<Word> _collectAllWordsFromBags();
 
     vector<PairOfWords> _combineIntoPairs(vector<Word> words);
+
+    int _calculatePlotkinForBinaryAlphabet(int n, int d);
+
+    Word _generateWordStartingWith(BagOfWords &bag, int startingSymbol, int wordLength);
 };
 
 #endif //AC_WORDS_GENERATOR_H

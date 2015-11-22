@@ -14,6 +14,9 @@
 #include "word.h"
 #include "bag_of_words.h"
 #include "words_generator.h"
+#include "plotkin_bound.h"
+#include "random_sphere.h"
+#include "point.h"
 
 using namespace std;
 
@@ -28,6 +31,26 @@ int main(int argc, char *argv[]) {
 
     Optimizer opt(argv[1]);
     opt.start();
+
+//    Point<double> G;
+//    G.addDimension(4.0);
+//    G.addDimension(6.0);
+//    G.addDimension(1.0);
+//    G.addDimension(2.0);
+//    G.addDimension(3.0);
+//    G.addDimension(4.0);
+//
+//    Point<double> X_p;
+//    X_p.addDimension(6.0);
+//    X_p.addDimension(4.0);
+//
+//    RandomSphere rs(G, X_p);
+//    cout << "SPHERE GENERATED: " << rs.toString() << endl;
+//
+//    for(int i = 0; i < 5 ; i++) {
+//        Point<double> temp = rs.generatePointWithin();
+//        cout << "Generated point: " << temp.toString() << endl;
+//    }
 
     return EXIT_SUCCESS;
 }

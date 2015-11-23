@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <vector>
 #include <optimizer.h>
+#include "flag_reader.h"
 #include "log.h"
 #include "utils.h"
 #include "global_settings.h"
@@ -24,7 +25,8 @@ using namespace std;
 /*
  * Initialises the application resources
  */
-void initApp();
+void initApp(int argc, char *argv[]);
+
 /*
  * Closes the application resources
  */
@@ -33,15 +35,9 @@ void closeApp();
 int main(int argc, char *argv[]) {
     printf("Main starting...\n");
 
-    if (argc != 2) {
-        // TODO(dybisz) usage() function
-        cout << "argc != 2\n";
-        return EXIT_FAILURE;
-    }
+    initApp(argc, argv);
 
-    initApp();
-
-    Optimizer opt(argv[1]);
+    Optimizer opt(global_settings::TOOL_URL);
     opt.start();
 
     closeApp();
@@ -69,8 +65,13 @@ int main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 }
 
-void initApp() {
+void initApp(int argc, char *argv[]) {
+    // Read flags must be first!!!!
+    console::readFlags(argc, argv);
+
     logger::initLog();
+
+
 }
 void closeApp(){
     logger::closeLog();

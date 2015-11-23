@@ -44,7 +44,6 @@ TEST(StringUtils, SplitString) {
     EXPECT_EQ(tokens.size(), actualValues.size());
 
     for(unsigned int i = 0; i < tokens.size(); i++){
-        std::cout<< tokens[i] << std::endl;
         EXPECT_EQ(tokens[i], actualValues[i]);
     }
 }

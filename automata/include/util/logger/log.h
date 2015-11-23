@@ -5,12 +5,12 @@
 #ifndef AC_LOG_H
 #define AC_LOG_H
 
-#include "error.h"
 #include <string>
 #include <iostream>
 #include <vector>
 #include <fstream>
 
+#include "logger_settings.h"
 #include "logger_engine.h"
 
 namespace logger

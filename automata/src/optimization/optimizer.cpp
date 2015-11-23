@@ -3,8 +3,8 @@
 //
 
 #include "optimizer.h"
+
 #include <set>
-#include <vector>
 
 //-----------------------------------------------------------//
 //  CONSTRUCTORS
@@ -40,7 +40,6 @@ void Optimizer::start() {
     }
 
     printResult();
-
 }
 
 //-----------------------------------------------------------//
@@ -74,27 +73,16 @@ bool Optimizer::runPSO(int s, int r) {
     bool returnValue = false;
 
     pso = new PSO(s, r, &_toolRelationResults, _wordsGenerator);
-
     pso->compute();
-
     std::vector<Particle*> results = pso->results();
 
-    int size = results.size();
     //logger::log(Verbose(OPTIMIZER), "Found ", results.size(),
     //           " results." , " Choosing best...");
 
-
     // Find the result with minimum state usage
     Particle* bestResult = selectParticleUsingMinimumStates(results);
+    compareResultWithBestResult(bestResult);
 
-    // Check if it is better than previous
-    if(this->bestResult == NULL){
-        this->bestResult = new Particle(*bestResult);
-    }
-    else if(this->bestResult->bestFitness < bestResult->bestFitness){
-        delete this->bestResult;
-        this->bestResult = new Particle(*bestResult);
-    }
     // If it is what we are looking for, stop.
     if(this->bestResult->bestFitness >= global_settings::FITNESS_TOLERANCE) {
         returnValue = true;
@@ -107,7 +95,6 @@ bool Optimizer::runPSO(int s, int r) {
 
 Particle* Optimizer::selectParticleUsingMinimumStates(
         std::vector<Particle *> results){
-    int size = results.size();
     std::vector<std::set<int>> stateCountVec;
 
     vector<PairOfWords> pairs = _wordsGenerator->getPairs();
@@ -132,7 +119,7 @@ Particle* Optimizer::selectParticleUsingMinimumStates(
     }
 
     int minIndex = 0;
-    int minCount = stateCountVec[minIndex].size();
+    unsigned int minCount = stateCountVec[minIndex].size();
     for(unsigned int i = 0; i < stateCountVec.size(); i++){
         if(minCount > stateCountVec[i].size()){
             minIndex = i;
@@ -143,8 +130,19 @@ Particle* Optimizer::selectParticleUsingMinimumStates(
     return results[minIndex];
 }
 
+void Optimizer::compareResultWithBestResult(Particle* particle){
+    // Check if it is better than previous
+    if(this->bestResult == NULL){
+        this->bestResult = new Particle(*particle);
+    }
+    else if(this->bestResult->bestFitness < particle->bestFitness){
+        delete this->bestResult;
+        this->bestResult = new Particle(*particle);
+    }
+}
+
 void Optimizer::printResult(){
     std::cout << "Best result: \n"
-    << "[position]: " << this->bestResult->pbest
-    << "\n[fitness]: " << this->bestResult->bestFitness << std::endl;
+        << "[position]: " << this->bestResult->pbest
+        << "\n[fitness]: " << this->bestResult->bestFitness << std::endl;
 }

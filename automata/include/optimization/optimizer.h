@@ -7,6 +7,7 @@
 
 #include "pso.h"
 
+
 /*
  * The Stochastic Algorithm for Deterministic Finite Automaton Optimization.
  *
@@ -78,7 +79,7 @@ private:
      * 2) Compute the relation R-L of the given set of words Omega for the
      * DFA tool T.
      *
-     * The result is saved in TODO.
+     * The result is saved in _toolRelationResults.
      */
     void computeRelation();
 
@@ -99,6 +100,13 @@ private:
      * to compute all words
      */
     Particle* selectParticleUsingMinimumStates(std::vector<Particle *> results);
+
+    /*
+     * Compares the result with current bestResult
+     * The better one is saved.
+     */
+    void compareResultWithBestResult(Particle* result);
+
 public:
     //-----------------------------------------------------------//
     //  CONSTRUCTORS

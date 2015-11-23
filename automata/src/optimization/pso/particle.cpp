@@ -8,7 +8,7 @@
 Particle::Particle(int numberOfStates, int numberOfSymbols) :
         _numberOfSymbols(numberOfSymbols),
         _numberOfStates(numberOfStates){
-    LOG_INFO("Creating new particle...");
+    //LOG_INFO("Creating new particle...");
 
     _length = _numberOfSymbols * _numberOfStates;
 
@@ -30,7 +30,7 @@ Particle::Particle(int numberOfStates, int numberOfSymbols) :
     bestFitness = 0;
     fitness = 0;
 
-    LOG_INFO("Following particle was created: ..."); // TODO(dybisz) change to  neat summary
+    //LOG_INFO("Following particle was created: ..."); // TODO(dybisz) change
 }
 
 Particle::Particle(const Particle& p) :
@@ -47,7 +47,7 @@ Particle::Particle(const Particle& p) :
 
 void Particle::_loadAndLogRandomPosition(int length, double minDim, double maxDim) {
     _position = _generateRandomPosition(length, minDim, maxDim);
-    LOG_CALC("_position", "[" + _positionToString() + "]");
+    //LOG_CALC("_position", "[" + _positionToString() + "]");
 }
 
 Point<double> Particle::_generateRandomPosition(int length, double minDim, double maxDim) {
@@ -90,7 +90,7 @@ vector<int> Particle::_castFromPositionToDFA(Point<double> position) {
 
 void Particle::_loadAndLogRandomVelocity(double minDim, double maxDim) {
     _velocity = utils::generateRandomPoint((double)_position.size(), minDim, maxDim);
-    LOG_CALC("_velocity", _velocity.toString());
+    //LOG_CALC("_velocity", _velocity.toString());
 }
 
 void Particle::_loadAndLogMaxVelocity(int numberOfStates) {

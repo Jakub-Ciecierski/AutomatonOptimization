@@ -11,7 +11,9 @@
 #include <vector>
 #include <string_utils.h>
 #include <sstream>
+
 #include "logger_settings.h"
+
 /*
  * The engine running logger
  */

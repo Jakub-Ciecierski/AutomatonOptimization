@@ -5,7 +5,6 @@
 #ifndef AC_ERROR_H
 #define AC_ERROR_H
 
-
 //#define _GNU_SOURCE
 #include <sys/types.h>
 #include <signal.h>

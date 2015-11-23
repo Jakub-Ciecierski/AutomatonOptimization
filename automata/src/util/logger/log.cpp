@@ -4,13 +4,13 @@
 
 #include "log.h"
 
+#include "error.h"
+
 #include <sys/stat.h>
 #include <ctime>
-#include <iostream>
 
 #include "global_settings.h"
 #include "clock.h"
-
 
 namespace logger
 {

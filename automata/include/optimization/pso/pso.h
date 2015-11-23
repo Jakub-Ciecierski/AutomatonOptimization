@@ -14,7 +14,6 @@
 #include "words_generator.h"
 #include "console_plot.h"
 
-
 /*
  * Particle Swarm Optimization.
  *
@@ -75,6 +74,15 @@ private:
     int _lastNumberOfClusters;
 
     vector<int>* _toolRelationResults;
+
+    struct TimeMeasures
+    {
+        double neighbouthoodTime;
+        double fitnessTime;
+        double updateParticleTime;
+    };
+
+    TimeMeasures timeMeasures{0,0,0};
 
     void _loadAndLogSwarmSize();
 

@@ -2,9 +2,8 @@
 // Created by jakub on 11/22/15.
 //
 
-#include <fstream>
 #include "logger_settings.h"
-#include "log.h"
+
 
 namespace logger
 {

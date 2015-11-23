@@ -3,9 +3,11 @@
 //
 
 #include "pso.h"
+
+#include "log.h"
 #include "mcclain_rao.h"
 #include <algorithm>
-#include "log.h"
+#include <clock.h>
 
 PSO::PSO(int numberOfStates, int numberOfSymbols,
          vector<int> *toolRelationResults, WordsGenerator *wordsGenerator) :
@@ -86,19 +88,26 @@ double PSO::_fitnessFunction(Particle *p) {
 
 void PSO::compute() {
     LOG_INFO("Particle Swarm Optimization: start computing...")
+
     int t = 0;
+    _infoPrint(t);
     while (!isConverged(t++)) {
-//        LOG_INFO("Interation: " + to_string(t));
-//        cout << "aaaaaaaaaaaaaaaaaa0\n";
+
         // Calculate pbest using Fitness Function
+        clk::startClock();
         _calculatePBestAndFitness(_particles);
-//        cout << "aaaaaaaaaaaaaaaaaaaaaaaaaa1\n";
+        timeMeasures.fitnessTime = clk::stopClock();
+
         // Update neighbourhood and compute lbest
+        clk::startClock();
         _updateNeighbourhoods();
-//        cout << "aaaaaaaaaaaaaaaaaaaa2\n";
+        timeMeasures.neighbouthoodTime = clk::stopClock();
+
         // Update particles positions
+        clk::startClock();
         _updateParticles();
-//        cout << "aaaaaaaaaaaaaaaaaaaaaa3\n";
+        timeMeasures.updateParticleTime = clk::stopClock();
+
         // Plot results so far
         _infoPrint(t);
     }
@@ -244,10 +253,19 @@ void PSO::_infoPrint(int t) {
     LOG_CALC("K",_lastNumberOfClusters);
     numberOfLinesToReset++;
 
+    LOG_CALC("Swarm Size",this->_swarmSize);
+    numberOfLinesToReset++;
     LOG_CALC("States Considered",_psoNumberOfStates );
     numberOfLinesToReset++;
 
     LOG_CALC("Global Best Fitness",_globalBestFitness );
+    numberOfLinesToReset++;
+
+    LOG_CALC("Neighbourhood Time",timeMeasures.neighbouthoodTime );
+    numberOfLinesToReset++;
+    LOG_CALC("Fitness Time",timeMeasures.fitnessTime);
+    numberOfLinesToReset++;
+    LOG_CALC("Particle Update Time",timeMeasures.updateParticleTime);
     numberOfLinesToReset++;
 
     _numberOfLinesToReset = numberOfLinesToReset;

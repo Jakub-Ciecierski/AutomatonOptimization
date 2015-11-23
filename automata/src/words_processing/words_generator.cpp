@@ -204,14 +204,21 @@ vector<Word> WordsGenerator::_collectAllWordsFromBags() {
 
 vector<PairOfWords> WordsGenerator::_combineIntoPairs(vector<Word> words) {
     vector<PairOfWords> pairs;
-
+/*
     for (unsigned int i = 0; i < words.size(); i++) {
         for (unsigned int j = 0; j < words.size(); j++) {
             PairOfWords pairOfWords(words[i], words[j]);
             pairs.push_back(pairOfWords);
         }
     }
+*/
 
+    for (unsigned int i = 0; i < words.size()-1; i++) {
+        for (unsigned int j = i; j < words.size(); j++) {
+            PairOfWords pairOfWords(words[i], words[j]);
+            pairs.push_back(pairOfWords);
+        }
+    }
     return pairs;
 }
 

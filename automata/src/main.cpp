@@ -39,8 +39,12 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
+    initApp();
+
     Optimizer opt(argv[1]);
     opt.start();
+
+    closeApp();
 
 //    Point<double> G;
 //    G.addDimension(4.0);

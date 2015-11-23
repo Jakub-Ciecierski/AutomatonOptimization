@@ -30,7 +30,7 @@ void CodedTransitionTable::_decodeEntries(vector<int> codedTransitionTable) {
             int viaSymbol = (symbol + 1);
             _saveTransitionInEntries(fromState, viaSymbol, toState);
         }
-        shift += 4;
+        shift += _numberOfStates;
     }
 
     LOG_DEBUG("Coded transitionTable: " + utils::vectorToString(codedTransitionTable) + ", decoded to: "

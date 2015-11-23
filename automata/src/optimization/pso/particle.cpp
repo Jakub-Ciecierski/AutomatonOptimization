@@ -33,6 +33,18 @@ Particle::Particle(int numberOfStates, int numberOfSymbols) :
     LOG_INFO("Following particle was created: ..."); // TODO(dybisz) change to  neat summary
 }
 
+Particle::Particle(const Particle& p) :
+        _numberOfSymbols(p._numberOfSymbols),
+        _numberOfStates(p._numberOfStates) {
+    _length = _numberOfSymbols * _numberOfStates;
+
+    bestFitness = p.bestFitness;
+    fitness = p.fitness;
+
+    pbest = p.pbest;
+    lbest = p.lbest;
+}
+
 void Particle::_loadAndLogRandomPosition(int length, double minDim, double maxDim) {
     _position = _generateRandomPosition(length, minDim, maxDim);
     LOG_CALC("_position", "[" + _positionToString() + "]");

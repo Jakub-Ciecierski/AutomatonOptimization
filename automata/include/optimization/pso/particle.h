@@ -30,12 +30,6 @@
  */
 class Particle {
 public:
-    Particle(int numberOfStates, int numberOfSymbols);
-
-    void update();
-
-    ~Particle();
-
     DFA *_particleRepresentation = NULL;
     Point<double> _position;
 
@@ -51,6 +45,19 @@ public:
     // Current Fitness value;
     double fitness;
 
+    int _numberOfSymbols;
+    int _numberOfStates;
+
+    Particle(int numberOfStates, int numberOfSymbols);
+
+    Particle(const Particle& p);
+
+    ~Particle();
+
+    void update();
+
+    vector<int> _castFromPositionToDFA(Point<double> position);
+
 private:
     int _length;
     Point<double> _velocity;
@@ -58,8 +65,6 @@ private:
     // The maximum change in position that one particle can take
     // during a single iteration.
     double _maxVelocity;
-    int _numberOfSymbols;
-    int _numberOfStates;
 
     // The lower bound of interval
     double _intervalMin;
@@ -80,8 +85,6 @@ private:
      * maximum of velocity_max distance.
      */
     void _moveParticle(Point<double> toPoint);
-
-    vector<int> _castFromPositionToDFA(Point<double> position);
 
     void _loadAndLogRandomPosition(int length, double dim, double maxDim);
 

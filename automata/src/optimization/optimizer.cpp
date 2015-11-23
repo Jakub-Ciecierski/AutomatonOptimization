@@ -3,6 +3,8 @@
 //
 
 #include "optimizer.h"
+#include <set>
+#include <vector>
 
 //-----------------------------------------------------------//
 //  CONSTRUCTORS
@@ -10,10 +12,12 @@
 
 Optimizer::Optimizer(string toolUrl) : tool(toolUrl) {
     _wordsGenerator = NULL;
+    bestResult = NULL;
 }
 
 Optimizer::~Optimizer(){
     delete _wordsGenerator;
+    delete bestResult;
 }
 
 //-----------------------------------------------------------//
@@ -31,8 +35,11 @@ void Optimizer::start() {
     // 3) Run PSO instances
     for(int s = global_settings::MIN_STATES;
             s <= global_settings::MAX_STATES; s++){
-        runPSO(s, r);
+        if(runPSO(s, r))
+            break;
     }
+
+    printResult();
 
 }
 
@@ -60,9 +67,11 @@ void Optimizer::computeRelation() {
     LOG_INFO("Fitness function results for _tool calculated and saved.");
 }
 
-void Optimizer::runPSO(int s, int r) {
-    std::cout << "Running PSO. States #: " << s
-        << " Symbols #: " << r << std::endl;
+bool Optimizer::runPSO(int s, int r) {
+    //logger::log(Verbose(OPTIMIZER), "Running PSO\n",
+    //           "States #: ", s, " Symbols #: ", r);
+
+    bool returnValue = false;
 
     pso = new PSO(s, r, &_toolRelationResults, _wordsGenerator);
 
@@ -70,11 +79,72 @@ void Optimizer::runPSO(int s, int r) {
 
     std::vector<Particle*> results = pso->results();
 
-    for(unsigned int i = 0;i < results.size(); i++) {
-        cout << "Result(" << i << "): Fitness = "
-        << results[i]->bestFitness << "\n"
-        << "pbest = " << results[i]->pbest << std::endl;
+    int size = results.size();
+    //logger::log(Verbose(OPTIMIZER), "Found ", results.size(),
+    //           " results." , " Choosing best...");
+
+
+    // Find the result with minimum state usage
+    Particle* bestResult = selectParticleUsingMinimumStates(results);
+
+    // Check if it is better than previous
+    if(this->bestResult == NULL){
+        this->bestResult = new Particle(*bestResult);
+    }
+    else if(this->bestResult->bestFitness < bestResult->bestFitness){
+        delete this->bestResult;
+        this->bestResult = new Particle(*bestResult);
+    }
+    // If it is what we are looking for, stop.
+    if(this->bestResult->bestFitness >= global_settings::FITNESS_TOLERANCE) {
+        returnValue = true;
     }
 
     delete pso;
+
+    return returnValue;
+}
+
+Particle* Optimizer::selectParticleUsingMinimumStates(
+        std::vector<Particle *> results){
+    int size = results.size();
+    std::vector<std::set<int>> stateCountVec;
+
+    vector<PairOfWords> pairs = _wordsGenerator->getPairs();
+    // For each result check how many states it uses.
+    for(unsigned int i = 0;i < results.size(); i++) {
+        Particle* result = results[i];
+        std::set<int> s;
+
+        DFA dfa = DFA(result->_numberOfStates,
+                      result->_numberOfSymbols,
+                      result->_castFromPositionToDFA(result->pbest));
+
+        for (auto pair = pairs.begin(); pair != pairs.end(); ++pair){
+            int state;
+
+            state = dfa.compute((*pair).word1);
+            s.insert(state);
+            state = dfa.compute((*pair).word2);
+            s.insert(state);
+        }
+        stateCountVec.push_back(s);
+    }
+
+    int minIndex = 0;
+    int minCount = stateCountVec[minIndex].size();
+    for(unsigned int i = 0; i < stateCountVec.size(); i++){
+        if(minCount > stateCountVec[i].size()){
+            minIndex = i;
+            minCount = stateCountVec[i].size();
+        }
+    }
+
+    return results[minIndex];
+}
+
+void Optimizer::printResult(){
+    std::cout << "Best result: \n"
+    << "[position]: " << this->bestResult->pbest
+    << "\n[fitness]: " << this->bestResult->bestFitness << std::endl;
 }

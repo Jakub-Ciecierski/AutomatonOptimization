@@ -14,6 +14,7 @@
 #include "words_generator.h"
 #include "console_plot.h"
 
+
 /*
  * Particle Swarm Optimization.
  *
@@ -32,7 +33,8 @@
  *
  * 3) Repeat 2) until an ending criterion is met.
  *
- * 4) Output the best solution.
+ * 4) Output the best solutions. There might be several equaly best solutions,
+ *  having the same fitness Value.
  *
  * Note: In the methodology, points 2.3) and 2.4) were swapped. The current
  * positions is the correct one - Inform about that in the final documentation.
@@ -60,6 +62,9 @@ private:
     // The best particles thus far.
     // Recall that it might happen that some particles are equally good
     // in terms of fitness value.
+        //
+        // The current values to take are pbest and bestFitnessValue
+        // NOT the current position !!!
     std::vector<Particle*> _bestParticles;
 
     int _psoNumberOfStates;

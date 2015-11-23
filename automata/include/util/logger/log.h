@@ -2,8 +2,8 @@
 // Created by jakub on 11/22/15.
 //
 
-#ifndef AC_LOGGER2_H
-#define AC_LOGGER2_H
+#ifndef AC_LOG_H
+#define AC_LOG_H
 
 #include "error.h"
 #include <string>
@@ -12,11 +12,6 @@
 #include <fstream>
 
 #include "logger_engine.h"
-
-struct LogDepth{
-    LogDepth(int depth){this->depth= depth;}
-    int depth;
-};
 
 namespace logger
 {
@@ -112,19 +107,6 @@ namespace logger
         settings::CURRENT_VERBOSE_DEPTH = 0;
 
         engine::closeExtraFile();
-    }
-
-    template<typename... Args>
-    void log(LogDepth depth, Args... args)
-    {
-        settings::CURRENT_VERBOSE = settings::DEFAULT_VERBOSE;
-        settings::CURRENT_VERBOSE_DEPTH = 0;
-
-        engine::printVerboseAndTimeStamp(settings::DEFAULT_VERBOSE,
-                                         depth.depth);
-        engine::recursivePrint(args...);
-
-        settings::CURRENT_VERBOSE_DEPTH = 0;
     }
 
     /*

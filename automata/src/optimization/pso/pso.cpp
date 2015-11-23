@@ -5,7 +5,7 @@
 #include "pso.h"
 #include "mcclain_rao.h"
 #include <algorithm>
-#include <unistd.h>
+#include "log.h"
 
 PSO::PSO(int numberOfStates, int numberOfSymbols,
          vector<int> *toolRelationResults, WordsGenerator *wordsGenerator) :
@@ -115,23 +115,18 @@ void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
     for (unsigned int i = 0; i < particles.size(); i++) {
 
         double prevFitness = particles[i]->fitness;
-//        cout << "FIR DIRaaaaaaaaaaaaaa1\n";
         particles[i]->fitness = _fitnessFunction(particles[i]);
-//        cout << "FIR DIRaaaaaaaaaaaaaa2\n";
-//        double delta = particles[i]->fitness - prevFitness;
-//        LOG_CALC("P_" + to_string(i),"---");
-//        LOG_CALC("New Fitness",particles[i]->fitness );
-//        LOG_CALC("delta",delta );
+
+        double delta = particles[i]->fitness - prevFitness;
 
         // Check if particle is in new pbest
         if (particles[i]->bestFitness < particles[i]->fitness) {
             particles[i]->pbest = particles[i]->_position;
             particles[i]->bestFitness = particles[i]->fitness;
         }
-//        cout << "FIR DIRaaaaaaaaaaaaaa3\n";
         // Update global best fitness value
         _calculateGBestFitness(particles[i]);
-//        cout << "FIR DIRaaaaaaaaaaaaaa4\n";
+
     }
 }
 

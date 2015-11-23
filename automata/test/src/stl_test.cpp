@@ -46,3 +46,11 @@ TEST(STL, Vector_SubVectors){
         EXPECT_EQ(expectedSubSize, actualSubSize);
     }
 }
+
+TEST(STL, Set){
+    std::set<int> s;
+    s.insert(1);
+    s.insert(1);
+
+    EXPECT_EQ(1, s.size());
+}

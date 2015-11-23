@@ -5,7 +5,6 @@
 #ifndef AC_OPTIMIZER_H
 #define AC_OPTIMIZER_H
 
-
 #include "pso.h"
 
 /*
@@ -31,6 +30,16 @@
  *      3.4) After PSO converges, save the best result - the most optimal DFA
  *
  * 4) Choose the best result among all PSO instances.
+ *      4.1) If PSO instance returns many results, choose the one
+ *          using minimum amount of states.
+ *          Otherwise simply choose the only one.
+ *      4.2) Compare the best solution from 4.1) with the best so far.
+ *          The one with better fitness value is new best.
+ *      4.3) Finish if the fitness tolerance has been matched
+ *
+ *  To summarise Point 4): First we choose the best fitness value, then
+ *  among equally good, the ones with minimum states.
+ *
  *  Note: It may happen that two automata have the same result (very unlikely).
  *  Then the automaton that uses the least amount of states to compute the words
  *  from set Omega will be chosen.
@@ -53,6 +62,9 @@ private:
 
     //
     vector<int> _toolRelationResults;
+
+    Particle* bestResult;
+
     //-----------------------------------------------------------//
     //  PRIVATE METHODS
     //-----------------------------------------------------------//
@@ -72,12 +84,21 @@ private:
 
     /*
      * 3) Runs PSO instances.
+     * Returns true if found solution.
      *
      * @s - number of states
      * @r - number of symbols in alphabet.
      */
-    void runPSO(int s, int r);
+    bool runPSO(int s, int r);
 
+    void printResult();
+
+    /*
+     * Selects the best result.
+     * The best DFA is the one that uses the least amount of states
+     * to compute all words
+     */
+    Particle* selectParticleUsingMinimumStates(std::vector<Particle *> results);
 public:
     //-----------------------------------------------------------//
     //  CONSTRUCTORS

@@ -37,6 +37,57 @@ namespace clk
         return delta;
     }
 
+
+    std::string currentFullDateString(std::string date_sep,
+                                      std::string between_sep,
+                                      std::string time_sep) {
+        // get time now
+        time_t t = time(0);
+        struct tm *now = localtime(&t);
+        std::string timeStr;
+
+        // Year
+        timeStr += std::to_string(now->tm_year + 1900)
+                   + date_sep;
+        // Month
+        timeStr += std::to_string(now->tm_mon + 1)
+                   + date_sep;
+        // Day
+        timeStr += std::to_string(now->tm_mday);
+
+        timeStr += between_sep;
+
+        // Hour
+        timeStr += std::to_string(now->tm_hour)
+                   + time_sep;
+        // Minute
+        timeStr += std::to_string(now->tm_min)
+                   + time_sep;
+        // Second
+        timeStr += std::to_string(now->tm_sec);
+
+        return timeStr;
+    }
+
+    std::string currentTimeString(std::string time_sep) {
+        // get time now
+        time_t t = time(0);
+        struct tm *now = localtime(&t);
+        std::string timeStr;
+
+        // Hour
+        timeStr += std::to_string(now->tm_hour)
+                   + time_sep;
+        // Minute
+        timeStr += std::to_string(now->tm_min)
+                   + time_sep;
+        // Second
+        timeStr += std::to_string(now->tm_sec);
+
+        return timeStr;
+    }
+
+
     //-----------------------------------------------------------//
 
     /*

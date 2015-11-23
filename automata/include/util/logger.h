@@ -41,7 +41,7 @@
 #define GREEN_SPACE(word)   GREEN_BOLD_TEXT("   |-----o ")
 #define FREE_SPACE          "           "
 
-#define PRINT_ERROR(message) \
+#define PRINT_ERROR(message)     \
         std::cout << RED_BOLD_TEXT(TAG_ERROR_LOG) << std::endl << \
                      RED_SPACE(TAG_ERROR_LOG) << "[file]:     " << __FILE__ << std::endl << \
                      RED_SPACE(TAG_ERROR_LOG) << "[function]: " << __PRETTY_FUNCTION__ << std::endl << \

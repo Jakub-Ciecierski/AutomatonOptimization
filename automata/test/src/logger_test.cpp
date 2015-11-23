@@ -3,30 +3,38 @@
 //
 
 #include <gtest/gtest.h>
-#include "logger2.h"
+#include "log.h"
+#include <vector>
 
 //-----------------------------------------------------------//
 //  DECLARATIONS
 //-----------------------------------------------------------//
 
 
+void howToLog();
 
 //-----------------------------------------------------------//
 //  DEFINITIONS
 //-----------------------------------------------------------//
 
+void howToLog(){
+    std::string test = "Default\nVerbose";
+    std::string test2 = "Lol\nlol1";
+
+    logger::initLog();
+
+    logger::log(Verbose(PSO), File("test.txt"),test ,3, 2, 3.0f, test2);
+    logger::log(Verbose(PSO), test ,3, 2, 3.0f, test2);
+    logger::log(File("test.txt"),test ,3, 2, 3.0f, test2);
+    logger::log(test ,3, 2, 3.0f, test2, " Constant char");
+
+    logger::closeLog();
+}
 
 //-----------------------------------------------------------//
 //  TESTS
 //-----------------------------------------------------------//
 
 TEST(Logger, Init) {
-    logger::initLog();
-
-    logger::log("My name is:", "Kuba", "Age:", 23);
-    logger::log("My name is:", "Not Kuba", "Age:", 103);
-}
-
-TEST(Logger, InitClass) {
 
 }

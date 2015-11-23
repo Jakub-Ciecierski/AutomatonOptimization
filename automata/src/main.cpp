@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <vector>
 #include <optimizer.h>
+#include "log.h"
 #include "utils.h"
 #include "global_settings.h"
 #include "pso.h"
@@ -19,6 +20,15 @@
 #include "point.h"
 
 using namespace std;
+
+/*
+ * Initialises the application resources
+ */
+void initApp();
+/*
+ * Closes the application resources
+ */
+void closeApp();
 
 int main(int argc, char *argv[]) {
     printf("Main starting...\n");
@@ -53,6 +63,13 @@ int main(int argc, char *argv[]) {
 //    }
 
     return EXIT_SUCCESS;
+}
+
+void initApp() {
+    logger::initLog();
+}
+void closeApp(){
+    logger::closeLog();
 }
 
 #endif //AC_STANDARD_TRANSITION_T_H

@@ -30,6 +30,19 @@ namespace clk
      * Returns current second from the system.
      */
     double currentSecond();
+
+    /*
+     * Gets current date in string.
+     * Includes Year, Month, Day, Hour, Min Sec
+     */
+    std::string currentFullDateString(std::string date_sep,
+                                      std::string between_sep,
+                                      std::string time_sep);
+
+    /*
+     * Includes Hour, Min Sec
+     */
+    std::string currentTimeString(std::string time_sep);
 }
 
 #endif //AC_CLOCK_H

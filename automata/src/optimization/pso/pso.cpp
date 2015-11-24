@@ -8,18 +8,17 @@
 #include "mcclain_rao.h"
 #include <algorithm>
 #include <clock.h>
-#include <unistd.h>
 #include <ThreadPool.h>
-#include <error.h>
 #include <pso_parallel.h>
 
 PSO::PSO(int numberOfStates, int numberOfSymbols,
          vector<int> *toolRelationResults, WordsGenerator *wordsGenerator) :
         _wordsGenerator(wordsGenerator),
+        _toolRelationResults(toolRelationResults),
         _consolePlot(100, 20),
         _psoNumberOfStates(numberOfStates),
         _numberOfSymbols(numberOfSymbols),
-        _toolRelationResults(toolRelationResults),
+
         _numberOfLinesToReset(0) {
     try {
         _loadAndLogSwarmSize();
@@ -182,17 +181,13 @@ void PSO::_initFitnessFunctionParallel(){
     delete[] targs;
 }
 
-
 // -----------------------------------------------------------------------------
 
 void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
 
     for (unsigned int i = 0; i < particles.size(); i++) {
 
-        double prevFitness = particles[i]->fitness;
         particles[i]->fitness = _fitnessFunction(particles[i]);
-
-        double delta = particles[i]->fitness - prevFitness;
 
         // Check if particle is in new pbest
         if (particles[i]->bestFitness < particles[i]->fitness) {

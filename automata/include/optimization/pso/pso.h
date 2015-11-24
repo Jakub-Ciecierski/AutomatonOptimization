@@ -51,8 +51,11 @@ public:
     std::vector<Particle*> results();
 
 private:
-    vector<Particle *> _particles;
     WordsGenerator *_wordsGenerator;
+    vector<int>* _toolRelationResults;
+
+    vector<Particle *> _particles;
+
     ConsolePlot _consolePlot;
 
     // Best fitness value overall, global best
@@ -72,9 +75,7 @@ private:
     // Values needed to print
     int _numberOfLinesToReset;
     int _lastNumberOfClusters;
-
-    vector<int>* _toolRelationResults;
-
+    
     /*
      * Used to measure time during computations
      */

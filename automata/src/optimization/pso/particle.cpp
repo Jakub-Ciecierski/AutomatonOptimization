@@ -51,7 +51,6 @@ Particle::~Particle() {
     delete resultPack.dfa;
 }
 
-
 ResultPack Particle::getResultPack(){
     if (resultPack.dfa == NULL)
         resultPack.dfa = new DFA(this->_numberOfStates,

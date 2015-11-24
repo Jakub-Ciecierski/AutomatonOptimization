@@ -61,9 +61,9 @@ private:
     // The best particles thus far.
     // Recall that it might happen that some particles are equally good
     // in terms of fitness value.
-        //
-        // The current values to take are pbest and bestFitnessValue
-        // NOT the current position !!!
+    //
+    // The current values to take are pbest and bestFitnessValue
+    // NOT the current position !!!
     std::vector<Particle*> _bestParticles;
 
     int _psoNumberOfStates;
@@ -75,14 +75,21 @@ private:
 
     vector<int>* _toolRelationResults;
 
+    /*
+     * Used to measure time during computations
+     */
     struct TimeMeasures
     {
         double neighbouthoodTime;
         double fitnessTime;
         double updateParticleTime;
     };
-
     TimeMeasures timeMeasures{0,0,0};
+
+    bool doParallel;
+
+    // TESTING FUNCTIONs
+    void _initFitnessFunctionParallel();
 
     void _loadAndLogSwarmSize();
 
@@ -107,7 +114,7 @@ private:
      *
      * @t - the iteration number
      */
-    bool isConverged(const int &t);
+    bool _isConverged(const int &t);
 
     /*
      * Updates the state of neighbourhoods.

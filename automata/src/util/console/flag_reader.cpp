@@ -123,6 +123,13 @@ namespace console {
                              DOUBLE,
                              &global_settings::FITNESS_TOLERANCE));
 
+        flags.push_back(Flag("T", "thread-count",
+                             "Default Thread Count - used only when system"
+                                     " can't determine optimal number of "
+                                     "threads",
+                             DOUBLE,
+                             &global_settings::DEFAULT_THREAD_COUNT));
+
         /* ------ WORDS GENERATION ----- */
 
         flags.push_back(Flag("R", "r-max",

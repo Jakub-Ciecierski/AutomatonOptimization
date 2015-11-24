@@ -135,10 +135,13 @@ void Particle::update_naive(){
 // TODO clean up
 void Particle::update_pso11() {
     Point<double> oldPosition = _position;
-    Point<double> y_p1 = (pbest - oldPosition) * global_settings::LEARNING_FACTOR;
-    Point<double> y_p2 = (lbest - oldPosition) * (global_settings::LEARNING_FACTOR);
+    Point<double> y_p1 = (pbest - oldPosition)
+                         * global_settings::LEARNING_FACTOR;
+    Point<double> y_p2 = (lbest - oldPosition)
+                         * (global_settings::LEARNING_FACTOR);
     Point<double> centerOfGravity = (oldPosition + y_p1 + y_p2) / 3.0;
-    Point<double> randomPointInSphere = _generateRandomPointInSphere(centerOfGravity, oldPosition);
+    Point<double> randomPointInSphere =
+            _generateRandomPointInSphere(centerOfGravity, oldPosition);
 
     // Don't make move bigger than velocity_max
     Point<double> toPosition =
@@ -147,7 +150,8 @@ void Particle::update_pso11() {
 
     _moveParticle(toPosition);
 
-    _velocity = _velocity * global_settings::PARTICLE_VEL_WEIGHT + randomPointInSphere - oldPosition;
+    _velocity = _velocity * global_settings::PARTICLE_VEL_WEIGHT
+                + randomPointInSphere - oldPosition;
 }
 
 void Particle::update() {

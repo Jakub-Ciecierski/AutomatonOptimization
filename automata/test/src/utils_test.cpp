@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <vector>
+#include <thread>
 #include "string_utils.h"
 
 //-----------------------------------------------------------//
@@ -22,7 +23,6 @@
 //-----------------------------------------------------------//
 //  TESTS
 //-----------------------------------------------------------//
-
 
 
 TEST(StringUtils, SplitString) {
@@ -46,4 +46,12 @@ TEST(StringUtils, SplitString) {
     for(unsigned int i = 0; i < tokens.size(); i++){
         EXPECT_EQ(tokens[i], actualValues[i]);
     }
+}
+
+TEST(CoreUtil, NumberOfCores) {
+
+    unsigned concurentThreadsSupported = std::thread::hardware_concurrency();
+
+    //std::cout << "Number of Cores: " << concurentThreadsSupported <<
+    // std::endl;
 }

@@ -140,7 +140,7 @@ MAKE_EXTERNAL =
 #---------------- LIBRARIES -------------------#
 
 # Paths and names of libraries to link with
-LIBS +=
+LIBS += -lpthread
 # -L /opt/cuda/lib64 \
 #		-L /usr/local/cuda/lib64 \
 #		-lGL -lglut -lGLEW -lcudart -lcuda

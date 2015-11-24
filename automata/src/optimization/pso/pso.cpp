@@ -8,6 +8,10 @@
 #include "mcclain_rao.h"
 #include <algorithm>
 #include <clock.h>
+#include <unistd.h>
+#include <ThreadPool.h>
+#include <error.h>
+#include <pso_parallel.h>
 
 PSO::PSO(int numberOfStates, int numberOfSymbols,
          vector<int> *toolRelationResults, WordsGenerator *wordsGenerator) :
@@ -26,7 +30,62 @@ PSO::PSO(int numberOfStates, int numberOfSymbols,
     }
 
     _globalBestFitness = 0;
+
+    doParallel = true;
 }
+
+PSO::~PSO() {
+    for (auto particle = _particles.begin();
+         particle != _particles.end(); ++particle) {
+        delete (*particle);
+    }
+    _particles.clear();
+}
+
+//-----------------------------------------------------------//
+//  PUBLIC METHODS
+//-----------------------------------------------------------//
+
+void PSO::compute() {
+    LOG_INFO("Particle Swarm Optimization: start computing...")
+
+    int t = 0;
+    _infoPrint(t);
+    while (!_isConverged(t++)) {
+        // Calculate pbest using Fitness Function
+        clk::startClock();
+        if(doParallel) {
+            _initFitnessFunctionParallel();
+        }
+        else {
+            _calculatePBestAndFitness(_particles);
+        }
+        timeMeasures.fitnessTime = clk::stopClock();
+
+        // Update neighbourhood and compute lbest
+        clk::startClock();
+        _updateNeighbourhoods();
+        timeMeasures.neighbouthoodTime = clk::stopClock();
+
+        // Update particles positions
+        clk::startClock();
+        _updateParticles();
+        timeMeasures.updateParticleTime = clk::stopClock();
+
+        // Plot results so far
+        _infoPrint(t);
+    }
+    LOG_INFO("Particle Swarm Optimization: scomputing ends.")
+    _numberOfLinesToReset = 0;
+}
+
+std::vector<Particle *> PSO::results() {
+    return this->_bestParticles;
+}
+
+//-----------------------------------------------------------//
+//  PRIVATE METHODS
+//-----------------------------------------------------------//
 
 void PSO::_loadAndLogSwarmSize() {
     _swarmSize = _calculateSwarmSize(_psoNumberOfStates, _numberOfSymbols);
@@ -66,6 +125,8 @@ vector<Particle *> PSO::_generateRandomParticles(int numberOfParticles) {
     return particles;
 }
 
+// -----------------------------------------------------------------------------
+
 double PSO::_fitnessFunction(Particle *p) {
     vector<PairOfWords> pairs = _wordsGenerator->getPairs();
     double count = 0;
@@ -86,38 +147,43 @@ double PSO::_fitnessFunction(Particle *p) {
     return count / (double) pairs.size();
 }
 
-void PSO::compute() {
-    LOG_INFO("Particle Swarm Optimization: start computing...")
+// -----------------------------------------------------------------------------
 
-    int t = 0;
-    _infoPrint(t);
-    while (!isConverged(t++)) {
+void PSO::_initFitnessFunctionParallel(){
+    // Create Thread pool
+    ThreadPool threadPool;
 
-        // Calculate pbest using Fitness Function
-        clk::startClock();
-        _calculatePBestAndFitness(_particles);
-        timeMeasures.fitnessTime = clk::stopClock();
+    // Create structure for thread arguments
+    pso_parallel::thread_args* targs = new
+        pso_parallel::thread_args[threadPool.numberOfCores];
 
-        // Update neighbourhood and compute lbest
-        clk::startClock();
-        _updateNeighbourhoods();
-        timeMeasures.neighbouthoodTime = clk::stopClock();
+    // Pointer to initial funtion
+    void* (*ptr)(void*);
+    ptr = &pso_parallel::fitness::initFitnessFunction;
 
-        // Update particles positions
-        clk::startClock();
-        _updateParticles();
-        timeMeasures.updateParticleTime = clk::stopClock();
+    // Initialize the structure with data
+    for(int i = 0;i < threadPool.numberOfCores; i++){
+        targs[i].id = i;
+        targs[i].thread_count = threadPool.numberOfCores;
+        targs[i].particles = &(this->_particles);
+        targs[i].bestParticles = &(this->_bestParticles);
+        targs[i].globalBestFitness = &this->_globalBestFitness;
 
-        // Plot results so far
-        _infoPrint(t);
+        targs[i].wordsGenerator = this->_wordsGenerator;
+        targs[i].toolRelationResults = this->_toolRelationResults;
+
+        targs[i].mutex = &threadPool.mutex;
+
+        threadPool.createThread(ptr, (&targs[i]));
     }
-    LOG_INFO("Particle Swarm Optimization: scomputing ends.")
-    _numberOfLinesToReset = 0;
+
+    threadPool.joinAll();
+
+    delete[] targs;
 }
 
-std::vector<Particle *> PSO::results() {
-    return this->_bestParticles;
-}
+
+// -----------------------------------------------------------------------------
 
 void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
 
@@ -133,15 +199,10 @@ void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
             particles[i]->pbest = particles[i]->_position;
             particles[i]->bestFitness = particles[i]->fitness;
         }
+
         // Update global best fitness value
         _calculateGBestFitness(particles[i]);
 
-    }
-}
-
-void PSO::_updateParticles() {
-    for (auto particle : _particles) {
-        particle->update();
     }
 }
 
@@ -163,6 +224,15 @@ void PSO::_calculateGBestFitness(Particle *particle) {
         _bestParticles.push_back(particle);
     }
 }
+// -----------------------------------------------------------------------------
+
+void PSO::_updateParticles() {
+    for (auto particle : _particles) {
+        particle->update();
+    }
+}
+
+// -----------------------------------------------------------------------------
 
 /*
  * Updates the neighbourhood.
@@ -206,6 +276,15 @@ void PSO::_updateNeighbourhoods() {
     }
 }
 
+// -----------------------------------------------------------------------------
+
+bool PSO::_isConverged(const int &t) {
+    return (t > global_settings::MAX_ITER ||
+            _globalBestFitness >= global_settings::FITNESS_TOLERANCE);
+}
+
+// -----------------------------------------------------------------------------
+
 vector<Point<double> *> PSO::_particlesToPoints(vector<Particle *> particles) {
     unsigned int size = particles.size();
     vector<Point<double> *> points(size);
@@ -216,20 +295,6 @@ vector<Point<double> *> PSO::_particlesToPoints(vector<Particle *> particles) {
 
     return points;
 }
-
-bool PSO::isConverged(const int &t) {
-    return (t > global_settings::MAX_ITER ||
-            _globalBestFitness >= global_settings::FITNESS_TOLERANCE);
-}
-
-
-PSO::~PSO() {
-    for (auto particle = _particles.begin(); particle != _particles.end(); ++particle) {
-        delete (*particle);
-    }
-    _particles.clear();
-}
-
 
 void PSO::_infoPrint(int t) {
 

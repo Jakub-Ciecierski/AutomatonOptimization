@@ -64,8 +64,6 @@ void McClainRao<T>::compute(const std::vector<Point<T>*>* data) {
 
         delete km;
     }
-//    std::cout << "Best K: " << best_km->getK() << std::endl;
-//    LOG_CALC("Best K",best_km->getK());
     LOG_DEBUG("Mcclain-Rao Finished");
 }
 

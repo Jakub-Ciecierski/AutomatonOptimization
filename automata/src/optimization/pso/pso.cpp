@@ -8,7 +8,7 @@
 #include "mcclain_rao.h"
 #include <algorithm>
 #include <clock.h>
-#include <ThreadPool.h>
+#include "thread_pool.h"
 #include <pso_parallel.h>
 
 PSO::PSO(int numberOfStates, int numberOfSymbols,
@@ -126,12 +126,12 @@ vector<Particle *> PSO::_generateRandomParticles(int numberOfParticles) {
 // -----------------------------------------------------------------------------
 
 double PSO::_fitnessFunction(Particle *p) {
-    vector<PairOfWords> pairs = _wordsGenerator->getPairs();
+    vector<PairOfWords>* pairs = _wordsGenerator->getPairs();
     double count = 0;
 
-    for (unsigned int i = 0; i < pairs.size(); i++) {
-        Word w1 = pairs[i].word1;
-        Word w2 = pairs[i].word2;
+    for (unsigned int i = 0; i < pairs->size(); i++) {
+        Word w1 = (*pairs)[i].word1;
+        Word w2 = (*pairs)[i].word2;
 //        cout << "CALC DIRaaaaaaaaaaaaaa1\n";
         // HAHA MAM XD
         bool inRelation = p->_particleRepresentation->checkRelationInducedByLanguage(w1, w2);
@@ -142,7 +142,7 @@ double PSO::_fitnessFunction(Particle *p) {
         count += (result == (*_toolRelationResults)[i]) ? 1 : 0;
     }
 
-    return count / (double) pairs.size();
+    return count / (double) pairs->size();
 }
 
 // -----------------------------------------------------------------------------
@@ -238,7 +238,7 @@ void PSO::_updateNeighbourhoods() {
 
     // Get vector of points from vector of particles.
     // Must preserve the indexing !!!
-    vector<Point<double> *> points = _particlesToPoints(_particles);
+    vector<Point<double>*> points = _particlesToPoints(_particles);
 
     mc_r.compute(&points);
 
@@ -291,7 +291,6 @@ vector<Point<double> *> PSO::_particlesToPoints(vector<Particle *> particles) {
 }
 
 void PSO::_infoPrint(int t) {
-
     // Clean previous entry
     for (int i = 0; i < _numberOfLinesToReset; i++) {
         cout << "\e[A\r";

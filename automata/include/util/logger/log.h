@@ -28,7 +28,7 @@ namespace logger
      * Logs arguments to default file and cout
      */
     template<typename T, typename... Args>
-    void log(T t, Args... args)
+    inline void log(T t, Args... args)
     {
         settings::CURRENT_VERBOSE = settings::DEFAULT_VERBOSE;
         settings::CURRENT_VERBOSE_DEPTH = 0;
@@ -44,7 +44,7 @@ namespace logger
      * Logs arguments to File f, default file and cout
      */
     template<typename... Args>
-    void log(File f, Args... args)
+    inline void log(File f, Args... args)
     {
         settings::CURRENT_VERBOSE = settings::DEFAULT_VERBOSE;
         settings::CURRENT_VERBOSE_DEPTH = 0;
@@ -64,7 +64,7 @@ namespace logger
      * Logs arguments to default file and cout
      */
     template<typename... Args>
-    void log(Verbose verb, Args... args)
+    inline void log(Verbose verb, Args... args)
     {
         settings::CURRENT_VERBOSE = verb;
         settings::CURRENT_VERBOSE_DEPTH = 0;
@@ -76,7 +76,7 @@ namespace logger
     }
 
     template<typename... Args>
-    void log(File f, Verbose verb, Args... args)
+    inline void log(File f, Verbose verb, Args... args)
     {
         settings::CURRENT_VERBOSE = verb;
         settings::CURRENT_VERBOSE_DEPTH = 0;
@@ -93,7 +93,7 @@ namespace logger
     }
 
     template<typename... Args>
-    void log(Verbose verb, File f, Args... args)
+    inline void log(Verbose verb, File f, Args... args)
     {
         settings::CURRENT_VERBOSE = verb;
         settings::CURRENT_VERBOSE_DEPTH = 0;
@@ -108,6 +108,23 @@ namespace logger
 
         engine::closeExtraFile();
     }
+/*
+    template<typename... Args>
+    inline void log(Verbose verb, File f, Args... args)
+    {
+        settings::CURRENT_VERBOSE = verb;
+        settings::CURRENT_VERBOSE_DEPTH = 0;
+
+        engine::openExtraFile(f.name);
+        settings::EXTRA_FILE = f;
+
+        engine::printVerboseAndTimeStamp(verb, 0);
+        engine::recursivePrint(args...);
+
+        settings::CURRENT_VERBOSE_DEPTH = 0;
+
+        engine::closeExtraFile();
+    }*/
 
     /*
     template<typename T1, typename T2, typename... Args>

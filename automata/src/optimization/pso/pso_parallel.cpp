@@ -43,14 +43,15 @@ namespace pso_parallel
             return NULL;
         }
 
-        void calculatePBestAndFitness(int start, int finish, thread_args* t_args){
+        void calculatePBestAndFitness(int start, int finish,
+                                      thread_args* t_args){
             vector<Particle*>* particles = t_args->particles;
 
             // Start main loop
             for (int i = start; i <= finish; i++) {
 
                 Particle* p = (*particles)[i];
-                //double prevFitness = p->fitness;
+
                 p->fitness = fitnessFunction(p, t_args->wordsGenerator,
                                              t_args->toolRelationResults);
 
@@ -77,12 +78,16 @@ namespace pso_parallel
 
         double fitnessFunction(Particle *p, WordsGenerator* wg,
                                         vector<int>* toolRelationResults) {
-            vector<PairOfWords> pairs = wg->getPairs();
+            vector<PairOfWords>* pairs = wg->getPairs();
+
             double count = 0;
 
-            for (unsigned int i = 0; i < pairs.size(); i++) {
-                Word w1 = pairs[i].word1;
-                Word w2 = pairs[i].word2;
+            unsigned int pairsSize = pairs->size();
+            for (unsigned int i = 0; i < pairsSize; i++) {
+                PairOfWords* pair = &((*pairs)[i]);
+
+                Word w1 = pair->word1;
+                Word w2 = pair->word2;
 
                 bool inRelation =
                         p->_particleRepresentation->
@@ -92,7 +97,7 @@ namespace pso_parallel
                 count += (result == (*toolRelationResults)[i]) ? 1 : 0;
             }
 
-            return count / (double) pairs.size();
+            return count / (double) pairsSize;
         }
 
         void calculateGBestFitness(Particle* particle,

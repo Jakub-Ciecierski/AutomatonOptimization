@@ -56,11 +56,11 @@ void Optimizer::generateWords() {
 }
 
 void Optimizer::computeRelation() {
-    vector<PairOfWords> pairs = _wordsGenerator->getPairs();
+    vector<PairOfWords>* pairs = _wordsGenerator->getPairs();
 
     // TODO(dybisz) check for errors
 
-    for (auto pair = pairs.begin(); pair != pairs.end(); ++pair) {
+    for (auto pair = pairs->begin(); pair != pairs->end(); ++pair) {
         bool inRelation = tool.checkRelationInducedByLanguage((*pair).word1,
                                                               (*pair).word2);
         int result = (inRelation) ? 1 : 0;
@@ -93,7 +93,7 @@ Particle* Optimizer::selectParticleUsingMinimumStates(
         std::vector<Particle *> results){
     std::vector<std::set<int>> stateCountVec;
 
-    vector<PairOfWords> pairs = _wordsGenerator->getPairs();
+    vector<PairOfWords>* pairs = _wordsGenerator->getPairs();
     // For each result check how many states it uses.
     for(unsigned int i = 0;i < results.size(); i++) {
         Particle* result = results[i];
@@ -102,7 +102,7 @@ Particle* Optimizer::selectParticleUsingMinimumStates(
         ResultPack resultPack = result->getResultPack();
         DFA* dfa = resultPack.dfa;
 
-        for (auto pair = pairs.begin(); pair != pairs.end(); ++pair){
+        for (auto pair = pairs->begin(); pair != pairs->end(); ++pair){
             int state;
 
             state = dfa->compute((*pair).word1);

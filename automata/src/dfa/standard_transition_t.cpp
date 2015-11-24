@@ -26,7 +26,7 @@ void StandardTransitionTable::print() {
     _printEntries();
 }
 
-int StandardTransitionTable::_accessTransitionTable(int symbol, int state) {
+int StandardTransitionTable::_accessTransitionTable(int& symbol, int& state) {
     if (symbol < 1 || symbol > _numberOfSymbols) {
         throw invalid_argument("symbol out of range <=> (symbol < 0 || symbol > _numberOfSymbols)");
     }
@@ -40,7 +40,7 @@ int StandardTransitionTable::_accessTransitionTable(int symbol, int state) {
     }
 
     int index = (state - 1) * _numberOfSymbols + (symbol - 1);
-//    cout << index << " _entries:" << _entriesToString() << endl;
+
     return _entries[index];
 }
 

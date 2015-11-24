@@ -3,6 +3,7 @@
 //
 
 #include <utils.h>
+#include <clock.h>
 #include "coded_transition_t.h"
 
 CodedTransitionTable::CodedTransitionTable(string url) : PerSymbolTransitionTable(url) {
@@ -97,10 +98,14 @@ vector<int> CodedTransitionTable::getCodedTransitionTable() {
 }
 
 // TODO(dybisz) move this method to TransitionTable (base) class
-int CodedTransitionTable::processWord(Word word) {
+int CodedTransitionTable::processWord(Word& word) {
     int currentState = 1;
-    for (int i = 0; i < word.length(); i++) {
+
+    int len = word.length();
+
+    for (int i = 0; i < len; i++) {
         currentState = _accessTransitionTable(word[i], currentState);
     }
+
     return currentState;
 }

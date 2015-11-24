@@ -10,8 +10,8 @@
 // This file is just for quick values manipulations
 namespace global_settings {
     /* ------ OPTIMIZER SETTINGS ----- */
-    int MIN_STATES              = 3;
-    int MAX_STATES              = 5;
+    int MIN_STATES              = 20;
+    int MAX_STATES              = 21;
 
     /* ------ PSO SETTINGS ----- */
     std::string TOOL_URL        = "test_jastrz.txt";
@@ -27,11 +27,11 @@ namespace global_settings {
     int DEFAULT_THREAD_COUNT    = 4;
 
     /* ------ WORDS GENERATION ----- */
-    int R_MAX                   = 10;
-    int SIZE_S                  = 3;
-    int SIZE_M                  = 3;
-    int SIZE_L                  = 3;
-    int MIN_LENG_S              = 2;
+    int R_MAX                   = 300;
+    int SIZE_S                  = 100;
+    int SIZE_M                  = 100;
+    int SIZE_L                  = 100;
+    int MIN_LENG_S              = 20;
     int MAX_LENG_S              = 39;
     int MIN_LENG_M              = 40;
     int MAX_LENG_M              = 69;

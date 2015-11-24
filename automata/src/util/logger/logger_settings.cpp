@@ -51,7 +51,7 @@ namespace logger
 
         // The intent style between beginning of line and the message itself
         std::string LOG_INTENT                               = "|-----o ";
-        std::string LOG_INTENT_WHITESPACE                    = "     ";
+        std::string LOG_INTENT_WHITESPACE                    = "   ";
 
     }
 }

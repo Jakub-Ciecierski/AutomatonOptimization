@@ -17,8 +17,8 @@ public:
 
     // symbols take values from interval [1; _numberOfSymbols]
     vector<int> alphabet;
-    int compute(Word word);
-    bool checkRelationInducedByLanguage(Word w1, Word w2);
+    int compute(Word& word);
+    bool checkRelationInducedByLanguage(Word& w1, Word& w2);
 
     CodedTransitionTable getCodedTransitionTable() const;
 

@@ -2,7 +2,7 @@
 // Created by jakub on 11/24/15.
 //
 
-#include "ThreadPool.h"
+#include "thread_pool.h"
 #include "error.h"
 #include <semaphore.h>
 #include <stdexcept>

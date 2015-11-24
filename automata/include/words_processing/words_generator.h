@@ -23,7 +23,7 @@ public:
 
     void _fillBagWithWords(BagOfWords &bag, int numberOfWords);
 
-    vector<PairOfWords> getPairs();
+    vector<PairOfWords>* getPairs();
 
     void print();
 

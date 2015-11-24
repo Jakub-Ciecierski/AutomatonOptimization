@@ -2,7 +2,8 @@
 // Created by dybisz on 11/12/15.
 //
 
-#include <util/utils.h>
+#include <utils.h>
+#include <clock.h>
 #include "dfa.h"
 
 DFA::DFA(string url) : _codedTransitionTable(url) {
@@ -39,14 +40,13 @@ vector<int> DFA::_acquireAlphabetFromTransitionTable(CodedTransitionTable transi
     return alphabet;
 }
 
-int DFA::compute(Word word) {
+int DFA::compute(Word& word) {
     return _codedTransitionTable.processWord(word);
 }
 
-bool DFA::checkRelationInducedByLanguage(Word w1, Word w2) {
+bool DFA::checkRelationInducedByLanguage(Word& w1, Word& w2) {
     int state1 = compute(w1);
     int state2 = compute(w2);
 
     return (state1 == state2);
 }
-

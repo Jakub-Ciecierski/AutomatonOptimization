@@ -103,6 +103,14 @@ namespace global_settings {
 
     // Directory of current computation instance
     extern std::string LOG_CURR_DIR;
+
+//------------------------------------------------------------------------------
+
+    /*
+     * Prints all the settings.
+     * TODO Do it automatically.
+     */
+    void printSettings();
 }
 
 

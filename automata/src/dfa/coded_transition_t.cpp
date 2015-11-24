@@ -99,7 +99,7 @@ vector<int> CodedTransitionTable::getCodedTransitionTable() {
 // TODO(dybisz) move this method to TransitionTable (base) class
 int CodedTransitionTable::processWord(Word word) {
     int currentState = 1;
-    for (unsigned int i = 0; i < word.length(); i++) {
+    for (int i = 0; i < word.length(); i++) {
         currentState = _accessTransitionTable(word[i], currentState);
     }
     return currentState;

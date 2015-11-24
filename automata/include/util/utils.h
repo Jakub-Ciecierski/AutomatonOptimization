@@ -55,7 +55,9 @@ namespace utils {
     inline std::string vectorToString(std::vector<T> vec) {
         std::string stringOut = "";
         for (auto i = vec.begin(); i != vec.end(); ++i) {
-            stringOut += (std::to_string(*i) + " ");
+            stringOut += (std::to_string(*i));
+            if (i != vec.end()-1)
+                stringOut += ", ";
         }
         return stringOut;
     }

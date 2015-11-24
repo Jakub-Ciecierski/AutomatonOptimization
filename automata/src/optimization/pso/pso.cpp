@@ -46,8 +46,7 @@ PSO::~PSO() {
 //-----------------------------------------------------------//
 
 void PSO::compute() {
-    LOG_INFO("Particle Swarm Optimization: start computing...")
-
+    logger::log("Particle Swarm Optimization starts");
     int t = 0;
     _infoPrint(t);
     while (!_isConverged(t++)) {
@@ -74,7 +73,7 @@ void PSO::compute() {
         // Plot results so far
         _infoPrint(t);
     }
-    LOG_INFO("Particle Swarm Optimization: scomputing ends.")
+    logger::log("Particle Swarm Optimization ends");
     _numberOfLinesToReset = 0;
 }
 

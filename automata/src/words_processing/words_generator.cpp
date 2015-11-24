@@ -2,6 +2,7 @@
 // Created by dybisz on 11/13/15.
 //
 
+#include <logger/log.h>
 #include "words_generator.h"
 
 WordsGenerator::WordsGenerator(vector<int> alphabet) : _alphabet(alphabet),
@@ -60,14 +61,22 @@ void WordsGenerator::_fillBags() {
     _fillBagWithWords(_omegaS, SIZE_S);
     _fillBagWithWords(_omegaM, SIZE_M);
     _fillBagWithWords(_omegaL, SIZE_L);
+
+    std::stringstream ss;
+    ss << "Words Generated:" << std::endl;
+    ss << "Size Small:   " << SIZE_S  << std::endl;
+    ss << "Size Medium:  " << SIZE_M  << std::endl;
+    ss << "Size Large:   " << SIZE_L;
+    logger::log(File("words.txt"), ss.str());
 }
 
 void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords) {
-    bool moreWordsNeededThanSymbolsInAlphabet = numberOfWords > _alphabet.size();
+    int alphabetSize = _alphabet.size();
+    bool moreWordsNeededThanSymbolsInAlphabet = numberOfWords > alphabetSize;
     if (moreWordsNeededThanSymbolsInAlphabet) {
 
         // Create alphabet based words
-        for (int symbol = 1; symbol <= _alphabet.size(); symbol++) {
+        for (unsigned int symbol = 1; symbol <= _alphabet.size(); symbol++) {
             int length = utils::generateRandomNumber(bag.getMinWordLength(), bag.getMaxWordLength());
             Word word = _generateWordStartingWith(bag, symbol, length);
             bag.addWord(word);

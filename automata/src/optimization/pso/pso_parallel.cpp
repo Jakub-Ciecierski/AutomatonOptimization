@@ -21,8 +21,6 @@ namespace pso_parallel
             int id                              = t_args->id;
             int thread_count                    = t_args->thread_count;
             vector<Particle*>* particles        = t_args->particles;
-            WordsGenerator* wg                  = t_args->wordsGenerator;
-            vector<int>* toolRelationResults    = t_args->toolRelationResults;
 
             int particleCount                   = (*particles).size();
 
@@ -49,7 +47,7 @@ namespace pso_parallel
             vector<Particle*>* particles = t_args->particles;
 
             // Start main loop
-            for (unsigned int i = start; i <= finish; i++) {
+            for (int i = start; i <= finish; i++) {
 
                 Particle* p = (*particles)[i];
                 //double prevFitness = p->fitness;

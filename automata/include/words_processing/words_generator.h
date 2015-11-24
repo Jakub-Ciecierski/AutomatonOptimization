@@ -28,10 +28,10 @@ public:
     void print();
 
 private:
+    vector<int> _alphabet;
     BagOfWords _omegaS;
     BagOfWords _omegaM;
     BagOfWords _omegaL;
-    vector<int> _alphabet;
     vector<PairOfWords> _pairs;
 
     Word _generateWordStartingWith(int symbol, int length);

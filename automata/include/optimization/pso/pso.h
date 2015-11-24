@@ -75,7 +75,7 @@ private:
     // Values needed to print
     int _numberOfLinesToReset;
     int _lastNumberOfClusters;
-    
+
     /*
      * Used to measure time during computations
      */

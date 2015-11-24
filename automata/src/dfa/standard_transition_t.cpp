@@ -11,13 +11,14 @@ StandardTransitionTable::StandardTransitionTable(string url) : TransitionTable(u
 
 
 int StandardTransitionTable::operator()(int symbol, int state) {
+    int resultState;
     try {
-        int resultState = _accessTransitionTable(symbol, state);
-        return resultState;
+        resultState = _accessTransitionTable(symbol, state);
     }
     catch (std::exception &e) {
         LOG_ERROR(e.what());
     }
+    return resultState;
 }
 
 void StandardTransitionTable::print() {

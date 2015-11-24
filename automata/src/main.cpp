@@ -5,20 +5,9 @@
 #define LOG_TYPE DEBUG_LOG
 
 #include <iostream>
-#include <stdio.h>
-#include <vector>
 #include <optimizer.h>
 #include "flag_reader.h"
 #include "log.h"
-#include "utils.h"
-#include "global_settings.h"
-#include "pso.h"
-#include "word.h"
-#include "bag_of_words.h"
-#include "words_generator.h"
-#include "plotkin_bound.h"
-#include "random_sphere.h"
-#include "point.h"
 
 using namespace std;
 
@@ -32,38 +21,30 @@ void initApp(int argc, char *argv[]);
  */
 void closeApp();
 
-int main(int argc, char *argv[]) {
-    printf("Main starting...\n");
+void printSummary(Optimizer& opt);
 
+//------------------------------------------------------------------------------
+
+int main(int argc, char *argv[]) {
     initApp(argc, argv);
 
+    logger::log("Main Computations Begin");
+
+    // Start Optimizer
     Optimizer opt(global_settings::TOOL_URL);
     opt.start();
 
+    // Print summary
+    printSummary(opt);
+
     closeApp();
 
-//    Point<double> G;
-//    G.addDimension(4.0);
-//    G.addDimension(6.0);
-//    G.addDimension(1.0);
-//    G.addDimension(2.0);
-//    G.addDimension(3.0);
-//    G.addDimension(4.0);
-//
-//    Point<double> X_p;
-//    X_p.addDimension(6.0);
-//    X_p.addDimension(4.0);
-//
-//    RandomSphere rs(G, X_p);
-//    cout << "SPHERE GENERATED: " << rs.toString() << endl;
-//
-//    for(int i = 0; i < 5 ; i++) {
-//        Point<double> temp = rs.generatePointWithin();
-//        cout << "Generated point: " << temp.toString() << endl;
-//    }
+    logger::log("Main Computations End");
 
     return EXIT_SUCCESS;
 }
+
+//------------------------------------------------------------------------------
 
 void initApp(int argc, char *argv[]) {
     // Read flags must be first!!!!
@@ -71,10 +52,53 @@ void initApp(int argc, char *argv[]) {
 
     logger::initLog();
 
+    global_settings::printSettings();
 
 }
 void closeApp(){
     logger::closeLog();
 }
+
+void printSummary(Optimizer& opt){
+
+    Particle* result = opt.getResult();
+
+    // Result pack containing DFA of the particle
+    ResultPack resultPack = result->getResultPack();
+    CodedTransitionTable transitionTableResult =
+            resultPack.dfa->getCodedTransitionTable();
+    std::vector<int> transVecResult =
+            transitionTableResult.getCodedTransitionTable();
+    // Build string for result
+    stringstream ss;
+    ss << "Result Summary" << std::endl;
+    ss << "States: ................. "
+    << result->_numberOfStates << std::endl;
+    ss << "Symbols: ................ "
+    << result->_numberOfSymbols << std::endl;
+    ss << "Natural Coding: ......... "
+    << "[" << utils::vectorToString(transVecResult) << "]" << std::endl;
+    ss << "Fitness: ................ "
+    << result->bestFitness;
+
+    stringstream ssTool;
+    DFA* tool = opt.getTool();
+    CodedTransitionTable transitionTable = tool->getCodedTransitionTable();
+    std::vector<int> transVec =
+            transitionTable.getCodedTransitionTable();
+    int symbols = tool->alphabet.size();
+    int states = transVec.size() / symbols;
+    ssTool << "Tool Summary" << std::endl;
+    ssTool << "States: ................. "
+        << states  << std::endl;
+    ssTool << "Symbols: ................ "
+        << symbols << std::endl;
+    ssTool << "Natural Coding: ......... "
+        << "[" << utils::vectorToString(transVec) << "]";
+
+    logger::log(File("result.txt"), ss.str());
+    logger::log(File("result.txt"), ssTool.str());
+}
+//------------------------------------------------------------------------------
 
 #endif //AC_STANDARD_TRANSITION_T_H

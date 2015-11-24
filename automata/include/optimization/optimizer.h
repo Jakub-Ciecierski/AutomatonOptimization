@@ -92,8 +92,6 @@ private:
      */
     bool runPSO(int s, int r);
 
-    void printResult();
-
     /*
      * Selects the best result.
      * The best DFA is the one that uses the least amount of states
@@ -124,6 +122,10 @@ public:
      * Starts the computations.
      */
     void start();
+
+    Particle* getResult();
+
+    DFA* getTool();
 
 };
 

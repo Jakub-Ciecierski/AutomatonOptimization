@@ -21,7 +21,7 @@ namespace logger
 
         void openExtraFile(std::string filename) {
             std::string fileName = makeLogPath(filename);
-            settings::EXTRA_FILE_STREAM.open(fileName);
+            settings::EXTRA_FILE_STREAM.open(fileName, std::ofstream::app);
         }
 
         void closeExtraFile() {

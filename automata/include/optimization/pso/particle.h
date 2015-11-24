@@ -13,6 +13,15 @@
 #include "global_settings.h"
 
 /*
+ * Result pack
+ */
+struct ResultPack{
+    DFA* dfa;
+    double* fitness;
+    Point<double>* position;
+};
+
+/*
  * Particle is used to travel through the solution space in PSO algorithm.
  *
  * Each particle contains:
@@ -58,6 +67,8 @@ public:
 
     vector<int> _castFromPositionToDFA(Point<double> position);
 
+    ResultPack getResultPack();
+
 private:
     int _length;
     Point<double> _velocity;
@@ -70,6 +81,9 @@ private:
     double _intervalMin;
     // The upper bound of interval
     double _intervalMax;
+
+    // Result pack for final evaluation
+    ResultPack resultPack{NULL, NULL, NULL};
 
     /*
      * The update method of PSO11 - using random sphere

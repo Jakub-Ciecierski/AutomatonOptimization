@@ -45,6 +45,25 @@ Particle::Particle(const Particle& p) :
     lbest = p.lbest;
 }
 
+Particle::~Particle() {
+    delete _particleRepresentation;
+
+    delete resultPack.dfa;
+}
+
+
+ResultPack Particle::getResultPack(){
+    if (resultPack.dfa == NULL)
+        resultPack.dfa = new DFA(this->_numberOfStates,
+                          this->_numberOfSymbols,
+                          this->_castFromPositionToDFA(this->pbest));
+
+    resultPack.position = &(this->pbest);
+    resultPack.fitness = &(this->bestFitness);
+
+    return resultPack;
+}
+
 void Particle::_loadAndLogRandomPosition(int length, double minDim, double maxDim) {
     _position = _generateRandomPosition(length, minDim, maxDim);
     //LOG_CALC("_position", "[" + _positionToString() + "]");
@@ -203,11 +222,6 @@ string Particle::_positionToString() {
     }
     return stringOut;
 }
-
-Particle::~Particle() {
-    delete _particleRepresentation;
-}
-
 
 void Particle::_checkBorderConditions(Point<double>& position) {
     for(int i = 0; i < position.size(); i++) {

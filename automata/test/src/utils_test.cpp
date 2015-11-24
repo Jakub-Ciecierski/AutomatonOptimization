@@ -47,11 +47,3 @@ TEST(StringUtils, SplitString) {
         EXPECT_EQ(tokens[i], actualValues[i]);
     }
 }
-
-TEST(CoreUtil, NumberOfCores) {
-
-    unsigned concurentThreadsSupported = std::thread::hardware_concurrency();
-
-    //std::cout << "Number of Cores: " << concurentThreadsSupported <<
-    // std::endl;
-}

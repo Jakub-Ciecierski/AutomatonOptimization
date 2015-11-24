@@ -13,10 +13,15 @@ public:
     DFA(string url);
     DFA(int numberOfStates, int numberOfSymbols, vector<int> codedTransitionTable);
 
+    DFA(const DFA& dfa);
+
     // symbols take values from interval [1; _numberOfSymbols]
     vector<int> alphabet;
     int compute(Word word);
     bool checkRelationInducedByLanguage(Word w1, Word w2);
+
+    CodedTransitionTable getCodedTransitionTable() const;
+
 private:
     vector<int> _acquireAlphabetFromTransitionTable(CodedTransitionTable);
     CodedTransitionTable _codedTransitionTable;

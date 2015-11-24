@@ -3,7 +3,6 @@
 //
 
 #include "optimizer.h"
-
 #include <set>
 
 //-----------------------------------------------------------//
@@ -38,8 +37,14 @@ void Optimizer::start() {
         if(runPSO(s, r))
             break;
     }
+}
 
-    printResult();
+Particle* Optimizer::getResult(){
+    return this->bestResult;
+}
+
+DFA* Optimizer::getTool(){
+    return &this->tool;
 }
 
 //-----------------------------------------------------------//
@@ -47,9 +52,7 @@ void Optimizer::start() {
 //-----------------------------------------------------------//
 
 void Optimizer::generateWords() {
-    LOG_INFO("Generating Pairs of Words");
     _wordsGenerator = new WordsGenerator(tool.alphabet);
-    LOG_INFO("Pairs of Words generated");
 }
 
 void Optimizer::computeRelation() {
@@ -63,25 +66,18 @@ void Optimizer::computeRelation() {
         int result = (inRelation) ? 1 : 0;
         _toolRelationResults.push_back(result);
     }
-    LOG_INFO("Fitness function results for _tool calculated and saved.");
 }
 
 bool Optimizer::runPSO(int s, int r) {
-    //logger::log(Verbose(OPTIMIZER), "Running PSO\n",
-    //           "States #: ", s, " Symbols #: ", r);
-
     bool returnValue = false;
 
     pso = new PSO(s, r, &_toolRelationResults, _wordsGenerator);
     pso->compute();
-    std::vector<Particle*> results = pso->results();
-
-    //logger::log(Verbose(OPTIMIZER), "Found ", results.size(),
-    //           " results." , " Choosing best...");
+    std::vector<Particle*> psoResults = pso->results();
 
     // Find the result with minimum state usage
-    Particle* bestResult = selectParticleUsingMinimumStates(results);
-    compareResultWithBestResult(bestResult);
+    Particle*bestPSOResult = selectParticleUsingMinimumStates(psoResults);
+    compareResultWithBestResult(bestPSOResult);
 
     // If it is what we are looking for, stop.
     if(this->bestResult->bestFitness >= global_settings::FITNESS_TOLERANCE) {
@@ -103,16 +99,15 @@ Particle* Optimizer::selectParticleUsingMinimumStates(
         Particle* result = results[i];
         std::set<int> s;
 
-        DFA dfa = DFA(result->_numberOfStates,
-                      result->_numberOfSymbols,
-                      result->_castFromPositionToDFA(result->pbest));
+        ResultPack resultPack = result->getResultPack();
+        DFA* dfa = resultPack.dfa;
 
         for (auto pair = pairs.begin(); pair != pairs.end(); ++pair){
             int state;
 
-            state = dfa.compute((*pair).word1);
+            state = dfa->compute((*pair).word1);
             s.insert(state);
-            state = dfa.compute((*pair).word2);
+            state = dfa->compute((*pair).word2);
             s.insert(state);
         }
         stateCountVec.push_back(s);
@@ -139,10 +134,4 @@ void Optimizer::compareResultWithBestResult(Particle* particle){
         delete this->bestResult;
         this->bestResult = new Particle(*particle);
     }
-}
-
-void Optimizer::printResult(){
-    std::cout << "Best result: \n"
-        << "[position]: " << this->bestResult->pbest
-        << "\n[fitness]: " << this->bestResult->bestFitness << std::endl;
 }

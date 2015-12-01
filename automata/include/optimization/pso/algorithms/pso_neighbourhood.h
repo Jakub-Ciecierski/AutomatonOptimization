@@ -24,15 +24,6 @@ namespace pso
     namespace nbhood
     {
         /*
-         * Returns vector of points corresponding to the vector of particles
-         *
-         * @_particles - The vector of particles to get points from
-         */
-        std::vector<Point<double>*> particlesToPoints(
-                std::vector<Particle*>* particles);
-
-
-        /*
          * Updates the state of neighbourhoods.
          * The data set in the form of all particles
          * are subjected to cluster analysis.
@@ -43,6 +34,7 @@ namespace pso
          *
          */
         void updateNeighbourhoods(std::vector<Particle*>* particles,
+                                  vector<Point<double>*>* particlePositions,
                                   int& lastNumberOfClusters);
     }
 }

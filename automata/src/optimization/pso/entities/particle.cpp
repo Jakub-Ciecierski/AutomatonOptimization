@@ -51,6 +51,12 @@ Particle::~Particle() {
     delete resultPack.dfa;
 }
 
+void Particle::updateDFARepresentation(){
+    vector<int> roundedPosition = _castFromPositionToDFA(_position);
+    _particleRepresentation = new DFA(_numberOfStates, _numberOfSymbols,
+                                      roundedPosition);
+}
+
 ResultPack Particle::getResultPack(){
     if (resultPack.dfa == NULL)
         resultPack.dfa = new DFA(this->_numberOfStates,
@@ -132,108 +138,10 @@ void Particle::_loadInterval(){
 
 // ----------------------------------------------------------------------------
 
-void Particle::update_naive(){
-    Point<double> oldPosition = _position;
-    double mu1, mu2;
-
-    mu1 = utils::generateRandomNumber(0.0f, 1.0f);
-    mu2 = utils::generateRandomNumber(0.0f, 1.0f);
-
-    Point<double> toPosition = _position + _velocity;
-
-    _moveParticle(toPosition);
-
-    _velocity = _velocity
-                    + (pbest - oldPosition)
-                        * (global_settings::LEARNING_FACTOR * mu1)
-                    + (lbest - oldPosition)
-                        * (global_settings::LEARNING_FACTOR * mu2);
-}
-
-// TODO clean up
-void Particle::update_pso11() {
-    Point<double> oldPosition = _position;
-    Point<double> y_p1 = (pbest - oldPosition)
-                         * global_settings::LEARNING_FACTOR;
-    Point<double> y_p2 = (lbest - oldPosition)
-                         * (global_settings::LEARNING_FACTOR);
-    Point<double> centerOfGravity = (oldPosition + y_p1 + y_p2) / 3.0;
-    Point<double> randomPointInSphere =
-            _generateRandomPointInSphere(centerOfGravity, oldPosition);
-
-    // Don't make move bigger than velocity_max
-    Point<double> toPosition =
-            _velocity * global_settings::PARTICLE_VEL_WEIGHT
-            + randomPointInSphere;
-
-    _moveParticle(toPosition);
-
-    _velocity = _velocity * global_settings::PARTICLE_VEL_WEIGHT
-                + randomPointInSphere - oldPosition;
-}
-
-void Particle::update() {
-    // Choose update method
-    update_naive();
-    //update_pso11();
-
-    _checkBorderConditions(_position);
-
-    // Update automaton
-    _loadAndLogDFA(_numberOfStates, _numberOfSymbols, _position);
-}
-
-// ----------------------------------------------------------------------------
-
-void Particle::_moveParticle(Point<double> toPos){
-    for(int i = 0;i < toPos.size(); i++){
-        int sign;
-
-        sign = 1;
-        double delta = (_position[i] - toPos[i]);
-        if (delta < 0)
-            sign = -1;
-
-        delta *= delta;
-        delta = sqrt(delta);
-
-        if(delta > _maxVelocity){
-            _position[i] = _position[i] - (_maxVelocity*sign);
-        }
-        else{
-            _position[i] = toPos[i];
-        }
-    }
-}
-
-// TODO for large n's it will be rather slow
-Point<double> Particle::_generateRandomPointInSphere(Point<double> centerOfGravity, Point<double> oldPosition) {
-    Point<double> randomPointWithinSphere;
-    RandomSphere randomSphere(centerOfGravity, oldPosition);
-    randomPointWithinSphere = randomSphere.generatePointWithin();
-    return randomPointWithinSphere;
-}
-
 string Particle::_positionToString() {
     string stringOut = "";
     for (int i = 0; i < _position.size(); i++) {
         stringOut += (to_string(_position[i]) + " ");
     }
     return stringOut;
-}
-
-void Particle::_checkBorderConditions(Point<double>& position) {
-    for(int i = 0; i < position.size(); i++) {
-
-        if(position[i] < _intervalMin) {
-            position[i] = _intervalMin;
-            _velocity[i] = 0;
-        }
-
-        if(position[i] > _intervalMax) {
-            position[i] = _intervalMax;
-            _velocity[i] = 0;
-        }
-
-    }
 }

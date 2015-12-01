@@ -7,37 +7,20 @@
 #include <entities/particle.h>
 #include <algorithms/pso_main.h>
 #include "pso_neighbourhood.h"
-#include "pso_main.h"
 
 namespace pso
 {
     namespace nbhood
     {
-        std::vector<Point<double> *> particlesToPoints(
-                std::vector<Particle *>* particles) {
-            unsigned int size = particles->size();
-            vector<Point<double> *> points(size);
-
-            for (unsigned int i = 0; i < size; i++) {
-                points[i] = (&((*particles)[i]->_position));
-            }
-
-            return points;
-        }
-
         void updateNeighbourhoods(std::vector<Particle*>* particles,
-                                    int& lastNumberOfClusters) {
+                                std::vector<Point<double>*>* particlePositions,
+                                int& lastNumberOfClusters) {
 
             // Compute cluster evaluation.
             McClainRao<double> mc_r(global_settings::START_K,
                                     global_settings::END_K);
 
-            // Get vector of points from vector of particles.
-            // Must preserve the indexing !!!
-            std::vector<Point<double>*> points =
-                particlesToPoints(particles);
-
-            mc_r.compute(&points);
+            mc_r.compute(particlePositions);
 
             // Get the most optimal clustering
             KMeans<double> *km = mc_r.getBestClustering();

@@ -33,6 +33,16 @@ namespace pso
 
         pthread_mutex_t *mutex;
     };
+
+    /*
+     * Used to measure time during computations
+     */
+    struct TimeMeasures
+    {
+        double neighbouthoodTime;
+        double fitnessTime;
+        double updateParticleTime;
+    };
 }
 
 #endif //AC_PSO_PARALLEL_H

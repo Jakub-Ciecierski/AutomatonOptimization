@@ -19,7 +19,7 @@ void Word::appendSymbol(int symbol) {
     _entries.push_back(symbol);
 }
 
-int Word::length() {
+int Word::length() const{
     return _entries.size();
 }
 

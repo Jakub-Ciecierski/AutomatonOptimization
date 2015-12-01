@@ -12,6 +12,9 @@
 /*
  * Contains parallel implementation of fitness function update.
  *
+ * Parallel Solution:
+ *      Each thread is assigned a interval which it should operate on.
+ *
  * Each particle is decoded back to DFA.
  * Each DFA computes all the pairs of words that check how they relate to
  * the original tool, thus calculating the error.
@@ -24,7 +27,7 @@ namespace pso
         /*
          * Starts the computations of parallel fitness function
          */
-        void *initFitnessFunction(void *);
+        void* initFitness(void *);
 
         /*
          * Calculates pbest and fitness value for each particle
@@ -35,9 +38,9 @@ namespace pso
         /*
          * Computes fitness function
          */
-        double fitnessFunction(Particle *p,
-                               WordsGenerator *wg,
-                               vector<int> *toolRelationResults);
+        double fitnessValue(Particle *p,
+                            WordsGenerator *wg,
+                            vector<int> *toolRelationResults);
 
         /*
          * Calculates the global best fitness among the particles

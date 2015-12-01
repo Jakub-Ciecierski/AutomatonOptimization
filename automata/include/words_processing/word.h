@@ -25,7 +25,7 @@ public:
 
     void appendSymbol(int symbol);
 
-    int length();
+    int length() const;
 
     string toString();
 

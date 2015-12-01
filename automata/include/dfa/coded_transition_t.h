@@ -18,7 +18,7 @@ public:
     CodedTransitionTable(int numberOfStates, int numberOfSymbols, vector<int> codedTransitionTable);
     void print();
     vector<int> getCodedTransitionTable();
-    int processWord(Word& word);
+    int processWord(const Word& word);
 
 private:
     vector<int> _codedTransitionTable;

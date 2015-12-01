@@ -40,11 +40,11 @@ vector<int> DFA::_acquireAlphabetFromTransitionTable(CodedTransitionTable transi
     return alphabet;
 }
 
-int DFA::compute(Word& word) {
+int DFA::compute(const Word& word) {
     return _codedTransitionTable.processWord(word);
 }
 
-bool DFA::checkRelationInducedByLanguage(Word& w1, Word& w2) {
+bool DFA::checkRelationInducedByLanguage(const Word& w1, const Word& w2) {
     int state1 = compute(w1);
     int state2 = compute(w2);
 

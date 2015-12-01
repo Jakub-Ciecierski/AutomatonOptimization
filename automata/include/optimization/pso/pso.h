@@ -9,6 +9,7 @@
 #include <string>
 #include <stdexcept>
 #include <climits>
+#include <algorithms/pso_main.h>
 #include "dfa.h"
 #include "particle.h"
 #include "words_generator.h"
@@ -50,19 +51,37 @@ public:
 
     ~PSO();
 
+    /*
+     * Starts computations of PSO
+     */
     void compute();
 
+    /*
+     * Returns results.
+     * There can be many equally good results.
+     */
     std::vector<Particle*> results();
 
 private:
+    int _psoNumberOfStates;
+    int _numberOfSymbols;
+    int _swarmSize;
+
+    // Used in Fitness Function in order to retrieve pairs of words
     WordsGenerator *_wordsGenerator;
+    // Used in Fitness function in order to compare results of each
+    // particle to tool results.
     vector<int>* _toolRelationResults;
 
+    // The particles vector
     vector<Particle *> _particles;
+    // Position corresponding to the particles.
+    // Used in neighbourhood update
+    // in order to avoid lazy retrieval of these points
+    vector<Point<double>*> _particlePositions;
 
-    ConsolePlot _consolePlot;
-
-    // Best fitness value overall, global best
+    // Best fitness value overall.
+    // Global best with regards to all particles
     double _globalBestFitness;
 
     // The best particles thus far.
@@ -73,24 +92,19 @@ private:
     // NOT the current position !!!
     std::vector<Particle*> _bestParticles;
 
-    int _psoNumberOfStates;
-    int _numberOfSymbols;
-    int _swarmSize;
-
+    // Used to draw graph of fitness values in the course of
+    // PSO computations.
+    ConsolePlot _consolePlot;
     // Values needed to print
     int _numberOfLinesToReset;
     int _lastNumberOfClusters;
 
-    /*
-     * Used to measure time during computations
-     */
-    struct TimeMeasures
-    {
-        double neighbouthoodTime;
-        double fitnessTime;
-        double updateParticleTime;
-    };
-    TimeMeasures timeMeasures{0,0,0};
+    // Measures time of computations of each step
+    pso::TimeMeasures timeMeasures{0,0,0};
+
+    //-----------------------------------------------------------//
+    //  PRIVATE METHODS
+    //-----------------------------------------------------------//
 
     void _initFitnessFunctionParallel();
 

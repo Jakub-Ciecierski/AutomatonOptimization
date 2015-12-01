@@ -48,6 +48,8 @@ public:
     // fitness value among all particles within a neighbourhood.
     Point<double> lbest;
 
+    Point<double> _velocity;
+
     // Best fitness value obtained by itself so far.
     double bestFitness;
 
@@ -56,22 +58,6 @@ public:
 
     int _numberOfSymbols;
     int _numberOfStates;
-
-    Particle(int numberOfStates, int numberOfSymbols);
-
-    Particle(const Particle& p);
-
-    ~Particle();
-
-    void update();
-
-    vector<int> _castFromPositionToDFA(Point<double> position);
-
-    ResultPack getResultPack();
-
-private:
-    int _length;
-    Point<double> _velocity;
 
     // The maximum change in position that one particle can take
     // during a single iteration.
@@ -82,23 +68,26 @@ private:
     // The upper bound of interval
     double _intervalMax;
 
+    Particle(int numberOfStates, int numberOfSymbols);
+
+    Particle(const Particle& p);
+
+    ~Particle();
+
+    /*
+     * Updates the DFA that represents this particle.
+     */
+    void updateDFARepresentation();
+
+    vector<int> _castFromPositionToDFA(Point<double> position);
+
+    ResultPack getResultPack();
+
+private:
+    int _length;
+
     // Result pack for final evaluation
     ResultPack resultPack{NULL, NULL, NULL};
-
-    /*
-     * The update method of PSO11 - using random sphere
-     */
-    void update_pso11();
-    /*
-     * The naive update method
-     */
-    void update_naive();
-
-    /*
-     * Moves the particle to toPoint, bounding the move by
-     * maximum of velocity_max distance.
-     */
-    void _moveParticle(Point<double> toPoint);
 
     void _loadAndLogRandomPosition(int length, double dim, double maxDim);
 
@@ -113,10 +102,6 @@ private:
     void _loadAndLogMaxVelocity(int numberOfStates);
 
     void _loadInterval();
-
-    Point<double> _generateRandomPointInSphere(Point<double> centerOfGravity, Point<double> oldPosition);
-
-    void _checkBorderConditions(Point<double>& position);
 };
 
 #endif //AC_PARTICLE_H

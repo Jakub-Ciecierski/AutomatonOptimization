@@ -10,8 +10,8 @@
 // This file is just for quick values manipulations
 namespace global_settings {
     /* ------ OPTIMIZER SETTINGS ----- */
-    int MIN_STATES              = 20;
-    int MAX_STATES              = 21;
+    int MIN_STATES              = 3;
+    int MAX_STATES              = 5;
 
     /* ------ PSO SETTINGS ----- */
     std::string TOOL_URL        = "test_jastrz.txt";

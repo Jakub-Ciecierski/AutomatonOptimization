@@ -10,7 +10,7 @@ namespace pso
 {
     namespace fitness
     {
-        void* initFitnessFunction(void* argv)
+        void* initFitness(void *argv)
         {
             thread_args* t_args = (thread_args*)argv;
 
@@ -55,8 +55,8 @@ namespace pso
 
                 Particle* p = (*particles)[i];
 
-                p->fitness = fitnessFunction(p, t_args->wordsGenerator,
-                                             t_args->toolRelationResults);
+                p->fitness = fitnessValue(p, t_args->wordsGenerator,
+                                          t_args->toolRelationResults);
 
                 // Check if particle is in new pbest
                 if (p->bestFitness < p->fitness) {
@@ -77,8 +77,8 @@ namespace pso
             }
         }
 
-        double fitnessFunction(Particle *p, WordsGenerator* wg,
-                               vector<int>* toolRelationResults)
+        double fitnessValue(Particle *p, WordsGenerator *wg,
+                            vector<int> *toolRelationResults)
         {
             vector<PairOfWords>* pairs = wg->getPairs();
 

@@ -10,18 +10,17 @@
 #include <clock.h>
 #include <algorithms/pso_fitness.h>
 #include <algorithms/pso_neighbourhood.h>
-#include <algorithms/pso_update.h>
+#include "pso_update_common.h"
 #include "thread_pool.h"
 #include "pso_main.h"
 
 PSO::PSO(int numberOfStates, int numberOfSymbols,
          vector<int> *toolRelationResults, WordsGenerator *wordsGenerator) :
+        _psoNumberOfStates(numberOfStates),
+        _numberOfSymbols(numberOfSymbols),
         _wordsGenerator(wordsGenerator),
         _toolRelationResults(toolRelationResults),
         _consolePlot(100, 20),
-        _psoNumberOfStates(numberOfStates),
-        _numberOfSymbols(numberOfSymbols),
-
         _numberOfLinesToReset(0) {
     try {
         _loadAndLogSwarmSize();
@@ -62,6 +61,7 @@ void PSO::compute() {
         clk::startClock();
         // TODO Send position
         pso::nbhood::updateNeighbourhoods(&(this->_particles),
+                                          &(this->_particlePositions),
                                           this->_lastNumberOfClusters);
         timeMeasures.neighbouthoodTime = clk::stopClock();
 
@@ -92,8 +92,8 @@ void PSO::_loadAndLogSwarmSize() {
 
 // TODO(dybisz) google test
 int PSO::_calculateSwarmSize(int numberOfStates, int numberOfSymbols) {
-    int swarmSize = numberOfStates * numberOfSymbols *
-                    global_settings::POPULATION_FACTOR;
+    int swarmSize = (int)(numberOfStates * numberOfSymbols *
+                    global_settings::POPULATION_FACTOR);
 
     if (swarmSize < 1) {
         throw invalid_argument("swarmSize < 1");
@@ -105,6 +105,14 @@ int PSO::_calculateSwarmSize(int numberOfStates, int numberOfSymbols) {
 void PSO::_loadAndLogRandomParticles(int numberOfParticles) {
     utils::seed();
     _particles = _generateRandomParticles(numberOfParticles);
+
+    // Save the pointers to positions
+    int size = _particles.size();
+    _particlePositions.resize(size);
+    for(int i = 0; i < size; i++){
+        _particlePositions[i] = &(_particles[i]->_position);
+    }
+
     LOG_DEBUG(to_string(numberOfParticles) + " particles randomly generated and saved to _particles");
 }
 
@@ -123,7 +131,6 @@ vector<Particle *> PSO::_generateRandomParticles(int numberOfParticles) {
     return particles;
 }
 
-
 // -----------------------------------------------------------------------------
 
 void PSO::_initFitnessFunctionParallel(){
@@ -136,7 +143,7 @@ void PSO::_initFitnessFunctionParallel(){
 
     // Pointer to initial function
     void* (*ptr)(void*);
-    ptr = &pso::fitness::initFitnessFunction;
+    ptr = &pso::fitness::initFitness;
 
     // Initialize the structure with data
     for(int i = 0;i < global_settings::TRUE_THREAD_COUNT; i++){

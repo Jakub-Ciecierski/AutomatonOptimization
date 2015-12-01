@@ -59,7 +59,6 @@ void PSO::compute() {
 
         // Update neighbourhood and compute lbest
         clk::startClock();
-        // TODO Send position
         pso::nbhood::updateNeighbourhoods(&(this->_particles),
                                           &(this->_particlePositions),
                                           this->_lastNumberOfClusters);

@@ -1,0 +1,10 @@
+prefix=/home/jakub/programming/ac/automata/li/g_install
+exec_prefix=/home/jakub/programming/ac/automata/li/g_install_exec
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/graphviz
+
+Name: libcdt
+Description: Container DataType library
+Version: 2.38.0
+Libs: -L${libdir} -lcdt
+Cflags: -I${includedir}

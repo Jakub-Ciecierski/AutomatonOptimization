@@ -12,6 +12,7 @@
 
 # Path to root of googletest project
 GTEST_ROOT = '../../googletest'
+GRAPHVIZ_ROOT = '../../graphviz'
 
 #--------------- APPLICATION NAME -------------#
 
@@ -49,13 +50,13 @@ MAKE_EXTERNAL = $(GTEST_ROOT)/make/
 #---------------- LIBRARIES -------------------#
 
 # Paths and names of libraries to link with
-LIBS += $(GTEST_ROOT)/make/gtest_main.a -lpthread
-
+LIBS += $(GTEST_ROOT)/make/gtest_main.a -lpthread \
+	`pkg-config ${GRAPHVIZ_ROOT}/lib/pkgconfig/libgvc.pc --libs` \
 
 #----------------- INCLUDES -------------------#
 
 # Paths to all Includes
-INCLUDES += -I $(GTEST_ROOT)/include
+INCLUDES += -I $(GTEST_ROOT)/include -I ${GRAPHVIZ_ROOT}/include
 
 #------------------- FLAGS --------------------#
 

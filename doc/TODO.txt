@@ -4,42 +4,49 @@ This has been made for your convenience.
 
 1) Copy the following to CMakeLists.txt, completely overriding your version.
 #--------------------------------------------------------------------#
-                cmake_minimum_required(VERSION 3.3)
-                project(ac)
+            cmake_minimum_required(VERSION 3.3)
+            project(ac)
 
-                MACRO(FIND_DIRS return_list regex)
-                    FILE(GLOB_RECURSE new_list ${regex})
-                    SET(dir_list "")
-                    FOREACH(file_path ${new_list})
-                        GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
-                        SET(dir_list ${dir_list} ${dir_path})
-                    ENDFOREACH()
-                    LIST(REMOVE_DUPLICATES dir_list)
-                    SET(${return_list} ${dir_list})
-                ENDMACRO()
+            MACRO(FIND_DIRS return_list regex)
+                FILE(GLOB_RECURSE new_list ${regex})
+                SET(dir_list "")
+                FOREACH(file_path ${new_list})
+                    GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
+                    SET(dir_list ${dir_list} ${dir_path})
+                ENDFOREACH()
+                LIST(REMOVE_DUPLICATES dir_list)
+                SET(${return_list} ${dir_list})
+            ENDMACRO()
 
-                FIND_DIRS(INC_DIRS ./automata/include/*.h)
-                FIND_DIRS(SRC_DIRS ./automata/src/*.cpp)
-                FIND_DIRS(G_DIRS ./googletest/include/*.h)
+            FIND_DIRS(INC_DIRS ./automata/include/*.h)
+            FIND_DIRS(SRC_DIRS ./automata/src/*.cpp)
+            FIND_DIRS(TST_SRC_DIRS ./automata/test/src/*.cpp)
+            FIND_DIRS(TST_INC_DIRS ./automata/test/include/*.h)
+            FIND_DIRS(G_DIRS ./googletest/include/*.h)
+            FIND_DIRS(GVIZ_DIRS ./graphviz/include/*.h)
 
-                include_directories(${INC_DIRS})
-                include_directories(${SRC_DIRS})
-                include_directories(${G_DIRS})
+            include_directories(${INC_DIRS})
+            include_directories(${SRC_DIRS})
+            include_directories(${TST_SRC_DIRS})
+            include_directories(${TST_INC_DIRS})
+            include_directories(${G_DIRS})
+            include_directories(${GVIZ_DIRS})
 
-                # To make clion see gtests header file - for unit tests
-                include_directories("./googletest/include")
+            # To make clion see gtests header file - for unit tests
+            include_directories("./googletest/include")
+            include_directories("./graphviz/include")
 
-                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-                file(GLOB_RECURSE FILES
-                        "./automata/src/*.cpp"
-                        "./automata/include/*.h"
-                        "./automata/test/src/*.cpp"
-                        "./automata/test/include/*.h")
+            file(GLOB_RECURSE FILES
+                    "./automata/src/*.cpp"
+                    "./automata/include/*.h"
+                    "./automata/test/src/*.cpp"
+                    "./automata/test/include/*.h")
 
-                set(SPAM)
+            set(SPAM)
 
-                add_executable(ac ${FILES} ${SPAM})
+            add_executable(ac ${FILES} ${SPAM})
 #--------------------------------------------------------------------#
 
 2) Go to File->Settings->(Build, Execution, Deployment)->Cmake
@@ -56,3 +63,6 @@ Comment:
     You add new file. To avoid git merges and to create illusion of automatic
     Cmake reload this method is presented.
 ################################################################################
+
+for 'dot'
+    sudo apt-get install graphviz

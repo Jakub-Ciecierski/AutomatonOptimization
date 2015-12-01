@@ -4,8 +4,10 @@
 
 #define LOG_TYPE DEBUG_LOG
 
+#include "error.h"
 #include <iostream>
 #include <optimizer.h>
+#include <graph.h>
 #include "flag_reader.h"
 #include "log.h"
 #include "thread_util.h"
@@ -89,6 +91,9 @@ void printSummary(Optimizer& opt){
     ss << "Fitness: ................ "
     << result->bestFitness;
 
+    gfx::drawGraph(result->_numberOfStates,
+              result->_numberOfSymbols, transVecResult, "dfa_result");
+
     stringstream ssTool;
     DFA* tool = opt.getTool();
     CodedTransitionTable transitionTable = tool->getCodedTransitionTable();
@@ -104,9 +109,13 @@ void printSummary(Optimizer& opt){
     ssTool << "Natural Coding: ......... "
         << "[" << utils::vectorToString(transVec) << "]";
 
+    gfx::drawGraph(states,
+              symbols, transVec, "dfa_tool");
+
     logger::log(File("result.txt"), ss.str());
     logger::log(File("result.txt"), ssTool.str());
 }
+
 //------------------------------------------------------------------------------
 
 #endif //AC_STANDARD_TRANSITION_T_H

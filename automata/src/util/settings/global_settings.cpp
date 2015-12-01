@@ -29,10 +29,10 @@ namespace global_settings {
     int TRUE_THREAD_COUNT       = 0;
 
     /* ------ WORDS GENERATION ----- */
-    int R_MAX                   = 300;
-    int SIZE_S                  = 100;
-    int SIZE_M                  = 100;
-    int SIZE_L                  = 100;
+    int R_MAX                   = 30;
+    int SIZE_S                  = 10;
+    int SIZE_M                  = 10;
+    int SIZE_L                  = 10;
     int MIN_LENG_S              = 20;
     int MAX_LENG_S              = 39;
     int MIN_LENG_M              = 40;

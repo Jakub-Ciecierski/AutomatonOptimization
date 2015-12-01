@@ -60,7 +60,7 @@ namespace gfx
 
         agwrite(g, f);
 
-        std::string command = "dot -Tjpg " + filepath_dot +
+        std::string command = "../graphviz/dot -Tjpg " + filepath_dot +
                               " -o " + filepath_jpg;
 
         system(command.c_str());

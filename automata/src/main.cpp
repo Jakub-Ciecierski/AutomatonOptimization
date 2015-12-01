@@ -8,6 +8,7 @@
 #include <optimizer.h>
 #include "flag_reader.h"
 #include "log.h"
+#include "thread_util.h"
 
 using namespace std;
 
@@ -50,14 +51,21 @@ void initApp(int argc, char *argv[]) {
     // Read flags must be first!!!!
     console::readFlags(argc, argv);
 
+    // Set the number of threads to be activated
+    threading::setTrueNumberOfThreads();
+
+    // Initiates the logging functionality
     logger::initLog();
 
+    // Prints all settings to the console
     global_settings::printSettings();
 
 }
 void closeApp(){
     logger::closeLog();
 }
+
+//------------------------------------------------------------------------------
 
 void printSummary(Optimizer& opt){
 

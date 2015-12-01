@@ -21,14 +21,18 @@
  *
  * 2) For each particle
  *      2.1) Calculate its fitness value, using the fitness function.
+ *          Module: pso_fitness.h
  *
  *      2.2) Compare the fitness value to its best obtained so far,
  *          the better value is stored as best_fitness_value.
  *          The position of reaching best_fitness_value is stored in pbest.
+ *          Module: pso_fitness.h
  *
  *      2.3) Update neighbourhood and lbest position.
+ *          Module: pso_neighbourhood.h
  *
-*       2.4) Update velocity and position.
+ *       2.4) Update velocity and position.
+ *          Module: pso_update
  *
  * 3) Repeat 2) until an ending criterion is met.
  *
@@ -72,6 +76,7 @@ private:
     int _psoNumberOfStates;
     int _numberOfSymbols;
     int _swarmSize;
+
     // Values needed to print
     int _numberOfLinesToReset;
     int _lastNumberOfClusters;
@@ -87,9 +92,6 @@ private:
     };
     TimeMeasures timeMeasures{0,0,0};
 
-    bool doParallel;
-
-    // TESTING FUNCTIONs
     void _initFitnessFunctionParallel();
 
     void _loadAndLogSwarmSize();
@@ -100,14 +102,6 @@ private:
 
     vector<Particle *> _generateRandomParticles(int numberOfParticles);
 
-    double _fitnessFunction(Particle* p);
-
-    void _calculatePBestAndFitness(vector<Particle *> particles);
-
-    void _calculateGBestFitness(Particle* particle);
-
-    void _updateParticles();
-
     /*
      * Checks whether PSO should stop.
      * The ending criteria is based on maximum number of iterations
@@ -116,25 +110,6 @@ private:
      * @t - the iteration number
      */
     bool _isConverged(const int &t);
-
-    /*
-     * Updates the state of neighbourhoods.
-     * The data set in the form of all particles
-     * are subjected to cluster analysis.
-     *
-     * 1) Find the optimal number of clusters k.
-     * 2) Compute kmeans for that k.
-     * 3) Each cluster is a single neighbourhood.
-     *
-     */
-    void _updateNeighbourhoods();
-
-    /*
-     * Returns vector of points corresponding to the vector of particles
-     *
-     * @_particles - The vector of particles to get points from
-     */
-    vector<Point<double>*> _particlesToPoints(vector<Particle*> _particles);
 
     void _infoPrint(int t);
 };

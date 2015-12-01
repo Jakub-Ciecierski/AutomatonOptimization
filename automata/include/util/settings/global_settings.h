@@ -59,9 +59,18 @@ namespace global_settings {
     // Possible values: [0, 1], where 1 is the most optimal DFA.
     extern double FITNESS_TOLERANCE;
 
+    /* ------ THREAD SETTINGS ----- */
+
     // If the optimal number of threads can not be determined by the system
     // this value will be used
     extern int DEFAULT_THREAD_COUNT;
+
+    // The actual number of threads to be used in computation.
+    // If the value is below 1, then it will be up to the system to choose
+    // the optimal number of threads.
+    // If the optimal number of threads can not be determined, then
+    // DEFAULT_THREAD_COUNT will be used.
+    extern int TRUE_THREAD_COUNT;
 
     /* ------ WORDS GENERATION ----- */
     // Maximum number of testing words

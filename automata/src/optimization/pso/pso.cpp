@@ -8,8 +8,11 @@
 #include "mcclain_rao.h"
 #include <algorithm>
 #include <clock.h>
+#include <algorithms/pso_fitness.h>
+#include <algorithms/pso_neighbourhood.h>
+#include <algorithms/pso_update.h>
 #include "thread_pool.h"
-#include <pso_parallel.h>
+#include "pso_main.h"
 
 PSO::PSO(int numberOfStates, int numberOfSymbols,
          vector<int> *toolRelationResults, WordsGenerator *wordsGenerator) :
@@ -29,8 +32,6 @@ PSO::PSO(int numberOfStates, int numberOfSymbols,
     }
 
     _globalBestFitness = 0;
-
-    doParallel = true;
 }
 
 PSO::~PSO() {
@@ -52,22 +53,21 @@ void PSO::compute() {
     while (!_isConverged(t++)) {
         // Calculate pbest using Fitness Function
         clk::startClock();
-        if(doParallel) {
-            _initFitnessFunctionParallel();
-        }
-        else {
-            _calculatePBestAndFitness(_particles);
-        }
+
+        _initFitnessFunctionParallel();
+
         timeMeasures.fitnessTime = clk::stopClock();
 
         // Update neighbourhood and compute lbest
         clk::startClock();
-        _updateNeighbourhoods();
+        // TODO Send position
+        pso::nbhood::updateNeighbourhoods(&(this->_particles),
+                                          this->_lastNumberOfClusters);
         timeMeasures.neighbouthoodTime = clk::stopClock();
 
         // Update particles positions
         clk::startClock();
-        _updateParticles();
+        pso::update::updateParticles(&(this->_particles));
         timeMeasures.updateParticleTime = clk::stopClock();
 
         // Plot results so far
@@ -123,46 +123,25 @@ vector<Particle *> PSO::_generateRandomParticles(int numberOfParticles) {
     return particles;
 }
 
-// -----------------------------------------------------------------------------
-
-double PSO::_fitnessFunction(Particle *p) {
-    vector<PairOfWords>* pairs = _wordsGenerator->getPairs();
-    double count = 0;
-
-    for (unsigned int i = 0; i < pairs->size(); i++) {
-        Word w1 = (*pairs)[i].word1;
-        Word w2 = (*pairs)[i].word2;
-//        cout << "CALC DIRaaaaaaaaaaaaaa1\n";
-        // HAHA MAM XD
-        bool inRelation = p->_particleRepresentation->checkRelationInducedByLanguage(w1, w2);
-//        int pState = p->_particleRepresentation->compute()
-
-//        cout << "CALC DIRaaaaaaaaaaaaaa2\n";
-        int result = (inRelation) ? 1 : 0;
-        count += (result == (*_toolRelationResults)[i]) ? 1 : 0;
-    }
-
-    return count / (double) pairs->size();
-}
 
 // -----------------------------------------------------------------------------
 
 void PSO::_initFitnessFunctionParallel(){
     // Create Thread pool
-    ThreadPool threadPool;
+    threading::ThreadPool threadPool;
 
     // Create structure for thread arguments
-    pso_parallel::thread_args* targs = new
-        pso_parallel::thread_args[threadPool.numberOfCores];
+    pso::thread_args* targs = new
+        pso::thread_args[global_settings::TRUE_THREAD_COUNT];
 
-    // Pointer to initial funtion
+    // Pointer to initial function
     void* (*ptr)(void*);
-    ptr = &pso_parallel::fitness::initFitnessFunction;
+    ptr = &pso::fitness::initFitnessFunction;
 
     // Initialize the structure with data
-    for(int i = 0;i < threadPool.numberOfCores; i++){
+    for(int i = 0;i < global_settings::TRUE_THREAD_COUNT; i++){
         targs[i].id = i;
-        targs[i].thread_count = threadPool.numberOfCores;
+        targs[i].thread_count = global_settings::TRUE_THREAD_COUNT;
         targs[i].particles = &(this->_particles);
         targs[i].bestParticles = &(this->_bestParticles);
         targs[i].globalBestFitness = &this->_globalBestFitness;
@@ -182,96 +161,6 @@ void PSO::_initFitnessFunctionParallel(){
 
 // -----------------------------------------------------------------------------
 
-void PSO::_calculatePBestAndFitness(vector<Particle *> particles) {
-
-    for (unsigned int i = 0; i < particles.size(); i++) {
-
-        particles[i]->fitness = _fitnessFunction(particles[i]);
-
-        // Check if particle is in new pbest
-        if (particles[i]->bestFitness < particles[i]->fitness) {
-            particles[i]->pbest = particles[i]->_position;
-            particles[i]->bestFitness = particles[i]->fitness;
-        }
-
-        // Update global best fitness value
-        _calculateGBestFitness(particles[i]);
-
-    }
-}
-
-void PSO::_calculateGBestFitness(Particle *particle) {
-    // Check if another particle has global fitness
-    if (_globalBestFitness == particle->fitness) {
-        // If that particle is not already here
-        if (std::find(_bestParticles.begin(), _bestParticles.end(),
-                      particle) == _bestParticles.end()) {
-            _bestParticles.push_back(particle);
-        }
-    }
-
-    else if (_globalBestFitness < particle->fitness) {
-        _bestParticles.clear();
-
-        _globalBestFitness = particle->fitness;
-
-        _bestParticles.push_back(particle);
-    }
-}
-// -----------------------------------------------------------------------------
-
-void PSO::_updateParticles() {
-    for (auto particle : _particles) {
-        particle->update();
-    }
-}
-
-// -----------------------------------------------------------------------------
-
-/*
- * Updates the neighbourhood.
- */
-void PSO::_updateNeighbourhoods() {
-    // Compute cluster evaluation.
-    McClainRao<double> mc_r(global_settings::START_K,
-                            global_settings::END_K);
-
-    // Get vector of points from vector of particles.
-    // Must preserve the indexing !!!
-    vector<Point<double>*> points = _particlesToPoints(_particles);
-
-    mc_r.compute(&points);
-
-    // Get the most optimal clustering
-    KMeans<double> *km = mc_r.getBestClustering();
-    _lastNumberOfClusters = km->getK();
-    // For each neighbourhood (cluster), find the lbest
-    for (int c = 0; c < km->getK(); c++) {
-        std::vector<int> clusterIndices = km->getClusterIndices(c);
-
-        int bestIndex = clusterIndices[0];
-        double bestFitness = _particles[bestIndex]->bestFitness;
-
-        // Find lbest
-        for (unsigned int i = 0; i < clusterIndices.size(); i++) {
-            int index = clusterIndices[i];
-
-            if (bestFitness < _particles[index]->bestFitness) {
-                bestFitness = _particles[index]->bestFitness;
-                bestIndex = index;
-            }
-        }
-
-        // Assign lbest to each particle
-        for (unsigned int i = 0; i < clusterIndices.size(); i++) {
-            int index = clusterIndices[i];
-            _particles[index]->lbest = _particles[bestIndex]->_position;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
-
 bool PSO::_isConverged(const int &t) {
     return (t > global_settings::MAX_ITER ||
             _globalBestFitness >= global_settings::FITNESS_TOLERANCE);
@@ -279,16 +168,6 @@ bool PSO::_isConverged(const int &t) {
 
 // -----------------------------------------------------------------------------
 
-vector<Point<double> *> PSO::_particlesToPoints(vector<Particle *> particles) {
-    unsigned int size = particles.size();
-    vector<Point<double> *> points(size);
-
-    for (unsigned int i = 0; i < size; i++) {
-        points[i] = (&(particles[i]->_position));
-    }
-
-    return points;
-}
 
 void PSO::_infoPrint(int t) {
     // Clean previous entry

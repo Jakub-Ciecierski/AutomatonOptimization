@@ -4,19 +4,17 @@
 
 #include "thread_pool.h"
 #include "error.h"
-#include <semaphore.h>
 #include <stdexcept>
 #include <thread>
 #include <settings/global_settings.h>
 #include <logger/log.h>
 
+namespace threading
+{
+
+
 ThreadPool::ThreadPool() {
     if(pthread_mutex_init(&mutex, NULL) < 0) ERR("pthread_mutex_destroy");
-
-    numberOfCores = getNumberOfCores();
-    if(numberOfCores < 1){
-        numberOfCores = global_settings::DEFAULT_THREAD_COUNT;
-    }
 }
 
 ThreadPool::~ThreadPool(){
@@ -36,7 +34,9 @@ void ThreadPool::createThread(void* (*func)(void*), void* argv){
 }
 
 void ThreadPool::joinAll() {
-    for(int i = 0; i < numberOfCores;i++){
+    int size = threads.size();
+
+    for(int i = 0; i < size;i++){
         if (pthread_join(threads[i], NULL) != 0)
             ERR("pthread_join");
     }
@@ -55,7 +55,4 @@ void ThreadPool::join(unsigned int id) {
 //-----------------------------------------------------------//
 //  PRIVATE METHODS
 //-----------------------------------------------------------//
-
-int ThreadPool::getNumberOfCores(){
-    return std::thread::hardware_concurrency();
 }

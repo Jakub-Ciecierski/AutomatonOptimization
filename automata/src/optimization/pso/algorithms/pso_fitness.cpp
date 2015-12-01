@@ -1,19 +1,20 @@
 //
-// Created by jakub on 11/24/15.
+// Created by jakub on 12/1/15.
 //
 
+#include "pso_fitness.h"
 #include <error.h>
-#include <vector>
 #include <algorithm>
-#include "pso_parallel.h"
 
-namespace pso_parallel
+namespace pso
 {
     namespace fitness
     {
-        void* initFitnessFunction(void* argv){
+        void* initFitnessFunction(void* argv)
+        {
             thread_args* t_args = (thread_args*)argv;
 
+            /*          Critical section           */
             if (pthread_mutex_lock(t_args->mutex) != 0)
                 ERR("pthread_mutex_lock");
 
@@ -36,6 +37,7 @@ namespace pso_parallel
             if(id == thread_count - 1)
                 finish += reminder;
 
+            /*          End of Critical section           */
             pthread_mutex_unlock(t_args->mutex);
 
             calculatePBestAndFitness(start, finish, t_args);
@@ -44,7 +46,8 @@ namespace pso_parallel
         }
 
         void calculatePBestAndFitness(int start, int finish,
-                                      thread_args* t_args){
+                                      thread_args* t_args)
+        {
             vector<Particle*>* particles = t_args->particles;
 
             // Start main loop
@@ -55,15 +58,13 @@ namespace pso_parallel
                 p->fitness = fitnessFunction(p, t_args->wordsGenerator,
                                              t_args->toolRelationResults);
 
-                //double delta = particles[i]->fitness - prevFitness;
-
                 // Check if particle is in new pbest
                 if (p->bestFitness < p->fitness) {
                     p->pbest = p->_position;
                     p->bestFitness = p->fitness;
                 }
 
-                // CRITICAL SECTION
+                /*          Critical section           */
                 if (pthread_mutex_lock(t_args->mutex) != 0)
                     ERR("pthread_mutex_lock");
 
@@ -71,13 +72,14 @@ namespace pso_parallel
                 calculateGBestFitness(p, t_args->bestParticles,
                                       t_args->globalBestFitness);
 
-                // CRITICAL SECTION ENDS
+                /*          End of Critical section           */
                 pthread_mutex_unlock(t_args->mutex);
             }
         }
 
         double fitnessFunction(Particle *p, WordsGenerator* wg,
-                                        vector<int>* toolRelationResults) {
+                               vector<int>* toolRelationResults)
+        {
             vector<PairOfWords>* pairs = wg->getPairs();
 
             double count = 0;
@@ -102,7 +104,8 @@ namespace pso_parallel
 
         void calculateGBestFitness(Particle* particle,
                                    std::vector<Particle*>* bestParticles,
-                                   double* globalBestFitness) {
+                                   double* globalBestFitness)
+        {
 
             // Check if another particle has global fitness
             if (*globalBestFitness == particle->fitness) {

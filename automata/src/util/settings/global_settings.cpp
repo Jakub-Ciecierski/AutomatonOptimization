@@ -24,7 +24,9 @@ namespace global_settings {
     double POPULATION_FACTOR    = 1.0f;
     double FITNESS_TOLERANCE    = 1.0f;
 
+    /* ------ THREAD SETTINGS ----- */
     int DEFAULT_THREAD_COUNT    = 4;
+    int TRUE_THREAD_COUNT       = 0;
 
     /* ------ WORDS GENERATION ----- */
     int R_MAX                   = 300;
@@ -144,12 +146,21 @@ namespace global_settings {
         ss << " ";
         ss << FITNESS_TOLERANCE << std::endl;
 
+        ss << std::endl << "THREADS SETTINGS" <<std::endl << std::endl;
+
         s = "DEFAULT_THREAD_COUNT ";
         ss << s;
         for(unsigned int i = 0;i < startColumn-s.length(); i++)
             ss << PATH_TO_VALUE;
         ss << " ";
         ss << DEFAULT_THREAD_COUNT << std::endl;
+
+        s = "TRUE_THREAD_COUNT ";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << TRUE_THREAD_COUNT << std::endl;
 
 
         ss << std::endl << "WORDS GENERATION SETTINGS" <<std::endl << std::endl;

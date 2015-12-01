@@ -1,38 +1,24 @@
 //
-// Created by jakub on 11/24/15.
+// Created by jakub on 12/1/15.
 //
 
-#ifndef AC_PSO_PARALLEL_H
-#define AC_PSO_PARALLEL_H
+#ifndef AC_PSO_FITNESS_H
+#define AC_PSO_FITNESS_H
 
-#include <words_generator.h>
+#include "words_generator.h"
 #include "particle.h"
+#include "pso_main.h"
 
 /*
- * PSO Multi-threaded solution for fitness function
+ * Contains parallel implementation of fitness function update.
+ *
+ * Each particle is decoded back to DFA.
+ * Each DFA computes all the pairs of words that check how they relate to
+ * the original tool, thus calculating the error.
  */
-namespace pso_parallel
+
+namespace pso
 {
-
-    /*
-     * Structure of thread data
-     */
-    struct thread_args {
-        thread_args() { }
-
-        int id;
-        int thread_count;
-
-        vector<Particle *> *particles;
-        std::vector<Particle *> *bestParticles;
-        double *globalBestFitness;
-
-        WordsGenerator *wordsGenerator;
-        vector<int> *toolRelationResults;
-
-        pthread_mutex_t *mutex;
-    };
-
     namespace fitness
     {
         /*
@@ -44,12 +30,13 @@ namespace pso_parallel
          * Calculates pbest and fitness value for each particle
          */
         void calculatePBestAndFitness(int start, int finish,
-                                      thread_args *t_args);
+                                      pso::thread_args *t_args);
 
         /*
          * Computes fitness function
          */
-        double fitnessFunction(Particle *p, WordsGenerator *wg,
+        double fitnessFunction(Particle *p,
+                               WordsGenerator *wg,
                                vector<int> *toolRelationResults);
 
         /*
@@ -61,4 +48,4 @@ namespace pso_parallel
     }
 }
 
-#endif //AC_PSO_PARALLEL_H
+#endif //AC_PSO_FITNESS_H

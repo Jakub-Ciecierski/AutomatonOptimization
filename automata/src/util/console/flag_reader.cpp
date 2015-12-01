@@ -123,12 +123,21 @@ namespace console {
                              DOUBLE,
                              &global_settings::FITNESS_TOLERANCE));
 
-        flags.push_back(Flag("T", "thread-count",
+        /* ------ THREADING ----- */
+
+        flags.push_back(Flag("T", "d-thread-count",
                              "Default Thread Count - used only when system"
                                      " can't determine optimal number of "
                                      "threads",
-                             DOUBLE,
+                             INT,
                              &global_settings::DEFAULT_THREAD_COUNT));
+
+        flags.push_back(Flag("Y", "t-thread-count",
+                             "True Thread Count - How many threads should be "
+                                     "activated. If value is below 1 then "
+                                     "Optimal number of threads will be chosen",
+                             INT,
+                             &global_settings::TRUE_THREAD_COUNT));
 
         /* ------ WORDS GENERATION ----- */
 

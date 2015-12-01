@@ -10,7 +10,7 @@
 // This file is just for quick values manipulations
 namespace global_settings {
     /* ------ OPTIMIZER SETTINGS ----- */
-    int MIN_STATES              = 3;
+    int MIN_STATES              = 4;
     int MAX_STATES              = 5;
 
     /* ------ PSO SETTINGS ----- */
@@ -29,11 +29,11 @@ namespace global_settings {
     int TRUE_THREAD_COUNT       = 0;
 
     /* ------ WORDS GENERATION ----- */
-    int R_MAX                   = 30;
-    int SIZE_S                  = 10;
-    int SIZE_M                  = 10;
-    int SIZE_L                  = 10;
-    int MIN_LENG_S              = 20;
+    int R_MAX                   = 300;
+    int SIZE_S                  = 100;
+    int SIZE_M                  = 100;
+    int SIZE_L                  = 100;
+    int MIN_LENG_S              = 1;
     int MAX_LENG_S              = 39;
     int MIN_LENG_M              = 40;
     int MAX_LENG_M              = 69;

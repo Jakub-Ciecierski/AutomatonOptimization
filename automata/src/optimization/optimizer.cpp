@@ -79,22 +79,31 @@ void Optimizer::computeTestSetResults() {
     unsigned int pairsSize = pairs->size();
     double result = -1;
 
+	// Reconstruct dfa
+	std::vector<int> roundedPosition = 	
+					bestResult->_castFromPositionToDFA(bestResult->pbest);
+        
+	DFA* dfaResult = new DFA(bestResult->_numberOfStates,
+								bestResult->_numberOfSymbols,
+								roundedPosition);
+
     for (unsigned int i = 0; i < pairsSize; i++) {
         PairOfWords* pair = &((*pairs)[i]);
 
         Word w1 = pair->word1;
         Word w2 = pair->word2;
 
-        cout << bestResult << endl;
         bool inRelationTool = tool.checkRelationInducedByLanguage(w1, w2);
-        cout << "tu_się_sypie.jpg\n";
-        bool inRelationTest = bestResult->_particleRepresentation->checkRelationInducedByLanguage(w1, w2);
+        
+        bool inRelationTest = dfaResult->checkRelationInducedByLanguage(w1, w2);
 
         count += (inRelationTest && inRelationTool) ? 1 : 0;
     }
 
     result = count / (double) pairsSize;
     cout << "TEST SET RESULT: " << result << endl;
+    
+    delete dfaResult;
 }
 
 bool Optimizer::runPSO(int s, int r) {

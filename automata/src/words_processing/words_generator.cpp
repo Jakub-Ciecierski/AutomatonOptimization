@@ -8,12 +8,14 @@
 WordsGenerator::WordsGenerator(vector<int> alphabet) : _alphabet(alphabet),
                                                        _omegaS(MIN_LENG_S, MAX_LENG_S),
                                                        _omegaM(MIN_LENG_M, MAX_LENG_M),
-                                                       _omegaL(MIN_LENG_L, MAX_LENG_L) {
+                                                       _omegaL(MIN_LENG_L, MAX_LENG_L),
+                                                       _testSet(MIN_LENG_S, MAX_LENG_L) {
     try {
         utils::seed();
         _checkGlobalConditions();
         _fillBags();
         _generatePairs();
+        _generateTestPairs();
     }
     catch (std::exception &e) {
         LOG_ERROR(e.what())
@@ -34,45 +36,36 @@ void WordsGenerator::_checkGlobalConditions() {
     if (MAX_LENG_M >= MIN_LENG_L) {
         throw invalid_argument("MAX_LENG_M > MIN_LENG_L; words from omega_M might be longer than those in omega_L");
     }
-
-    int possibleNumberOfWords = _omegaS.numberOfPossibleWords(_alphabet.size());
-    if (SIZE_S > possibleNumberOfWords) {
-        throw invalid_argument("SIZE_S to big - class can not generate as many words. "
-                               "If You want to keep current settings, just change SIZE_S to be < "
-                               + to_string(possibleNumberOfWords));
-    }
-
-    possibleNumberOfWords =_omegaM.numberOfPossibleWords(_alphabet.size());
-    if (SIZE_M > possibleNumberOfWords) {
-        throw invalid_argument("SIZE_S to big - class can not generate as many words. "
-                                       "If You want to keep current settings, just change SIZE_S to be < "
-                               + to_string(possibleNumberOfWords));
-    }
-
-    possibleNumberOfWords = _omegaL.numberOfPossibleWords(_alphabet.size());
-    if (SIZE_L > possibleNumberOfWords) {
-        throw invalid_argument("SIZE_S to big - class can not generate as many words. "
-                                       "If You want to keep current settings, just change SIZE_S to be < "
-                               + to_string(possibleNumberOfWords));
-    }
 }
 
 void WordsGenerator::_fillBags() {
     _fillBagWithWords(_omegaS, SIZE_S);
     _fillBagWithWords(_omegaM, SIZE_M);
     _fillBagWithWords(_omegaL, SIZE_L);
+    _fillTestBag(R_MAX / 3);
 
     std::stringstream ss;
     ss << "Words Generated:" << std::endl;
-    ss << "Size Small:   " << SIZE_S  << std::endl;
-    ss << "Size Medium:  " << SIZE_M  << std::endl;
-    ss << "Size Large:   " << SIZE_L;
+    ss << "Size Small:   " << SIZE_S << std::endl;
+    ss << "Size Medium:  " << SIZE_M << std::endl;
+    ss << "Size Large:   " << SIZE_L << std::endl;
+    ss << "Size Test:    " << R_MAX / 3;
     logger::log(File("words.txt"), ss.str());
+}
+
+void WordsGenerator::_fillTestBag(int numberOfTestWords) {
+    // Produce as many alphabet words as words needed
+    for (int i = 0; i < numberOfTestWords; i++) {
+        int length = utils::generateRandomNumber(_testSet.getMinWordLength(), _testSet.getMaxWordLength());
+        Word word = _generateRandomWordOverAlphabet(length);
+        _testSet.addWord(word);
+    }
 }
 
 void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords) {
     int alphabetSize = _alphabet.size();
     bool moreWordsNeededThanSymbolsInAlphabet = numberOfWords > alphabetSize;
+
     if (moreWordsNeededThanSymbolsInAlphabet) {
 
         // Create alphabet based words
@@ -85,7 +78,8 @@ void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords) {
         // Fill up rest of the space
         int restOfTheSpaceSize = numberOfWords - _alphabet.size();
         for (int i = 0; i < restOfTheSpaceSize; i++) {
-            Word word = _generateWordWithHammingConditionMet(bag);
+            int length = utils::generateRandomNumber(bag.getMinWordLength(), bag.getMaxWordLength());
+            Word word = _generateRandomWordOverAlphabet(length);
             bag.addWord(word);
         }
 
@@ -118,19 +112,9 @@ int WordsGenerator::hammingDistance(Word w1, Word w2) const {
 Word WordsGenerator::_generateWordStartingWith(BagOfWords &bag, int startingSymbol, int wordLength) {
     Word word;
     do {
-        int length = bag.getRandomAvailableLength(_alphabet.size());
+        int length = utils::generateRandomNumber(0, bag.getMaxWordLength());
         word = _generateRandomWordOverAlphabet(length);
         word[0] = startingSymbol;
-    } while (!_hammingConditionMet(word));
-
-    return word;
-}
-
-Word WordsGenerator::_generateWordWithHammingConditionMet(BagOfWords &bag) {
-    Word word;
-    do {
-        int length = bag.getRandomAvailableLength(_alphabet.size());
-        word = _generateRandomWordOverAlphabet(length);
     } while (!_hammingConditionMet(word));
 
     return word;
@@ -202,6 +186,11 @@ void WordsGenerator::_generatePairs() {
     _pairs = _combineIntoPairs(allWords);
 }
 
+void WordsGenerator::_generateTestPairs() {
+    vector<Word> allTestWords = _testSet.getAllWords();
+    _testPairs = _combineIntoPairs(allTestWords);
+}
+
 vector<Word> WordsGenerator::_collectAllWordsFromBags() {
     vector<Word> wordsOmegaS = _omegaS.getAllWords();
     vector<Word> wordsOmegaM = _omegaM.getAllWords();
@@ -213,7 +202,7 @@ vector<Word> WordsGenerator::_collectAllWordsFromBags() {
 
 vector<PairOfWords> WordsGenerator::_combineIntoPairs(vector<Word> words) {
     vector<PairOfWords> pairs;
-    for (unsigned int i = 0; i < words.size()-1; i++) {
+    for (unsigned int i = 0; i < words.size() - 1; i++) {
         for (unsigned int j = i; j < words.size(); j++) {
             PairOfWords pairOfWords(words[i], words[j]);
             pairs.push_back(pairOfWords);
@@ -222,8 +211,12 @@ vector<PairOfWords> WordsGenerator::_combineIntoPairs(vector<Word> words) {
     return pairs;
 }
 
-vector<PairOfWords>* WordsGenerator::getPairs() {
+vector<PairOfWords> *WordsGenerator::getPairs() {
     return &_pairs;
+}
+
+vector<PairOfWords> *WordsGenerator::getTestPairs() {
+    return &_testPairs;
 }
 
 void WordsGenerator::print() {

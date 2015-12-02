@@ -68,34 +68,6 @@ int BagOfWords::size() {
     return _numberOfWords;
 }
 
-int BagOfWords::getRandomAvailableLength(int numberOfSymbols) {
-    vector<int> availableLengths;
-
-    for (auto kv : _bag) {
-        int wordLength = (int) kv.first;
-        int distance = ((int) kv.first) / 2;
-
-        if (distance < 1) {
-            distance = 1;
-        }
-
-        double bound = _plotkinBound.calculate(numberOfSymbols, wordLength, distance);
-        if (kv.second.size() < bound) {
-            availableLengths.push_back(kv.first);
-        }
-    }
-
-    if (availableLengths.size() < 1) {
-        throw invalid_argument(
-                "Bag is full - all posiible words has been generated. Check words generation parameters.");
-    }
-
-    int randomLength = utils::generateRandomNumber(0, (int) (availableLengths.size()));
-    return availableLengths[randomLength];
-
-}
-
-
 bool BagOfWords::canWordBelongToTheBag(int length) {
     return (_minWordLength <= length) && (length <= _maxWordLength);
 }
@@ -108,12 +80,3 @@ int BagOfWords::getMaxWordLength() {
     return _maxWordLength;
 }
 
-int BagOfWords::numberOfPossibleWords(int numberOfSymbols) {
-
-    int counter = 0;
-    for (int i = _minWordLength; i <= _maxWordLength; i++) {
-        counter += (_plotkinBound.calculate(numberOfSymbols, i, i / 2));
-    }
-
-    return counter - counter * 0.5;
-}

@@ -14,7 +14,7 @@ Optimizer::Optimizer(string toolUrl) : tool(toolUrl) {
     bestResult = NULL;
 }
 
-Optimizer::~Optimizer(){
+Optimizer::~Optimizer() {
     delete _wordsGenerator;
     delete bestResult;
 }
@@ -32,18 +32,21 @@ void Optimizer::start() {
 
     int r = tool.alphabet.size();
     // 3) Run PSO instances
-    for(int s = global_settings::MIN_STATES;
-            s <= global_settings::MAX_STATES; s++){
-        if(runPSO(s, r))
+    for (int s = global_settings::MIN_STATES;
+         s <= global_settings::MAX_STATES; s++) {
+        if (runPSO(s, r))
             break;
     }
+
+    // 4) Run test set
+    computeTestSetResults();
 }
 
-Particle* Optimizer::getResult(){
+Particle *Optimizer::getResult() {
     return this->bestResult;
 }
 
-DFA* Optimizer::getTool(){
+DFA *Optimizer::getTool() {
     return &this->tool;
 }
 
@@ -56,7 +59,7 @@ void Optimizer::generateWords() {
 }
 
 void Optimizer::computeRelation() {
-    vector<PairOfWords>* pairs = _wordsGenerator->getPairs();
+    vector<PairOfWords> *pairs = _wordsGenerator->getPairs();
 
     // TODO(dybisz) check for errors
 
@@ -68,19 +71,45 @@ void Optimizer::computeRelation() {
     }
 }
 
+
+void Optimizer::computeTestSetResults() {
+    cout << "COMPUTING TEST SET\n";
+    vector<PairOfWords> *pairs = _wordsGenerator->getTestPairs();
+    int count = 0;
+    unsigned int pairsSize = pairs->size();
+    double result = -1;
+
+    for (unsigned int i = 0; i < pairsSize; i++) {
+        PairOfWords* pair = &((*pairs)[i]);
+
+        Word w1 = pair->word1;
+        Word w2 = pair->word2;
+
+        cout << bestResult << endl;
+        bool inRelationTool = tool.checkRelationInducedByLanguage(w1, w2);
+        cout << "tu_się_sypie.jpg\n";
+        bool inRelationTest = bestResult->_particleRepresentation->checkRelationInducedByLanguage(w1, w2);
+
+        count += (inRelationTest && inRelationTool) ? 1 : 0;
+    }
+
+    result = count / (double) pairsSize;
+    cout << "TEST SET RESULT: " << result << endl;
+}
+
 bool Optimizer::runPSO(int s, int r) {
     bool returnValue = false;
 
     pso = new PSO(s, r, &_toolRelationResults, _wordsGenerator);
     pso->compute();
-    std::vector<Particle*> psoResults = pso->results();
+    std::vector<Particle *> psoResults = pso->results();
 
     // Find the result with minimum state usage
-    Particle*bestPSOResult = selectParticleUsingMinimumStates(psoResults);
+    Particle *bestPSOResult = selectParticleUsingMinimumStates(psoResults);
     compareResultWithBestResult(bestPSOResult);
 
     // If it is what we are looking for, stop.
-    if(this->bestResult->bestFitness >= global_settings::FITNESS_TOLERANCE) {
+    if (this->bestResult->bestFitness >= global_settings::FITNESS_TOLERANCE) {
         returnValue = true;
     }
 
@@ -89,20 +118,20 @@ bool Optimizer::runPSO(int s, int r) {
     return returnValue;
 }
 
-Particle* Optimizer::selectParticleUsingMinimumStates(
-        std::vector<Particle *> results){
+Particle *Optimizer::selectParticleUsingMinimumStates(
+        std::vector<Particle *> results) {
     std::vector<std::set<int>> stateCountVec;
 
-    vector<PairOfWords>* pairs = _wordsGenerator->getPairs();
+    vector<PairOfWords> *pairs = _wordsGenerator->getPairs();
     // For each result check how many states it uses.
-    for(unsigned int i = 0;i < results.size(); i++) {
-        Particle* result = results[i];
+    for (unsigned int i = 0; i < results.size(); i++) {
+        Particle *result = results[i];
         std::set<int> s;
 
         ResultPack resultPack = result->getResultPack();
-        DFA* dfa = resultPack.dfa;
+        DFA *dfa = resultPack.dfa;
 
-        for (auto pair = pairs->begin(); pair != pairs->end(); ++pair){
+        for (auto pair = pairs->begin(); pair != pairs->end(); ++pair) {
             int state;
 
             state = dfa->compute((*pair).word1);
@@ -115,8 +144,8 @@ Particle* Optimizer::selectParticleUsingMinimumStates(
 
     int minIndex = 0;
     unsigned int minCount = stateCountVec[minIndex].size();
-    for(unsigned int i = 0; i < stateCountVec.size(); i++){
-        if(minCount > stateCountVec[i].size()){
+    for (unsigned int i = 0; i < stateCountVec.size(); i++) {
+        if (minCount > stateCountVec[i].size()) {
             minIndex = i;
             minCount = stateCountVec[i].size();
         }
@@ -125,13 +154,14 @@ Particle* Optimizer::selectParticleUsingMinimumStates(
     return results[minIndex];
 }
 
-void Optimizer::compareResultWithBestResult(Particle* particle){
+void Optimizer::compareResultWithBestResult(Particle *particle) {
     // Check if it is better than previous
-    if(this->bestResult == NULL){
+    if (this->bestResult == NULL) {
         this->bestResult = new Particle(*particle);
     }
-    else if(this->bestResult->bestFitness < particle->bestFitness){
+    else if (this->bestResult->bestFitness < particle->bestFitness) {
         delete this->bestResult;
         this->bestResult = new Particle(*particle);
     }
 }
+

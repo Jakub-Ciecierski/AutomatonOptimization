@@ -127,6 +127,7 @@ public:
 
     DFA* getTool();
 
+    void computeTestSetResults();
 };
 
 

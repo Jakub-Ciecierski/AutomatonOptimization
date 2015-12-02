@@ -33,13 +33,6 @@ public:
 
     int size();
 
-    // Considering available symbols, there is limited number of words,
-    // of each length, that can be randomly created.
-    // Method gather lengths which were not fill out with words
-    // and randomly picks one of them and returns it.
-    // When all lengths has been filled, exception is thrown.
-    int getRandomAvailableLength(int numberOfSymbols);
-
     // Only words of length, which falls in interval specified
     // in global_settings.cpp can belong to the bag.
     bool canWordBelongToTheBag(int length);
@@ -48,15 +41,11 @@ public:
 
     int getMaxWordLength();
 
-    int numberOfPossibleWords(int numberOfSymbols);
-
 private:
     int _numberOfWords;
     int _minWordLength;
     int _maxWordLength;
     unordered_map<int, vector<Word>> _bag;
-    PlotkinBound _plotkinBound;
-
 };
 
 #endif //AC_BAGOFWORDS_H

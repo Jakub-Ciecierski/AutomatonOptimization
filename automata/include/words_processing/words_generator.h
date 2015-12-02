@@ -25,6 +25,8 @@ public:
 
     vector<PairOfWords>* getPairs();
 
+    vector<PairOfWords>* getTestPairs();
+
     void print();
 
 private:
@@ -32,7 +34,9 @@ private:
     BagOfWords _omegaS;
     BagOfWords _omegaM;
     BagOfWords _omegaL;
+    BagOfWords _testSet;
     vector<PairOfWords> _pairs;
+    vector<PairOfWords> _testPairs;
 
     Word _generateWordStartingWith(int symbol, int length);
 
@@ -52,17 +56,17 @@ private:
 
     void _fillBags();
 
-    Word _generateWordWithHammingConditionMet(BagOfWords &minWordLength);
-
     void _generatePairs();
+
+    void _generateTestPairs();
 
     vector<Word> _collectAllWordsFromBags();
 
     vector<PairOfWords> _combineIntoPairs(vector<Word> words);
 
-    int _calculatePlotkinForBinaryAlphabet(int n, int d);
-
     Word _generateWordStartingWith(BagOfWords &bag, int startingSymbol, int wordLength);
+
+    void _fillTestBag(int numberOfTestWords);
 };
 
 #endif //AC_WORDS_GENERATOR_H

@@ -144,8 +144,9 @@ MAKE_EXTERNAL =
 
 # Paths and names of libraries to link with
 LIBS += -lpthread \
-	`pkg-config ${GRAPHVIZ_ROOT}/lib/pkgconfig/libgvc.pc --libs`
-	#-L${GRAPHVIZ_ROOT}/lib -lgvc -lcgraph -lcdt
+	-L${GRAPHVIZ_ROOT}/lib -lgvc -lcgraph -lcdt
+	#`pkg-config ${GRAPHVIZ_ROOT}/lib/pkgconfig/libgvc.pc --libs`
+
 # -L /opt/cuda/lib64 \
 #		-L /usr/local/cuda/lib64 \
 #		-lGL -lglut -lGLEW -lcudart -lcuda

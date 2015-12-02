@@ -51,7 +51,15 @@ MAKE_EXTERNAL = $(GTEST_ROOT)/make/
 
 # Paths and names of libraries to link with
 LIBS += $(GTEST_ROOT)/make/gtest_main.a -lpthread \
-	`pkg-config ${GRAPHVIZ_ROOT}/lib/pkgconfig/libgvc.pc --libs` \
+	`pkg-config ${GRAPHVIZ_ROOT}/lib/pkgconfig/libgvc.pc --libs`
+	#-L${GRAPHVIZ_ROOT}/lib -lgvc -lcgraph -lcdt
+	#${GRAPHVIZ_ROOT}/lib/libcdt.so \
+	#${GRAPHVIZ_ROOT}/lib/libcgraph.so \
+	#${GRAPHVIZ_ROOT}/lib/libgvc.so\
+	#${GRAPHVIZ_ROOT}/lib/libcgraph.so.6.0.0 \
+	#${GRAPHVIZ_ROOT}/lib/libpathplan.so \
+	#${GRAPHVIZ_ROOT}/lib/libxdot.so \
+	
 
 #----------------- INCLUDES -------------------#
 

@@ -33,7 +33,7 @@ void Optimizer::start() {
     int r = tool.alphabet.size();
     // 3) Run PSO instances
     for (int s = global_settings::MIN_STATES;
-         s <= global_settings::MAX_STATES; s++) {
+            s <= global_settings::MAX_STATES; s++) {
         if (runPSO(s, r))
             break;
     }
@@ -79,13 +79,13 @@ void Optimizer::computeTestSetResults() {
     unsigned int pairsSize = pairs->size();
     double result = -1;
 
-	// Reconstruct dfa
-	std::vector<int> roundedPosition = 	
-					bestResult->_castFromPositionToDFA(bestResult->pbest);
-        
-	DFA* dfaResult = new DFA(bestResult->_numberOfStates,
-								bestResult->_numberOfSymbols,
-								roundedPosition);
+    // Reconstruct dfa
+    std::vector<int> roundedPosition =
+                    bestResult->_castFromPositionToDFA(bestResult->pbest);
+
+    DFA* dfaResult = new DFA(bestResult->_numberOfStates,
+                                bestResult->_numberOfSymbols,
+                                roundedPosition);
 
     for (unsigned int i = 0; i < pairsSize; i++) {
         PairOfWords* pair = &((*pairs)[i]);

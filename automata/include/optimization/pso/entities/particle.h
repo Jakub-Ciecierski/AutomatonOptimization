@@ -31,7 +31,7 @@
  */
 class Particle {
 private:
-    int _length;
+    unsigned int _length;
 
     unsigned int _numberOfSymbols;
     unsigned int _numberOfStates;
@@ -73,18 +73,11 @@ private:
      */
     TransitionFunction _decodeToTransitionFunction();
 
-    void _loadAndLogRandomPosition(int length, double dim, double maxDim);
-
-    Point<double> _generateRandomPosition(int length, double minDim, double maxDim);
-
-    void _loadAndLogRandomVelocity(double minDim, double maxDim);
-
-    void _loadAndLogMaxVelocity(int numberOfStates);
-
-    void _loadInterval();
-
 public:
-    Particle(unsigned int numberOfStates, unsigned int numberOfSymbols);
+    Particle(unsigned int numberOfStates, unsigned int numberOfSymbols,
+                double posMin, double posMax,
+                double maxVelocity,
+                Point<double> position, Point<double> velocity);
 
     Particle(const Particle& p);
 

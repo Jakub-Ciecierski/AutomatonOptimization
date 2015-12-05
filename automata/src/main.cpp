@@ -58,6 +58,9 @@ int main(int argc, char *argv[]) {
 //------------------------------------------------------------------------------
 
 void initApp(int argc, char *argv[]) {
+    // Start the seed
+    utils::seed();
+
     // Read flags must be first!!!!
     console::readFlags(argc, argv);
 

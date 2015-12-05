@@ -62,9 +62,9 @@ public:
     std::vector<Particle*> getBestParticles();
 
 private:
-    int _psoNumberOfStates;
-    int _numberOfSymbols;
-    int _swarmSize;
+    unsigned int _numberOfStates;
+    unsigned int _numberOfSymbols;
+    unsigned int _swarmSize;
 
     // Used in Fitness Function in order to retrieve pairs of words
     WordsGenerator *_wordsGenerator;
@@ -107,13 +107,9 @@ private:
 
     void _initFitnessFunctionParallel();
 
-    void _loadAndLogSwarmSize();
+    void _loadSwarmSize();
 
-    int _calculateSwarmSize(int numberOfStates, int numberOfSymbols);
-
-    void _loadAndLogRandomParticles(int numberOfParticles);
-
-    vector<Particle *> _generateRandomParticles(int numberOfParticles);
+    void _loadParticles();
 
     /*
      * Checks whether PSO should stop.

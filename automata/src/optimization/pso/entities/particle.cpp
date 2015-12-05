@@ -6,35 +6,31 @@
 #include <logger.h>
 #include "particle.h"
 
-Particle::Particle(unsigned int numberOfStates, unsigned int numberOfSymbols) :
-        _numberOfSymbols(numberOfSymbols),
-        _numberOfStates(numberOfStates){
-    _length = _numberOfSymbols * _numberOfStates;
+Particle::Particle(unsigned int numberOfStates, unsigned int numberOfSymbols,
+                    double intervalMin, double intervalMax,
+                    double maxVelocity,
+                    Point<double> position, Point<double> velocity) {
+    this->_numberOfSymbols = numberOfSymbols;
+    this->_numberOfStates = numberOfStates;
+    this->_length = _numberOfSymbols * _numberOfStates;
 
-    // Must be called before other _loads :(
-    _loadInterval();
+    this->_intervalMin = intervalMin;
+    this->_intervalMax = intervalMax;
+    this->_maxVelocity = maxVelocity;
 
-    try {
-        _loadAndLogRandomPosition(_length,
-                                  _intervalMin,
-                                  _intervalMax);
-        _loadAndLogRandomVelocity(-numberOfStates, numberOfStates);
-        _loadAndLogMaxVelocity(numberOfStates);
-    }
-    catch (std::exception &e) {
-        LOG_ERROR(e.what())
-    }
-
-    this->updateDFA();
+    this->_position = position;
+    this->_velocity = velocity;
 
     this->_fitness = 0;
+
+    this->updateDFA();
 
     this->saveCurrentConfigAsBest();
 }
 
-Particle::Particle(const Particle& p) :
-        _numberOfSymbols(p._numberOfSymbols),
-        _numberOfStates(p._numberOfStates) {
+Particle::Particle(const Particle& p) {
+    this->_numberOfSymbols = p._numberOfSymbols;
+    this->_numberOfStates = p._numberOfStates;
     this->_length = _numberOfSymbols * _numberOfStates;
 
     this->_currentDFA = new DFA(*(p._currentDFA));
@@ -186,45 +182,3 @@ TransitionFunction Particle::_decodeToTransitionFunction(){
 
     return tf;
 }
-
-void Particle::_loadAndLogRandomPosition(int length, double minDim, double maxDim) {
-    _position = _generateRandomPosition(length, minDim, maxDim);
-    //LOG_CALC("_position", "[" + _positionToString() + "]");
-}
-
-Point<double> Particle::_generateRandomPosition(int length, double minDim, double maxDim) {
-    Point<double> position;
-
-    for (int i = 0; i < length; i++) {
-        double randomDouble = utils::generateRandomNumber(minDim, maxDim);
-        position.addDimension(randomDouble);
-    }
-
-    return position;
-}
-
-void Particle::_loadAndLogRandomVelocity(double minDim, double maxDim) {
-    _velocity = utils::generateRandomPoint((double)_position.size(), minDim, maxDim);
-    //LOG_CALC("_velocity", _velocity.toString());
-}
-
-void Particle::_loadAndLogMaxVelocity(int numberOfStates) {
-    _maxVelocity = (((double)numberOfStates) / 2.0 )
-                    * global_settings::SPEED_FACTOR;
-
-    if(_maxVelocity > numberOfStates) {
-        throw invalid_argument("This must be true: _maxVelocity: "
-                               + to_string(_maxVelocity)
-                               + " <= numberOfStates");
-    }
-
-    LOG_DEBUG("_maxVelocity set to:" + to_string(_maxVelocity));
-}
-
-void Particle::_loadInterval(){
-    _intervalMin = global_settings::ENCODING_DELTA;
-    _intervalMax = _numberOfStates + global_settings::ENCODING_DELTA
-                   - global_settings::UPPER_BOUND_ERR;
-}
-
-// ----------------------------------------------------------------------------

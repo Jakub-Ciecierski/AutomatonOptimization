@@ -10,29 +10,27 @@
 #include <clock.h>
 #include <algorithms/pso_fitness.h>
 #include <algorithms/pso_neighbourhood.h>
+#include <particle_factory.h>
 #include "pso_update_common.h"
 #include "thread_pool.h"
 #include "pso_main.h"
 
-
 PSO::PSO(int numberOfStates, int numberOfSymbols,
          vector<int> *toolRelationResults, WordsGenerator *wordsGenerator) :
-        _psoNumberOfStates(numberOfStates),
-        _numberOfSymbols(numberOfSymbols),
-        _wordsGenerator(wordsGenerator),
-        _toolRelationResults(toolRelationResults),
         _consolePlot(100, 20),
         _numberOfLinesToReset(0) {
-    try {
-        _loadAndLogSwarmSize();
-        _loadAndLogRandomParticles(_swarmSize);
-    }
-    catch (std::exception &e) {
-        LOG_ERROR(e.what())
-    }
+    this->_numberOfStates = numberOfStates;
+    this->_numberOfSymbols = numberOfSymbols;
+
+    this->_wordsGenerator = wordsGenerator;
+    this->_toolRelationResults = toolRelationResults;
+
+    _loadSwarmSize();
+    _loadParticles();
 
     _globalBestFitness = 0;
 }
+
 
 PSO::~PSO() {
     for (auto particle = _particles.begin();
@@ -83,57 +81,41 @@ std::vector<Particle *> PSO::getBestParticles() {
 //  PRIVATE METHODS
 //-----------------------------------------------------------//
 
-void PSO::_loadAndLogSwarmSize() {
-    _swarmSize = _calculateSwarmSize(_psoNumberOfStates, _numberOfSymbols);
-    LOG_DEBUG("_swarmSize calculated: " + to_string(_swarmSize));
-}
-
-// TODO(dybisz) google test
-int PSO::_calculateSwarmSize(int numberOfStates, int numberOfSymbols) {
-    int swarmSize = (int)(numberOfStates * numberOfSymbols *
-                    global_settings::POPULATION_FACTOR);
-
-    if (swarmSize < 1) {
+void PSO::_loadSwarmSize() {
+    _swarmSize = (unsigned int)(_numberOfStates * _numberOfSymbols *
+                          global_settings::POPULATION_FACTOR);
+    if (_swarmSize < 1) {
         throw invalid_argument("swarmSize < 1");
     }
-
-    return swarmSize;
 }
 
-void PSO::_loadAndLogRandomParticles(int numberOfParticles) {
-    logger::log("Generating Random Particles");
+void PSO::_loadParticles(){
+    double posIntervalMin = global_settings::ENCODING_DELTA;
+    double posIntervalMax = _numberOfStates + global_settings::ENCODING_DELTA
+                            - global_settings::UPPER_BOUND_ERR;
 
-    utils::seed();
-    _particles = _generateRandomParticles(numberOfParticles);
+    double velIntervalMin = (double)-_numberOfStates;
+    double velIntervalMax = (double)_numberOfStates;
 
-    logger::log("Finished Generating Random Particles");
+    double maxVelocity = (((double)_numberOfStates) / 2.0 )
+                         * global_settings::SPEED_FACTOR;
 
-    logger::log("Saving Particles Positions");
-    // Save the pointers to positions
-    int size = _particles.size();
-    _particlePositions.resize(size);
-    for(int i = 0; i < size; i++){
+    maxVelocity = maxVelocity > _numberOfStates ? _numberOfStates : maxVelocity;
 
+    ParticleFactory pf;
+    _particles = pf.generateUniformParticles(_swarmSize,
+                                             _numberOfStates, _numberOfSymbols,
+                                             posIntervalMin, posIntervalMax,
+                                             velIntervalMin, velIntervalMax,
+                                             maxVelocity);
+
+    // Save particle position for faster Clustering process.
+    _particlePositions.resize(_swarmSize);
+    for(unsigned int i = 0; i < _swarmSize; i++){
         _particlePositions[i] = _particles[i]->getPosition();
     }
-
-    logger::log("Finished Saving Particles Positions");
 }
 
-// TODO(dybisz) google test
-vector<Particle *> PSO::_generateRandomParticles(int numberOfParticles) {
-    vector<Particle *> particles;
-
-    if (numberOfParticles < 1) {
-        throw invalid_argument("numberOfParticles < 1");
-    }
-
-    for (int i = 0; i < numberOfParticles; i++) {
-        Particle *p = new Particle(_psoNumberOfStates, _numberOfSymbols);
-        particles.push_back(p);
-    }
-    return particles;
-}
 
 // -----------------------------------------------------------------------------
 
@@ -202,7 +184,7 @@ void PSO::_infoPrint(int t) {
 
     LOG_CALC("Swarm Size",this->_swarmSize);
     numberOfLinesToReset++;
-    LOG_CALC("States Considered",_psoNumberOfStates );
+    LOG_CALC("States Considered", _numberOfStates);
     numberOfLinesToReset++;
 
     LOG_CALC("Global Best Fitness",_globalBestFitness );

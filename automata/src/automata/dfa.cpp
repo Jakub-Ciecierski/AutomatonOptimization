@@ -31,8 +31,6 @@ DFA::DFA(const DFA & dfa) :
     this->initialState = dfa.getInitialState();
 
     this->acceptingStates = *(dfa.getAcceptingStates());
-
-    //std::cout << this->transitionFunction << std::endl;
 }
 
 DFA::~DFA(){

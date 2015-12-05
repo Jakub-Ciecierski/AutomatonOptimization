@@ -45,7 +45,7 @@ void drawGraph(){
 
 
     agsafeset(nodes[0], labelColorStr , colorStr , emptyStr);
-    
+
     int currentSymbol = 0;
 
     while(currentSymbol < symbols){

@@ -59,7 +59,7 @@ public:
      * Returns results.
      * There can be many equally good results.
      */
-    std::vector<Particle*> results();
+    std::vector<Particle*> getBestParticles();
 
 private:
     int _psoNumberOfStates;

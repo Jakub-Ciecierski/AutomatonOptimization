@@ -48,7 +48,7 @@ void Optimizer::start() {
     std::cout << "after test set results\n";
 }
 
-Particle* Optimizer::getBestParticle() {
+const Particle* Optimizer::getBestParticle() const{
     return this->bestParticle;
 }
 
@@ -114,7 +114,7 @@ bool Optimizer::runPSO(int s, int r) {
     pso = new PSO(s, r, &_toolRelationResults, _wordsGenerator);
     pso->compute();
 
-    std::vector<Particle *> psoResults = pso->results();
+    std::vector<Particle *> psoResults = pso->getBestParticles();
 
     // Find the result with minimum state usage
     Particle *bestPSOResult = selectParticleUsingMinimumStates(psoResults);
@@ -132,7 +132,7 @@ bool Optimizer::runPSO(int s, int r) {
 }
 
 Particle *Optimizer::selectParticleUsingMinimumStates(
-        std::vector<Particle *> results) {
+        const std::vector<Particle *>& results) {
     std::vector<std::set<int>> stateCountVec;
 
     vector<PairOfWords> *pairs = _wordsGenerator->getPairs();
@@ -171,7 +171,7 @@ void Optimizer::compareResultWithBestResult(Particle *particle) {
     if (this->bestParticle == NULL) {
         this->bestParticle = new Particle(*particle);
     }
-    else if (this->bestParticle->getBestFitness() < particle->getBestFitness()) {
+    else if (this->bestParticle->getBestFitness() < particle->getBestFitness()){
         delete this->bestParticle;
         this->bestParticle = new Particle(*particle);
     }

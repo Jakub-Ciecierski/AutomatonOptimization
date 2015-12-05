@@ -75,7 +75,7 @@ void PSO::compute() {
     _numberOfLinesToReset = 0;
 }
 
-std::vector<Particle *> PSO::results() {
+std::vector<Particle *> PSO::getBestParticles() {
     return this->_bestParticles;
 }
 
@@ -178,7 +178,6 @@ bool PSO::_isConverged(const int &t) {
 }
 
 // -----------------------------------------------------------------------------
-
 
 void PSO::_infoPrint(int t) {
     // Clean previous entry

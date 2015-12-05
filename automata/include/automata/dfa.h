@@ -90,13 +90,11 @@ public:
      */
     int compute(const Word& w) const;
 
-
     //-----------------------------------------------------------//
     //  OPERATORS
     //-----------------------------------------------------------//
 
-    friend std::ostream& operator<<(std::ostream& os,
-                                    const DFA & dfa);
+    friend std::ostream& operator<<(std::ostream& os, const DFA & dfa);
 
 };
 

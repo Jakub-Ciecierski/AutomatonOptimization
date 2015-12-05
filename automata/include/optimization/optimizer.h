@@ -97,7 +97,8 @@ private:
      * The best DFA is the one that uses the least amount of states
      * to compute all words
      */
-    Particle* selectParticleUsingMinimumStates(std::vector<Particle *> results);
+    Particle* selectParticleUsingMinimumStates(
+            const std::vector<Particle *>& results);
 
     /*
      * Compares the result with current bestResult
@@ -125,7 +126,7 @@ public:
      */
     void start();
 
-    Particle* getBestParticle();
+    const Particle* getBestParticle() const;
 
     const DFA* getTool() const;
 };

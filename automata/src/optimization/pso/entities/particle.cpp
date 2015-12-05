@@ -35,15 +35,24 @@ Particle::Particle(unsigned int numberOfStates, unsigned int numberOfSymbols) :
 Particle::Particle(const Particle& p) :
         _numberOfSymbols(p._numberOfSymbols),
         _numberOfStates(p._numberOfStates) {
-    _length = _numberOfSymbols * _numberOfStates;
+    this->_length = _numberOfSymbols * _numberOfStates;
 
-    _bestFitness = p._bestFitness;
-    _fitness = p._fitness;
+    this->_currentDFA = new DFA(*(p._currentDFA));
+    this->_pbestDFA = new DFA(*(p.getBestDFA()));
 
-    _pbest = p._pbest;
-    _lbest = p._lbest;
+    this->_position = p._position;
+    this->_velocity = p._velocity;
 
-    _pbestDFA = new DFA(*(p.getBestDFA()));
+    this->_bestFitness = p._bestFitness;
+    this->_fitness = p._fitness;
+
+    this->_pbest = p._pbest;
+    this->_lbest = p._lbest;
+
+    this->_maxVelocity = p._maxVelocity;
+
+    this->_intervalMax = p._intervalMax;
+    this->_intervalMin = p._intervalMin;
 }
 
 Particle::~Particle() {

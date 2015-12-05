@@ -15,7 +15,7 @@ namespace global_settings {
 
     /* ------ PSO SETTINGS ----- */
     std::string TOOL_URL        = "test_jastrz.txt";
-    int MAX_ITER                = 99;
+    int MAX_ITER                = 2;
     double LEARNING_FACTOR      = 0.5 + log(2.0);
     double PARTICLE_VEL_WEIGHT  = 1.0 / (2.0 * log(2.0));
     double ENCODING_DELTA       = 0.5f;
@@ -29,10 +29,10 @@ namespace global_settings {
     int TRUE_THREAD_COUNT       = 0;
 
     /* ------ WORDS GENERATION ----- */
-    int R_MAX                   = 1000;
-    int SIZE_S                  = 330;
-    int SIZE_M                  = 330;
-    int SIZE_L                  = 330;
+    int R_MAX                   = 300;
+    int SIZE_S                  = 100;
+    int SIZE_M                  = 100;
+    int SIZE_L                  = 100;
     int MIN_LENG_S              = 0;
     int MAX_LENG_S              = 8;
     int MIN_LENG_M              = 9;

@@ -4,15 +4,18 @@
 
 #include "optimizer.h"
 #include <set>
+#include <relation_induced.h>
 
 //-----------------------------------------------------------//
 //  CONSTRUCTORS
 //-----------------------------------------------------------//
 
-Optimizer::Optimizer(string toolUrl) : tool(toolUrl) {
+Optimizer::Optimizer(DFA * tool){
     _wordsGenerator = NULL;
     bestResult = NULL;
+    tool_t = tool;
 }
+
 
 Optimizer::~Optimizer() {
     delete _wordsGenerator;
@@ -27,10 +30,12 @@ void Optimizer::start() {
     // 1) Generate sample set of words
     generateWords();
 
+    std::cout << "Computing Relation" << std::endl;
     // 2) Compute the relation R-L and save the results
     computeRelation();
 
-    int r = tool.alphabet.size();
+    std::cout << "Starting PSO logic" << std::endl;
+    int r = tool_t->getSymbolCount();
     // 3) Run PSO instances
     for (int s = global_settings::MIN_STATES;
             s <= global_settings::MAX_STATES; s++) {
@@ -40,14 +45,15 @@ void Optimizer::start() {
 
     // 4) Run test set
     computeTestSetResults();
+    std::cout << "after test set results\n";
 }
 
-Particle *Optimizer::getResult() {
+Particle* Optimizer::getResult() {
     return this->bestResult;
 }
 
-DFA *Optimizer::getTool() {
-    return &this->tool;
+const DFA * Optimizer::getTool() const{
+    return this->tool_t;
 }
 
 //-----------------------------------------------------------//
@@ -55,7 +61,9 @@ DFA *Optimizer::getTool() {
 //-----------------------------------------------------------//
 
 void Optimizer::generateWords() {
-    _wordsGenerator = new WordsGenerator(tool.alphabet);
+    std::vector<int>* alphabet = tool_t->getAlphabet();
+
+    _wordsGenerator = new WordsGenerator(*alphabet);
 }
 
 void Optimizer::computeRelation() {
@@ -64,8 +72,10 @@ void Optimizer::computeRelation() {
     // TODO(dybisz) check for errors
 
     for (auto pair = pairs->begin(); pair != pairs->end(); ++pair) {
-        bool inRelation = tool.checkRelationInducedByLanguage((*pair).word1,
-                                                              (*pair).word2);
+        bool inRelation = automata::isInRelationInduced(*tool_t,
+                                                        (*pair).word1,
+                                                        (*pair).word2);
+
         int result = (inRelation) ? 1 : 0;
         _toolRelationResults.push_back(result);
     }
@@ -79,31 +89,23 @@ void Optimizer::computeTestSetResults() {
     unsigned int pairsSize = pairs->size();
     double result = -1;
 
-    // Reconstruct dfa
-    std::vector<int> roundedPosition =
-                    bestResult->_castFromPositionToDFA(bestResult->pbest);
-
-    DFA* dfaResult = new DFA(bestResult->_numberOfStates,
-                                bestResult->_numberOfSymbols,
-                                roundedPosition);
+    const DFA * dfaResult = bestResult->getBestDFA();
 
     for (unsigned int i = 0; i < pairsSize; i++) {
         PairOfWords* pair = &((*pairs)[i]);
 
-        Word w1 = pair->word1;
-        Word w2 = pair->word2;
+        const Word& w1 = pair->word1;
+        const Word& w2 = pair->word2;
 
-        bool inRelationTool = tool.checkRelationInducedByLanguage(w1, w2);
-        
-        bool inRelationTest = dfaResult->checkRelationInducedByLanguage(w1, w2);
+        bool inRelationTool = automata::isInRelationInduced(*tool_t, w1, w2);
+
+        bool inRelationTest = automata::isInRelationInduced(*dfaResult, w1, w2);
 
         count += (inRelationTest && inRelationTool) ? 1 : 0;
     }
 
     result = count / (double) pairsSize;
     cout << "TEST SET RESULT: " << result << endl;
-    
-    delete dfaResult;
 }
 
 bool Optimizer::runPSO(int s, int r) {
@@ -111,6 +113,7 @@ bool Optimizer::runPSO(int s, int r) {
 
     pso = new PSO(s, r, &_toolRelationResults, _wordsGenerator);
     pso->compute();
+
     std::vector<Particle *> psoResults = pso->results();
 
     // Find the result with minimum state usage
@@ -118,7 +121,8 @@ bool Optimizer::runPSO(int s, int r) {
     compareResultWithBestResult(bestPSOResult);
 
     // If it is what we are looking for, stop.
-    if (this->bestResult->bestFitness >= global_settings::FITNESS_TOLERANCE) {
+    if (this->bestResult->getBestFitness() >=
+                global_settings::FITNESS_TOLERANCE) {
         returnValue = true;
     }
 
@@ -137,8 +141,7 @@ Particle *Optimizer::selectParticleUsingMinimumStates(
         Particle *result = results[i];
         std::set<int> s;
 
-        ResultPack resultPack = result->getResultPack();
-        DFA *dfa = resultPack.dfa;
+        const DFA * dfa = result->getBestDFA();
 
         for (auto pair = pairs->begin(); pair != pairs->end(); ++pair) {
             int state;
@@ -168,7 +171,7 @@ void Optimizer::compareResultWithBestResult(Particle *particle) {
     if (this->bestResult == NULL) {
         this->bestResult = new Particle(*particle);
     }
-    else if (this->bestResult->bestFitness < particle->bestFitness) {
+    else if (this->bestResult->getBestFitness() < particle->getBestFitness()) {
         delete this->bestResult;
         this->bestResult = new Particle(*particle);
     }

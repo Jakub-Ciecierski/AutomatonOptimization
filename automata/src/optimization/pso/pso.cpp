@@ -14,6 +14,7 @@
 #include "thread_pool.h"
 #include "pso_main.h"
 
+
 PSO::PSO(int numberOfStates, int numberOfSymbols,
          vector<int> *toolRelationResults, WordsGenerator *wordsGenerator) :
         _psoNumberOfStates(numberOfStates),
@@ -52,9 +53,7 @@ void PSO::compute() {
     while (!_isConverged(t++)) {
         // Calculate pbest using Fitness Function
         clk::startClock();
-
-        _initFitnessFunctionParallel();
-
+        this->_initFitnessFunctionParallel();
         timeMeasures.fitnessTime = clk::stopClock();
 
         // Update neighbourhood and compute lbest
@@ -102,17 +101,23 @@ int PSO::_calculateSwarmSize(int numberOfStates, int numberOfSymbols) {
 }
 
 void PSO::_loadAndLogRandomParticles(int numberOfParticles) {
+    logger::log("Generating Random Particles");
+
     utils::seed();
     _particles = _generateRandomParticles(numberOfParticles);
 
+    logger::log("Finished Generating Random Particles");
+
+    logger::log("Saving Particles Positions");
     // Save the pointers to positions
     int size = _particles.size();
     _particlePositions.resize(size);
     for(int i = 0; i < size; i++){
-        _particlePositions[i] = &(_particles[i]->_position);
+
+        _particlePositions[i] = _particles[i]->getPosition();
     }
 
-    LOG_DEBUG(to_string(numberOfParticles) + " particles randomly generated and saved to _particles");
+    logger::log("Finished Saving Particles Positions");
 }
 
 // TODO(dybisz) google test

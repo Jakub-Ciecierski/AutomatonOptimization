@@ -108,7 +108,7 @@ const T &Point<T>::operator[](int i) const{
 
 
 template <class T>
-Point<T> Point<T>::operator+(const Point<T>& p) {
+Point<T> Point<T>::operator+(const Point<T>& p) const {
     int size1;
     int size2;
 
@@ -146,7 +146,7 @@ void Point<T>::operator+=(const Point<T>& p) {
 }
 
 template <class T>
-Point<T> Point<T>::operator+(const T& t){
+Point<T> Point<T>::operator+(const T& t) const{
     int size;
 
     size = this->size();
@@ -172,7 +172,7 @@ void Point<T>::operator+=(const T& t) {
 }
 
 template <class T>
-Point<T> Point<T>::operator-(const Point<T>& p){
+Point<T> Point<T>::operator-(const Point<T>& p) const{
     int size1;
     int size2;
 
@@ -269,7 +269,7 @@ std::ostream& operator<<(std::ostream& os, const Point<T>& p){
 }
 
 template <class T>
-Point<T> Point<T>::operator* (T x) {
+Point<T> Point<T>::operator* (T x) const{
     Point<T> resultPoint;
 
     for(unsigned int dim = 0; dim < elements.size(); dim++) {

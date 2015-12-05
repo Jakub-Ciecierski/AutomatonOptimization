@@ -8,6 +8,7 @@
 #include <iostream>
 #include <optimizer.h>
 #include <graph.h>
+#include <dfa_loader.h>
 #include "flag_reader.h"
 #include "log.h"
 #include "thread_util.h"
@@ -24,7 +25,7 @@ void initApp(int argc, char *argv[]);
  */
 void closeApp();
 
-void printSummary(Optimizer& opt);
+void summarize(Optimizer &opt);
 
 //------------------------------------------------------------------------------
 
@@ -33,12 +34,19 @@ int main(int argc, char *argv[]) {
 
     logger::log("Main Computations Begin");
 
+    logger::log("Loading Tool DFA from file: ", global_settings::TOOL_URL);
+    DFA dfaTool = dfa_loader::loadDFA(global_settings::TOOL_URL);
+
+    logger::log("Starting Optimizer");
     // Start Optimizer
-    Optimizer opt(global_settings::TOOL_URL);
+    Optimizer opt(&dfaTool);
     opt.start();
+    logger::log("Optimizer Finished");
 
     // Print summary
-    printSummary(opt);
+    summarize(opt);
+
+    logger::log("After print");
 
     closeApp();
 
@@ -69,52 +77,34 @@ void closeApp(){
 
 //------------------------------------------------------------------------------
 
-void printSummary(Optimizer& opt){
+
+void summarize(Optimizer &opt){
 
     Particle* result = opt.getResult();
 
-    // Result pack containing DFA of the particle
-    ResultPack resultPack = result->getResultPack();
-    CodedTransitionTable transitionTableResult =
-            resultPack.dfa->getCodedTransitionTable();
-    std::vector<int> transVecResult =
-            transitionTableResult.getCodedTransitionTable();
+    const DFA * dfa = result->getBestDFA();
+
     // Build string for result
     stringstream ss;
     ss << "Result Summary" << std::endl;
-    ss << "States: ................. "
-    << result->_numberOfStates << std::endl;
-    ss << "Symbols: ................ "
-    << result->_numberOfSymbols << std::endl;
-    ss << "Natural Coding: ......... "
-    << "[" << utils::vectorToString(transVecResult) << "]" << std::endl;
-    ss << "Fitness: ................ "
-    << result->bestFitness;
 
-    gfx::drawGraph(result->_numberOfStates,
-              result->_numberOfSymbols, transVecResult, "dfa_result");
+    ss << *dfa;
+    ss << "Fitness: " << result->getBestFitness();
+
+    graphics::drawGraph(*dfa, "dfa_result");
 
     stringstream ssTool;
-    DFA* tool = opt.getTool();
-    CodedTransitionTable transitionTable = tool->getCodedTransitionTable();
-    std::vector<int> transVec =
-            transitionTable.getCodedTransitionTable();
-    int symbols = tool->alphabet.size();
-    int states = transVec.size() / symbols;
-    ssTool << "Tool Summary" << std::endl;
-    ssTool << "States: ................. "
-        << states  << std::endl;
-    ssTool << "Symbols: ................ "
-        << symbols << std::endl;
-    ssTool << "Natural Coding: ......... "
-        << "[" << utils::vectorToString(transVec) << "]";
+    const DFA * tool = opt.getTool();
 
-    gfx::drawGraph(states,
-              symbols, transVec, "dfa_tool");
+    ssTool << "Tool Summary" << std::endl;
+    ssTool << *tool;
+
+    graphics::drawGraph(*tool, "dfa_tool");
 
     logger::log(File("result.txt"), ss.str());
     logger::log(File("result.txt"), ssTool.str());
 }
+
 
 //------------------------------------------------------------------------------
 

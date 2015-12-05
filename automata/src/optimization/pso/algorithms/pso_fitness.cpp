@@ -5,6 +5,7 @@
 #include "pso_fitness.h"
 #include <error.h>
 #include <algorithm>
+#include <relation_induced.h>
 
 namespace pso
 {
@@ -55,13 +56,12 @@ namespace pso
 
                 Particle* p = (*particles)[i];
 
-                p->fitness = fitnessValue(p, t_args->wordsGenerator,
-                                          t_args->toolRelationResults);
+                p->setFitness(fitnessValue(p, t_args->wordsGenerator,
+                                          t_args->toolRelationResults));
 
                 // Check if particle is in new pbest
-                if (p->bestFitness < p->fitness) {
-                    p->pbest = p->_position;
-                    p->bestFitness = p->fitness;
+                if (p->getBestFitness() < p->getFitness()) {
+                    p->saveCurrentConfigAsBest();
                 }
 
                 /*          Critical section           */
@@ -88,12 +88,11 @@ namespace pso
             for (unsigned int i = 0; i < pairsSize; i++) {
                 PairOfWords* pair = &((*pairs)[i]);
 
-                Word w1 = pair->word1;
-                Word w2 = pair->word2;
+                const Word& w1 = pair->word1;
+                const Word& w2 = pair->word2;
 
-                bool inRelation =
-                        p->_particleRepresentation->
-                                checkRelationInducedByLanguage(w1, w2);
+                const DFA * dfa = p->getCurrentDFA();
+                bool inRelation = automata::isInRelationInduced(*(dfa), w1, w2);
 
                 int result = (inRelation) ? 1 : 0;
                 count += (result == (*toolRelationResults)[i]) ? 1 : 0;
@@ -107,8 +106,10 @@ namespace pso
                                    double* globalBestFitness)
         {
 
+            double currentFitness = particle->getFitness();
+
             // Check if another particle has global fitness
-            if (*globalBestFitness == particle->fitness) {
+            if (*globalBestFitness == currentFitness) {
                 // If that particle is not already here
                 if (std::find(bestParticles->begin(), bestParticles->end(),
                               particle) == bestParticles->end()) {
@@ -116,10 +117,10 @@ namespace pso
                 }
             }
 
-            else if (*globalBestFitness < particle->fitness) {
+            else if (*globalBestFitness < currentFitness) {
                 bestParticles->clear();
 
-                *globalBestFitness = particle->fitness;
+                *globalBestFitness = currentFitness;
 
                 bestParticles->push_back(particle);
             }

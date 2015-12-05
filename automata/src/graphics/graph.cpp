@@ -3,52 +3,62 @@
 //
 
 #include <logger/logger_settings.h>
+#include <logger/log.h>
 #include "graphviz/gvc.h"
 #include "graph.h"
 
-namespace gfx
+namespace graphics
 {
-    void drawGraph(int states, int symbols,
-                   std::vector<int> transVec, std::string filename){
+    void drawGraph(const DFA & dfa, std::string filename){
+
+        unsigned int stateCount = dfa.getStateCount();
+        unsigned int symbolCount = dfa.getSymbolCount();
+
         Agraph_t *g;
-        g = agopen("g", Agdirected, 0);
+        std::string graphName = "g";
+        //char* charGraphName = (graphName.c_str());
+        char* charGraphName = "g";
+        g = agopen(charGraphName, Agdirected, 0);
 
-        std::vector<Agnode_t*> nodes(states);
+        std::vector<Agnode_t*> nodes(stateCount);
 
-        for(int i = 0; i < states; i++){
+        // Create nodes corresponding to states
+        for(unsigned int i = 0; i < stateCount; i++){
             std::string s = std::to_string(i);
             char const *pchar = s.c_str();
 
             nodes[i] = agnode(g, (char*)pchar, 1);
         }
 
+        // First state colored in red
         agsafeset(nodes[0], "color", "red", "");
 
-        int size = transVec.size();
-        int currentSymbol = 0;
+        unsigned int currentState = 0;
+        unsigned int currentSymbol = 0;
 
-        while(currentSymbol < symbols){
-            std::string s = std::to_string(currentSymbol);
-            char const *pchar = s.c_str();
+        const TransitionFunction* tf = dfa.getTransitionFunction();
 
-            int start_i = states * currentSymbol;
-            int fromNode = 0;
+        // Set up edges
+        while(currentState < stateCount){
+            currentSymbol = 0;
+            while(currentSymbol < symbolCount){
+                int toState;
+                // toState - 1, We index states from 0
+                toState = tf->getState(currentState, currentSymbol);
 
-            for(int i = start_i; i < (start_i+states); i++){
+                std::string str = std::to_string(currentSymbol);
+                char const *pchar = str.c_str();
 
-                // -1 becouse the decoding starts indexing from 1
-                int toNode = transVec[i] - 1;
+                if(toState != -1){
+                    Agedge_t* e = agedge(g, nodes[currentState],
+                                            nodes[toState],
+                                            (char*)pchar, 1);
 
-                Agedge_t* e = agedge(g,
-                                     nodes[fromNode],
-                                     nodes[toNode],
-                                     (char*)pchar, 1);
-
-                agsafeset(e, "label", (char*)pchar, "");
-
-                fromNode++;
+                    agsafeset(e, "label", (char*)pchar, "");
+                }
+                currentSymbol++;
             }
-            currentSymbol++;
+            currentState++;
         }
 
         std::string filepath_dot = logger::settings::FULL_DIR_STR +
@@ -68,7 +78,5 @@ namespace gfx
         fclose(f);
 
         agclose(g);
-
     }
-
 }

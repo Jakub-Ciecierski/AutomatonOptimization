@@ -27,7 +27,7 @@ McClainRao<T>::~McClainRao(){
  * Starts the computation for mcclain-rao index
  */
 template <class T>
-void McClainRao<T>::compute(const std::vector<Point<T>*>* data) {
+void McClainRao<T>::compute(const std::vector<const Point<T>*>* data) {
     double C;
     this->data = data;
     this->best_C = -1;
@@ -86,7 +86,7 @@ void McClainRao<T>::computeSumWithin() {
 
     // For each cluster
     for(int c = 0; c < km->getK(); c++){
-        std::vector<Point<T>*> cluster = km->getCluster(c);
+        std::vector<const Point<T>*> cluster = km->getCluster(c);
         int size = cluster.size();
 
         // If some cluster is empty. return with bad result
@@ -119,10 +119,10 @@ void McClainRao<T>::computeSumBetween() {
 
     // For each distinct pair of clusters
     for(int c1 = 0; c1 < k-1; c1++) {
-        std::vector<Point<T>*> cluster1 = km->getCluster(c1);
+        std::vector<const Point<T>*> cluster1 = km->getCluster(c1);
 
         for(int c2 = c1+1; c2 < k; c2++){
-            std::vector<Point<T>*> cluster2 = km->getCluster(c2);
+            std::vector<const Point<T>*> cluster2 = km->getCluster(c2);
 
             // If some cluster is empty. return with bad result
             if(cluster1.size() == 0 || cluster2.size() == 0){

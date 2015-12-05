@@ -10,7 +10,6 @@
 #include <stdexcept>
 #include <climits>
 #include <algorithms/pso_main.h>
-#include "dfa.h"
 #include "particle.h"
 #include "words_generator.h"
 #include "console_plot.h"
@@ -78,7 +77,7 @@ private:
     // Position corresponding to the particles.
     // Used in neighbourhood update
     // in order to avoid lazy retrieval of these points
-    vector<Point<double>*> _particlePositions;
+    vector<const Point<double>*> _particlePositions;
 
     // Best fitness value overall.
     // Global best with regards to all particles

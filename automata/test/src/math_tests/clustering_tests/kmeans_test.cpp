@@ -52,7 +52,7 @@ void kmeansSmall2Clusters(){
     (*p6)[0] = 8.0f;
     (*p6)[1] = 8.0f;
 
-    std::vector<Point<double>*> data = {p1, p2, p3, p4 ,p5 ,p6};
+    std::vector<const Point<double>*> data = {p1, p2, p3, p4 ,p5 ,p6};
 
     KMeans<double> km = createKMeans();
 
@@ -61,7 +61,7 @@ void kmeansSmall2Clusters(){
     for(int c = 0; c < km.getK(); c++){
         std::cout << "Cluster #" << c << std::endl;
 
-        std::vector<Point<double>*> cluster = km.getCluster(c);
+        std::vector<const Point<double>*> cluster = km.getCluster(c);
         for(unsigned int i = 0; i < cluster.size(); i++){
             std::cout << (*cluster[i]) << std::endl;
         }

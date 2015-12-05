@@ -56,7 +56,7 @@ private:
     PSO* pso;
 
     // The DFA tool used to compute R-L.
-    DFA tool;
+    DFA * tool_t;
 
     // Generates the sample set of words Omega
     WordsGenerator* _wordsGenerator;
@@ -110,7 +110,7 @@ public:
     //  CONSTRUCTORS
     //-----------------------------------------------------------//
 
-    Optimizer(string toolUrl);
+    Optimizer(DFA * tool);
 
     ~Optimizer();
 
@@ -125,7 +125,7 @@ public:
 
     Particle* getResult();
 
-    DFA* getTool();
+    const DFA * getTool() const;
 
     void computeTestSetResults();
 };

@@ -34,7 +34,8 @@ namespace pso
          *
          */
         void updateNeighbourhoods(std::vector<Particle*>* particles,
-                                  vector<Point<double>*>* particlePositions,
+                                  vector<const Point<double>*>*
+                                        particlePositions,
                                   int& lastNumberOfClusters);
     }
 }

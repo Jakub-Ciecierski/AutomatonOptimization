@@ -24,7 +24,8 @@ namespace rnd
      * @max - maximum value.
      */
     template <typename T>
-    std::vector<Point<T>*> uniformPoints(int count, int dim, T min, T max);
+    std::vector<const Point<T>*> uniformPoints(int count,
+                                               int dim, T min, T max);
 }
 
 #endif //AC_RANDOM_H

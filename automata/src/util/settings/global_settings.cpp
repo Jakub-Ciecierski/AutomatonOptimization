@@ -29,16 +29,16 @@ namespace global_settings {
     int TRUE_THREAD_COUNT       = 0;
 
     /* ------ WORDS GENERATION ----- */
-    int R_MAX                   = 300;
-    int SIZE_S                  = 100;
-    int SIZE_M                  = 100;
-    int SIZE_L                  = 100;
-    int MIN_LENG_S              = 1;
-    int MAX_LENG_S              = 39;
-    int MIN_LENG_M              = 40;
-    int MAX_LENG_M              = 69;
-    int MIN_LENG_L              = 70;
-    int MAX_LENG_L              = 100;
+    int R_MAX                   = 1000;
+    int SIZE_S                  = 330;
+    int SIZE_M                  = 330;
+    int SIZE_L                  = 330;
+    int MIN_LENG_S              = 0;
+    int MAX_LENG_S              = 8;
+    int MIN_LENG_M              = 9;
+    int MAX_LENG_M              = 16;
+    int MIN_LENG_L              = 17;
+    int MAX_LENG_L              = 25;
     
     /* ------ CLUSTERING ----- */
     double KM_TOL               = 0.0001f;

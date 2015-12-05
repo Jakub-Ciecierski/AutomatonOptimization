@@ -49,10 +49,10 @@ private:
     std::vector<Point<T>> previousCentroids;
 
     // Point to the data to be cluster
-    const std::vector<Point<T>*>* data;
+    const std::vector<const Point<T>*>* data;
 
     // Vector of clusters, each containing points
-    std::vector<std::vector<Point<T>*>> clusters;
+    std::vector<std::vector<const Point<T>*>> clusters;
 
     //-----------------------------------------------------------//
     //  PRIVATE METHODS
@@ -114,7 +114,7 @@ public:
      *
      * @data - the data to compute the kmeans for
      */
-    void compute(const std::vector<Point<T>*>* data);
+    void compute(const std::vector<const Point<T>*>* data);
 
     //-----------------------------------------------------------//
     //  GETTERS / SETTERS
@@ -126,7 +126,7 @@ public:
      *
      * @i - the index of cluster
      */
-    std::vector<Point<T>*> getCluster(int i);
+    std::vector<const Point<T>*> getCluster(int i);
 
     /*
      * Returns i-th cluster indices

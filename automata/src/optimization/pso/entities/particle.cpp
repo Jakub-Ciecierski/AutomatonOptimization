@@ -3,13 +3,12 @@
 //
 
 #include <random_sphere.h>
+#include <logger.h>
 #include "particle.h"
 
-Particle::Particle(int numberOfStates, int numberOfSymbols) :
+Particle::Particle(unsigned int numberOfStates, unsigned int numberOfSymbols) :
         _numberOfSymbols(numberOfSymbols),
         _numberOfStates(numberOfStates){
-    //LOG_INFO("Creating new particle...");
-
     _length = _numberOfSymbols * _numberOfStates;
 
     // Must be called before other _loads :(
@@ -19,7 +18,6 @@ Particle::Particle(int numberOfStates, int numberOfSymbols) :
         _loadAndLogRandomPosition(_length,
                                   _intervalMin,
                                   _intervalMax);
-        _loadAndLogDFA(numberOfStates, numberOfSymbols, _position);
         _loadAndLogRandomVelocity(-numberOfStates, numberOfStates);
         _loadAndLogMaxVelocity(numberOfStates);
     }
@@ -27,10 +25,11 @@ Particle::Particle(int numberOfStates, int numberOfSymbols) :
         LOG_ERROR(e.what())
     }
 
-    bestFitness = 0;
-    fitness = 0;
+    this->updateDFA();
 
-    //LOG_INFO("Following particle was created: ..."); // TODO(dybisz) change
+    this->_fitness = 0;
+
+    this->saveCurrentConfigAsBest();
 }
 
 Particle::Particle(const Particle& p) :
@@ -38,35 +37,145 @@ Particle::Particle(const Particle& p) :
         _numberOfStates(p._numberOfStates) {
     _length = _numberOfSymbols * _numberOfStates;
 
-    bestFitness = p.bestFitness;
-    fitness = p.fitness;
+    _bestFitness = p._bestFitness;
+    _fitness = p._fitness;
 
-    pbest = p.pbest;
-    lbest = p.lbest;
+    _pbest = p._pbest;
+    _lbest = p._lbest;
+
+    _pbestDFA = new DFA(*(p.getBestDFA()));
 }
 
 Particle::~Particle() {
-    delete _particleRepresentation;
-
-    delete resultPack.dfa;
+    delete _currentDFA;
+    delete _pbestDFA;
 }
 
-void Particle::updateDFARepresentation(){
-    vector<int> roundedPosition = _castFromPositionToDFA(_position);
-    _particleRepresentation = new DFA(_numberOfStates, _numberOfSymbols,
-                                      roundedPosition);
+//-----------------------------------------------------------//
+//  PUBLIC METHODS
+//-----------------------------------------------------------//
+
+void Particle::updateDFA(){
+    TransitionFunction tf = this->_decodeToTransitionFunction();
+
+    delete _currentDFA;
+    _currentDFA = new DFA(tf);
 }
 
-ResultPack Particle::getResultPack(){
-    if (resultPack.dfa == NULL)
-        resultPack.dfa = new DFA(this->_numberOfStates,
-                          this->_numberOfSymbols,
-                          this->_castFromPositionToDFA(this->pbest));
+void Particle::saveCurrentConfigAsBest(){
+    this->_bestFitness = this->_fitness;
+    this->_pbest = this->_position;
 
-    resultPack.position = &(this->pbest);
-    resultPack.fitness = &(this->bestFitness);
+    delete this->_pbestDFA;
+    this->_pbestDFA = new DFA(*(this->_currentDFA));
+}
 
-    return resultPack;
+//-----------------------------------------------------------//
+//  GETTERS
+//-----------------------------------------------------------//
+
+const DFA * Particle::getCurrentDFA() const{
+    return this->_currentDFA;
+}
+
+const DFA * Particle::getBestDFA() const{
+    return this->_pbestDFA;
+}
+
+const double& Particle::getFitness() const{
+    return this->_fitness;
+}
+
+const double& Particle::getBestFitness() const{
+    return this->_bestFitness;
+}
+
+const Point<double>* Particle::getPosition() const{
+    return &(this->_position);
+}
+
+const Point<double>* Particle::getVelocity() const{
+    return &(this->_velocity);
+}
+
+const double& Particle::getMaxVelocity() const{
+    return this->_maxVelocity;
+}
+
+const Point<double>* Particle::getPBest() const{
+    return &(this->_pbest);
+}
+
+const Point<double>* Particle::getLBest() const{
+    return &(this->_lbest);
+}
+
+const double& Particle::getIntervalMin() const{
+    return this->_intervalMin;
+}
+const double& Particle::getIntervalMax() const{
+    return this->_intervalMax;
+}
+
+//-----------------------------------------------------------//
+//  SETTERS
+//-----------------------------------------------------------//
+
+void Particle::setFitness(double fitness){
+    this->_fitness = fitness;
+}
+
+void Particle::setPosition(Point<double> pos){
+    this->_position = pos;
+}
+
+void Particle::setPositionDim(double value, int dim){
+    if(dim < 0 || dim >= this->_position.size()){
+        throw std::invalid_argument("Particle::setVelocityDimension");
+    }
+    this->_position[dim] = value;
+}
+
+void Particle::setVelocity(Point<double> vel){
+    this->_velocity = vel;
+}
+
+void Particle::setVelocityDim(double value, int dim){
+    if(dim < 0 || dim >= this->_velocity.size()){
+        throw std::invalid_argument("Particle::setVelocityDimension");
+    }
+    this->_velocity[dim] = value;
+}
+
+void Particle::setLBest(Point<double> lbest){
+    this->_lbest = lbest;
+}
+
+//-----------------------------------------------------------//
+//  PRIVATE METHODS
+//-----------------------------------------------------------//
+
+TransitionFunction Particle::_decodeToTransitionFunction(){
+    int size = this->_position.size();
+    vector<int> decodedParticle(size);
+
+    for (int i = 0; i < size; i++) {
+        int encodedValue;
+        double delta;
+
+        encodedValue = (int)this->_position[i];
+        delta = this->_position[i] - encodedValue;
+        if (delta >= global_settings::ENCODING_DELTA)
+            encodedValue++;
+
+        // We enumerate from 0
+        decodedParticle[i] = encodedValue - 1;
+    }
+
+    TransitionFunction tf(this->_numberOfStates, this->_numberOfSymbols,
+                          decodedParticle);
+
+    return tf;
 }
 
 void Particle::_loadAndLogRandomPosition(int length, double minDim, double maxDim) {
@@ -83,33 +192,6 @@ Point<double> Particle::_generateRandomPosition(int length, double minDim, doubl
     }
 
     return position;
-}
-
-void Particle::_loadAndLogDFA(int numberOfStates, int numberOfSymbols, Point<double> position) {
-    vector<int> roundedPosition = _castFromPositionToDFA(position);
-    _particleRepresentation = new DFA(numberOfStates, numberOfSymbols,
-                                      roundedPosition);
-}
-
-/*
- * Encodes position to automaton.
- */
-vector<int> Particle::_castFromPositionToDFA(Point<double> position) {
-
-    vector<int> casted;
-    for (int i = 0; i < position.size(); i++) {
-        int encodedValue;
-        double delta;
-
-        encodedValue = (int)position[i];
-        delta = position[i] - encodedValue;
-        if (delta >= global_settings::ENCODING_DELTA)
-            encodedValue++;
-
-        casted.push_back(encodedValue);
-    }
-
-    return casted;
 }
 
 void Particle::_loadAndLogRandomVelocity(double minDim, double maxDim) {
@@ -137,11 +219,3 @@ void Particle::_loadInterval(){
 }
 
 // ----------------------------------------------------------------------------
-
-string Particle::_positionToString() {
-    string stringOut = "";
-    for (int i = 0; i < _position.size(); i++) {
-        stringOut += (to_string(_position[i]) + " ");
-    }
-    return stringOut;
-}

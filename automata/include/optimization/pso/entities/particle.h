@@ -13,15 +13,6 @@
 #include "global_settings.h"
 
 /*
- * Result pack
- */
-struct ResultPack{
-    DFA* dfa;
-    double* fitness;
-    Point<double>* position;
-};
-
-/*
  * Particle is used to travel through the solution space in PSO algorithm.
  *
  * Each particle contains:
@@ -36,72 +27,128 @@ struct ResultPack{
  *          (pbest stands for previous best, or personal best.)
  *      3.2) lbest - Position of some other particle reaching the best
  *          fitness value among all particles within a neighbourhood.
+ *
  */
 class Particle {
-public:
-    DFA *_particleRepresentation = NULL;
+private:
+    int _length;
+
+    unsigned int _numberOfSymbols;
+    unsigned int _numberOfStates;
+
+    // DFA Representation of current position
+    DFA * _currentDFA = NULL;
+    // DFA Representation of best position
+    DFA * _pbestDFA = NULL;
+
+    // Current position
     Point<double> _position;
 
-    // Position of reaching its personal best fitness value.
-    Point<double> pbest;
-    // Position of some other particle reaching the best
-    // fitness value among all particles within a neighbourhood.
-    Point<double> lbest;
-
+    // current velocity
     Point<double> _velocity;
-
-    // Best fitness value obtained by itself so far.
-    double bestFitness;
-
-    // Current Fitness value;
-    double fitness;
-
-    int _numberOfSymbols;
-    int _numberOfStates;
 
     // The maximum change in position that one particle can take
     // during a single iteration.
     double _maxVelocity;
+
+    // Position of reaching its personal best fitness value.
+    Point<double> _pbest;
+    // Position of some other particle reaching the best
+    // fitness value among all particles within a neighbourhood.
+    Point<double> _lbest;
+
+    // Current Fitness value;
+    double _fitness;
+
+    // Best fitness value obtained by itself so far.
+    double _bestFitness;
 
     // The lower bound of interval
     double _intervalMin;
     // The upper bound of interval
     double _intervalMax;
 
-    Particle(int numberOfStates, int numberOfSymbols);
-
-    Particle(const Particle& p);
-
-    ~Particle();
-
     /*
-     * Updates the DFA that represents this particle.
+     * Decodes Particle Position back to Natural Decoding
      */
-    void updateDFARepresentation();
-
-    vector<int> _castFromPositionToDFA(Point<double> position);
-
-    ResultPack getResultPack();
-
-private:
-    int _length;
-
-    // Result pack for final evaluation
-    ResultPack resultPack{NULL, NULL, NULL};
+    TransitionFunction _decodeToTransitionFunction();
 
     void _loadAndLogRandomPosition(int length, double dim, double maxDim);
 
-    string _positionToString();
-
     Point<double> _generateRandomPosition(int length, double minDim, double maxDim);
-
-    void _loadAndLogDFA(int i, int i1, Point<double> point);
 
     void _loadAndLogRandomVelocity(double minDim, double maxDim);
 
     void _loadAndLogMaxVelocity(int numberOfStates);
 
     void _loadInterval();
+
+public:
+    Particle(unsigned int numberOfStates, unsigned int numberOfSymbols);
+
+    Particle(const Particle& p);
+
+    ~Particle();
+
+    /*
+     * Updates the DFA representation of the particle
+     */
+    void updateDFA();
+
+    /*
+     * Save current Configuration as Best result.
+     * Saves: pbest, bestFitness, bestDFA.
+     */
+    void saveCurrentConfigAsBest();
+
+    //-----------------------------------------------------------//
+    //  GETTERS
+    //-----------------------------------------------------------//
+
+    const DFA * getCurrentDFA() const;
+
+    /*
+     * Returns the DFA corresponding to pbest
+     */
+    const DFA * getBestDFA() const;
+
+    const double& getFitness() const;
+
+    /*
+     * Returns best fitness so far
+     */
+    const double& getBestFitness() const;
+
+    const Point<double>* getPosition() const;
+    const Point<double>* getVelocity() const;
+
+    const double& getMaxVelocity() const;
+
+    const Point<double>* getPBest() const;
+    const Point<double>* getLBest() const;
+
+    const double& getIntervalMin() const;
+    const double& getIntervalMax() const;
+
+    //-----------------------------------------------------------//
+    //  SETTERS
+    //-----------------------------------------------------------//
+
+    void setFitness(double fitness);
+
+    void setPosition(Point<double> pos);
+    /*
+     * Set value of dim-th dimension of position vector
+     */
+    void setPositionDim(double value, int dim);
+
+    void setVelocity(Point<double> vel);
+    /*
+     * Set value of dim-th dimension of velocity vector
+     */
+    void setVelocityDim(double value, int dim);
+
+    void setLBest(Point<double> lbest);
 };
 
 #endif //AC_PARTICLE_H

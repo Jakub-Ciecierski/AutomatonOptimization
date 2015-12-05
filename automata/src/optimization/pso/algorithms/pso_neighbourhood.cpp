@@ -13,7 +13,8 @@ namespace pso
     namespace nbhood
     {
         void updateNeighbourhoods(std::vector<Particle*>* particles,
-                                std::vector<Point<double>*>* particlePositions,
+                                std::vector<const Point<double>*>*
+                                    particlePositions,
                                 int& lastNumberOfClusters) {
 
             // Compute cluster evaluation.
@@ -33,14 +34,16 @@ namespace pso
                 std::vector<int> clusterIndices = km->getClusterIndices(c);
 
                 int bestIndex = clusterIndices[0];
-                double bestFitness = (*particles)[bestIndex]->bestFitness;
+                double bestFitness = (*particles)[bestIndex]->getBestFitness();
 
                 // Find lbest
                 for (unsigned int i = 0; i < clusterIndices.size(); i++) {
                     int index = clusterIndices[i];
+                    double currBestFitness =
+                            (*particles)[index]->getBestFitness();
 
-                    if (bestFitness < (*particles)[index]->bestFitness) {
-                        bestFitness = (*particles)[index]->bestFitness;
+                    if (bestFitness < currBestFitness) {
+                        bestFitness = currBestFitness;
                         bestIndex = index;
                     }
                 }
@@ -48,8 +51,8 @@ namespace pso
                 // Assign lbest to each particle
                 for (unsigned int i = 0; i < clusterIndices.size(); i++) {
                     int index = clusterIndices[i];
-                    (*particles)[index]->lbest =
-                            (*particles)[bestIndex]->_position;
+                    (*particles)[index]->setLBest(
+                            (*(*particles)[bestIndex]->getPosition()));
                 }
             }
         }

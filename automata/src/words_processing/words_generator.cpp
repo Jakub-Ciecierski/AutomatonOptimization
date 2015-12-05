@@ -69,7 +69,7 @@ void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords) {
     if (moreWordsNeededThanSymbolsInAlphabet) {
 
         // Create alphabet based words
-        for (unsigned int symbol = 1; symbol <= _alphabet.size(); symbol++) {
+        for (unsigned int symbol = 0; symbol <= _alphabet.size()-1; symbol++) {
             int length = utils::generateRandomNumber(bag.getMinWordLength(), bag.getMaxWordLength());
             Word word = _generateWordStartingWith(bag, symbol, length);
             bag.addWord(word);
@@ -85,7 +85,7 @@ void WordsGenerator::_fillBagWithWords(BagOfWords &bag, int numberOfWords) {
 
     } else {
         // Produce as many alphabet words as words needed
-        for (int symbol = 1; symbol <= numberOfWords; symbol++) {
+        for (int symbol = 0; symbol <= numberOfWords-1; symbol++) {
             int length = utils::generateRandomNumber(bag.getMinWordLength(), bag.getMaxWordLength());
             Word word = _generateWordStartingWith(bag, symbol, length);
             bag.addWord(word);
@@ -132,8 +132,11 @@ Word WordsGenerator::_generateRandomWordOverAlphabet(int length) {
 }
 
 int WordsGenerator::_generateRandomSymbolFromAlphabet() {
+    unsigned int size = _alphabet.size();
+
     int firstSymbol = _alphabet[0];
-    int lastSymbol = _alphabet.size() + 1;
+    int lastSymbol = _alphabet[size-1];
+
     return utils::generateRandomNumber(firstSymbol, lastSymbol);
 }
 

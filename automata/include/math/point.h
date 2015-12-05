@@ -112,20 +112,20 @@ public:
     /*
      * Adds two points
      */
-    Point<T> operator+(const Point<T>& p);
+    Point<T> operator+(const Point<T>& p) const;
     void operator+=(const Point<T>& p);
 
     /*
      * Adds value t to each dimension.
      * Watch out for implicit casting.
      */
-    Point<T> operator+(const T& t);
+    Point<T> operator+(const T& t) const;
     void operator+=(const T& p);
 
     /*
      * Subtracts two points
      */
-    Point<T> operator-(const Point<T>& p);
+    Point<T> operator-(const Point<T>& p) const;
 
     /*
      * Divides by divider.
@@ -150,7 +150,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Point<TT>& p);
 
     /* Multiply every entry by a scalar */
-    Point<T> operator* (T x);
+    Point<T> operator* (T x) const;
 };
 
 #endif //AC_POINT_H

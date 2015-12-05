@@ -12,25 +12,28 @@ namespace pso
         namespace naive
         {
             void update_naive(Particle *particle) {
-                Point<double> oldPosition = particle->_position;
+                const Point<double>* position = particle->getPosition();
+                const Point<double>* velocity = particle->getVelocity();
+
+                const Point<double>* pbest = particle->getPBest();
+                const Point<double>* lbest = particle->getLBest();
+
                 double mu1, mu2;
 
                 mu1 = utils::generateRandomNumber(0.0f, 1.0f);
                 mu2 = utils::generateRandomNumber(0.0f, 1.0f);
 
-                Point<double> toPosition =
-                        particle->_position +
-                        particle->_velocity;
+                Point<double> toPosition = (*position) + (*velocity);
 
                 moveParticleWithMaxVelocity(particle, &toPosition);
 
-                particle->_velocity =
-                        particle->_velocity +
-                        (particle->pbest - oldPosition) *
+                particle->setVelocity(
+                        (*velocity) +
+                        ((*pbest) - (*position)) *
                         (global_settings::LEARNING_FACTOR * mu1)
                         +
-                        (particle->lbest - oldPosition) *
-                        (global_settings::LEARNING_FACTOR * mu2);
+                        ((*lbest) - (*position)) *
+                        (global_settings::LEARNING_FACTOR * mu2));
             }
         }
     }

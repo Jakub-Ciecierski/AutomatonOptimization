@@ -61,7 +61,7 @@ KMeans<T>::~KMeans() {
  * 4) Repeat 2), 3) until convergence or max iterations.
  */
 template <class T>
-void KMeans<T>::compute(const std::vector<Point<T>*>* data) {
+void KMeans<T>::compute(const std::vector<const Point<T>*>* data) {
     int t;
 
     if((*data).size() == 0){
@@ -100,7 +100,7 @@ void KMeans<T>::compute(const std::vector<Point<T>*>* data) {
  * The valid range of i = [0, k-1]
  */
 template <class T>
-std::vector<Point<T>*> KMeans<T>::getCluster(int i){
+std::vector<const Point<T>*> KMeans<T>::getCluster(int i){
     if( i < 0 || i >= k)
         throw std::invalid_argument("Index out of range");
 
@@ -198,7 +198,6 @@ void KMeans<T>::kmeans_pp(){
     while(centroidCount < k){
         /* 2) Compute D(x) */
         this->chooseCentroid(centroidCount);
-
     }
 
     // Log
@@ -379,14 +378,14 @@ void KMeans<T>::createClusters(){
     LOG_DEBUG("Creating Clusters");
 
     for(int i = 0; i < this->k ;i++){
-        std::vector<Point<T>*> cluster;
+        std::vector<const Point<T>*> cluster;
 
         unsigned int size = clusterIndices[i].size();
 
         for(unsigned int j = 0; j < size; j++){
             int index = this->clusterIndices[i][j];
 
-            Point<T>* p = (*data)[index];
+            const Point<T>* p = (*data)[index];
             cluster.push_back(p);
         }
         this->clusters.push_back(cluster);

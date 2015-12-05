@@ -10,14 +10,17 @@
 namespace graphics
 {
     void drawGraph(const DFA & dfa, std::string filename){
+        char* charGraphName = (char*)"g";
+        char* labelColorStr = (char*)"color";
+        char* colorStr = (char*)"red";
+        char* emptyStr = (char*)"";
+        char* labelLabelStr = (char*)"label";
 
         unsigned int stateCount = dfa.getStateCount();
         unsigned int symbolCount = dfa.getSymbolCount();
 
         Agraph_t *g;
-        std::string graphName = "g";
-        //char* charGraphName = (graphName.c_str());
-        char* charGraphName = "g";
+
         g = agopen(charGraphName, Agdirected, 0);
 
         std::vector<Agnode_t*> nodes(stateCount);
@@ -31,7 +34,8 @@ namespace graphics
         }
 
         // First state colored in red
-        agsafeset(nodes[0], "color", "red", "");
+
+        agsafeset(nodes[0], labelColorStr , colorStr , emptyStr);
 
         unsigned int currentState = 0;
         unsigned int currentSymbol = 0;
@@ -54,7 +58,7 @@ namespace graphics
                                             nodes[toState],
                                             (char*)pchar, 1);
 
-                    agsafeset(e, "label", (char*)pchar, "");
+                    agsafeset(e, labelLabelStr, (char*)pchar, emptyStr);
                 }
                 currentSymbol++;
             }

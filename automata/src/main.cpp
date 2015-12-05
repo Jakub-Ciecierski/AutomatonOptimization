@@ -80,7 +80,7 @@ void closeApp(){
 
 void summarize(Optimizer &opt){
 
-    Particle* result = opt.getResult();
+    Particle* result = opt.getBestParticle();
 
     const DFA * dfa = result->getBestDFA();
 

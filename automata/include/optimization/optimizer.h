@@ -64,7 +64,7 @@ private:
     //
     vector<int> _toolRelationResults;
 
-    Particle* bestResult;
+    Particle* bestParticle;
 
     //-----------------------------------------------------------//
     //  PRIVATE METHODS
@@ -105,6 +105,8 @@ private:
      */
     void compareResultWithBestResult(Particle* result);
 
+    void computeTestSetResults();
+
 public:
     //-----------------------------------------------------------//
     //  CONSTRUCTORS
@@ -123,11 +125,9 @@ public:
      */
     void start();
 
-    Particle* getResult();
+    Particle* getBestParticle();
 
-    const DFA * getTool() const;
-
-    void computeTestSetResults();
+    const DFA* getTool() const;
 };
 
 

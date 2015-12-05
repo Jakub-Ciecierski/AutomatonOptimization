@@ -12,14 +12,14 @@
 
 Optimizer::Optimizer(DFA * tool){
     _wordsGenerator = NULL;
-    bestResult = NULL;
+    bestParticle = NULL;
     tool_t = tool;
 }
 
 
 Optimizer::~Optimizer() {
     delete _wordsGenerator;
-    delete bestResult;
+    delete bestParticle;
 }
 
 //-----------------------------------------------------------//
@@ -48,11 +48,11 @@ void Optimizer::start() {
     std::cout << "after test set results\n";
 }
 
-Particle* Optimizer::getResult() {
-    return this->bestResult;
+Particle* Optimizer::getBestParticle() {
+    return this->bestParticle;
 }
 
-const DFA * Optimizer::getTool() const{
+const DFA* Optimizer::getTool() const{
     return this->tool_t;
 }
 
@@ -89,7 +89,7 @@ void Optimizer::computeTestSetResults() {
     unsigned int pairsSize = pairs->size();
     double result = -1;
 
-    const DFA * dfaResult = bestResult->getBestDFA();
+    const DFA * dfaResult = bestParticle->getBestDFA();
 
     for (unsigned int i = 0; i < pairsSize; i++) {
         PairOfWords* pair = &((*pairs)[i]);
@@ -121,7 +121,7 @@ bool Optimizer::runPSO(int s, int r) {
     compareResultWithBestResult(bestPSOResult);
 
     // If it is what we are looking for, stop.
-    if (this->bestResult->getBestFitness() >=
+    if (this->bestParticle->getBestFitness() >=
                 global_settings::FITNESS_TOLERANCE) {
         returnValue = true;
     }
@@ -168,12 +168,12 @@ Particle *Optimizer::selectParticleUsingMinimumStates(
 
 void Optimizer::compareResultWithBestResult(Particle *particle) {
     // Check if it is better than previous
-    if (this->bestResult == NULL) {
-        this->bestResult = new Particle(*particle);
+    if (this->bestParticle == NULL) {
+        this->bestParticle = new Particle(*particle);
     }
-    else if (this->bestResult->getBestFitness() < particle->getBestFitness()) {
-        delete this->bestResult;
-        this->bestResult = new Particle(*particle);
+    else if (this->bestParticle->getBestFitness() < particle->getBestFitness()) {
+        delete this->bestParticle;
+        this->bestParticle = new Particle(*particle);
     }
 }
 

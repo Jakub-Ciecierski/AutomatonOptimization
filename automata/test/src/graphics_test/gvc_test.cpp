@@ -18,15 +18,19 @@ void drawGraph();
 //-----------------------------------------------------------//
 
 void drawGraph(){
+    char* charGraphName = (char*)"g";
+    char* labelColorStr = (char*)"color";
+    char* colorStr = (char*)"red";
+    char* emptyStr = (char*)"";
+    char* labelLabelStr = (char*)"label";
+
     int states = 3;
     int symbols = 2;
     std::vector<int> transVec{3,2,3,
                               2,2,3};
 
-    std::cout << "Init" << std::endl;
-
     Agraph_t *g;
-    g = agopen("g", Agdirected, 0);
+    g = agopen(charGraphName, Agdirected, 0);
 
     std::vector<Agnode_t*> nodes(states);
 
@@ -39,11 +43,9 @@ void drawGraph(){
         nodes[i] = agnode(g, (char*)pchar, 1);
     }
 
-    agsafeset(nodes[0], "color", "red", "");
 
-    std::cout << "Creating Edges" << std::endl;
-
-    int size = transVec.size();
+    agsafeset(nodes[0], labelColorStr , colorStr , emptyStr);
+    
     int currentSymbol = 0;
 
     while(currentSymbol < symbols){
@@ -66,7 +68,7 @@ void drawGraph(){
                                  nodes[toNode],
                                  (char*)pchar, 1);
 
-            agsafeset(e, "label", (char*)pchar, "");
+            agsafeset(e, labelLabelStr, (char*)pchar, emptyStr);
 
             fromNode++;
         }

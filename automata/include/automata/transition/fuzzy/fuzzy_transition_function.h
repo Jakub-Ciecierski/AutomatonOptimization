@@ -7,6 +7,7 @@
 
 #include "matrix.h"
 #include <vector>
+
 /*
  * Transition Function is of the form:
  *      d: Q x E x Q -> [0, 1]

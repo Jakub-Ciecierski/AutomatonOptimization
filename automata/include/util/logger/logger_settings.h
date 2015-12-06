@@ -35,12 +35,12 @@ struct File {
 
 enum Verbose_t
 {
-    INFO,
-    WARNING,
-    DEBUG,
+    INFO_V,
+    WARNING_V,
+    DEBUG_V,
 
-    PSO,
-    OPTIMIZER
+    PSO_V,
+    OPTIMIZER_V
 };
 
 struct Verbose
@@ -54,25 +54,25 @@ struct Verbose
     void setNameAndColor()
     {
         switch(this->type) {
-            case INFO:
+            case INFO_V:
                 this->name = "Info";
                 this->color = logger::colors::GREEN;
                 break;
-            case WARNING:
+            case WARNING_V:
                 this->name = "Warning";
                 this->color = logger::colors::BLUE;
                 break;
-            case DEBUG:
+            case DEBUG_V:
                 this->name = "Debug";
                 this->color = logger::colors::RED;
                 break;
-            case PSO:
+            case PSO_V:
                 this->name = "PSO";
                 this->color = logger::colors::LIGHT_CYAN;
                 break;
-            case OPTIMIZER:
+            case OPTIMIZER_V:
                 this->name = "Optimizer";
-                this->color = logger::colors::LIGHT_CYAN;
+                this->color = logger::colors::BLUE;
                 break;
         }
     }

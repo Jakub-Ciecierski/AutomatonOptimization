@@ -3,8 +3,10 @@
 //
 
 #include "optimizer.h"
+
 #include <set>
-#include <relation_induced.h>
+
+#include "relation_induced.h"
 
 //-----------------------------------------------------------//
 //  CONSTRUCTORS
@@ -30,11 +32,10 @@ void Optimizer::start() {
     // 1) Generate sample set of words
     generateWords();
 
-    std::cout << "Computing Relation" << std::endl;
     // 2) Compute the relation R-L and save the results
     computeRelation();
 
-    std::cout << "Starting PSO logic" << std::endl;
+    logger::log(Verbose(OPTIMIZER_V), "Starting PSO Logic");
     int r = tool_t->getSymbolCount();
     // 3) Run PSO instances
     for (int s = global_settings::MIN_STATES;
@@ -45,7 +46,6 @@ void Optimizer::start() {
 
     // 4) Run test set
     computeTestSetResults();
-    std::cout << "after test set results\n";
 }
 
 const Particle* Optimizer::getBestParticle() const{
@@ -61,12 +61,16 @@ const DFA* Optimizer::getTool() const{
 //-----------------------------------------------------------//
 
 void Optimizer::generateWords() {
+    logger::log(Verbose(OPTIMIZER_V), "Generating Words");
+
     std::vector<int>* alphabet = tool_t->getAlphabet();
 
     _wordsGenerator = new WordsGenerator(*alphabet);
 }
 
 void Optimizer::computeRelation() {
+    logger::log(Verbose(OPTIMIZER_V), "Computing Relation");
+
     vector<PairOfWords> *pairs = _wordsGenerator->getPairs();
 
     // TODO(dybisz) check for errors
@@ -83,7 +87,8 @@ void Optimizer::computeRelation() {
 
 
 void Optimizer::computeTestSetResults() {
-    cout << "COMPUTING TEST SET\n";
+    logger::log(Verbose(OPTIMIZER_V), "Generating Test Set");
+
     vector<PairOfWords> *pairs = _wordsGenerator->getTestPairs();
     int count = 0;
     unsigned int pairsSize = pairs->size();
@@ -105,7 +110,7 @@ void Optimizer::computeTestSetResults() {
     }
 
     result = count / (double) pairsSize;
-    cout << "TEST SET RESULT: " << result << endl;
+    logger::log(Verbose(OPTIMIZER_V), "Test Set Results\n", result);
 }
 
 bool Optimizer::runPSO(int s, int r) {

@@ -26,14 +26,17 @@ public:
 
     ~ParticleFactory();
 
+    /*
+     * Generates Particles by uniform distribution.
+     */
     std::vector<Particle*> generateUniformParticles(unsigned int count,
-                                                unsigned int numberOfStates,
-                                                unsigned int numberOfSymbols,
-                                                double posIntervalMin,
-                                                double posIntervalMax,
-                                                double velIntervalMin,
-                                                double velIntervalMax,
-                                                double maxVelocity);
+                                              unsigned int particleDimension,
+                                              double posIntervalMin,
+                                              double posIntervalMax,
+                                              double velIntervalMin,
+                                              double velIntervalMax,
+                                              double maxVelocity,
+                                              ParticleDecoder* pDecoder);
 };
 
 

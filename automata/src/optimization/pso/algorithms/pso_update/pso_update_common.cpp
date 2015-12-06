@@ -18,7 +18,7 @@ namespace pso
                 naive::update_naive(p);
 
                 boundPositionWithInterval(p);
-                p->updateDFA();
+                p->updateCurrentDFA();
             }
         }
 

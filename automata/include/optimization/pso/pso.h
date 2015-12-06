@@ -9,7 +9,7 @@
 #include <string>
 #include <stdexcept>
 #include <climits>
-#include <algorithms/pso_main.h>
+#include "pso_common.h"
 #include "particle.h"
 #include "words_generator.h"
 #include "console_plot.h"
@@ -45,7 +45,7 @@
  */
 class PSO {
 public:
-    PSO(int numberOfStates, int numberOfSymbols,
+    PSO(unsigned int numberOfStates, unsigned int numberOfSymbols,
         vector<int>* toolRelationResults, WordsGenerator* wordsGenerator);
 
     ~PSO();
@@ -91,15 +91,12 @@ private:
     // NOT the current position !!!
     std::vector<Particle*> _bestParticles;
 
-    // Used to draw graph of fitness values in the course of
-    // PSO computations.
-    ConsolePlot _consolePlot;
-    // Values needed to print
-    int _numberOfLinesToReset;
     int _lastNumberOfClusters;
 
     // Measures time of computations of each step
     pso::TimeMeasures timeMeasures{0,0,0};
+
+    ParticleDecoder* _particleDecoder;
 
     //-----------------------------------------------------------//
     //  PRIVATE METHODS
@@ -107,9 +104,15 @@ private:
 
     void _initFitnessFunctionParallel();
 
+    /*
+     * Loads swarm size based on the parameters
+     */
     void _loadSwarmSize();
 
-    void _loadParticles();
+    /*
+     * Generates Particles based on the parameters
+     */
+    void _generateParticles();
 
     /*
      * Checks whether PSO should stop.
@@ -120,7 +123,8 @@ private:
      */
     bool _isConverged(const int &t);
 
-    void _infoPrint(int t);
+    void _printInfoAndPlot(int t, ConsolePlot *cPlot,
+                           int &totalNumberOfLinesToReset);
 };
 
 #endif //AC_PSO_H

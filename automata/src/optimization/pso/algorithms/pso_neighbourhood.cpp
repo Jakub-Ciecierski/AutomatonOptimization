@@ -5,7 +5,7 @@
 #include <clustering/evaluation/mcclain_rao.h>
 #include <settings/global_settings.h>
 #include <entities/particle.h>
-#include <algorithms/pso_main.h>
+#include "pso_common.h"
 #include "pso_neighbourhood.h"
 
 namespace pso

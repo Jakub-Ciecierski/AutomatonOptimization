@@ -23,8 +23,8 @@ void howToLog(){
 
     logger::initLog();
 
-    logger::log(Verbose(PSO), File("test.txt"),test ,3, 2, 3.0f, test2);
-    logger::log(Verbose(PSO), test ,3, 2, 3.0f, test2);
+    logger::log(Verbose(PSO_V), File("test.txt"),test ,3, 2, 3.0f, test2);
+    logger::log(Verbose(PSO_V), test ,3, 2, 3.0f, test2);
     logger::log(File("test.txt"),test ,3, 2, 3.0f, test2);
     logger::log(test ,3, 2, 3.0f, test2, " Constant char");
 

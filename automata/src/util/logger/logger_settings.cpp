@@ -25,8 +25,8 @@ namespace logger
         // Extra file output
         std::ofstream EXTRA_FILE_STREAM;
 
-        Verbose DEFAULT_VERBOSE                             = Verbose(INFO);
-        Verbose CURRENT_VERBOSE                             = Verbose(INFO);
+        Verbose DEFAULT_VERBOSE                             = Verbose(INFO_V);
+        Verbose CURRENT_VERBOSE                             = Verbose(INFO_V);
         int CURRENT_VERBOSE_DEPTH                           = 0;
 
         //-----------------------------------------------------------//

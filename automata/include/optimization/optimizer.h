@@ -6,7 +6,7 @@
 #define AC_OPTIMIZER_H
 
 #include "pso.h"
-
+#include "log.h"
 
 /*
  * The Stochastic Algorithm for Deterministic Finite Automaton Optimization.
@@ -71,12 +71,12 @@ private:
     //-----------------------------------------------------------//
 
     /*
-     * 1) Select a sample set of words Omega
+     * Select a sample set of words Omega
      */
     void generateWords();
 
     /*
-     * 2) Compute the relation R-L of the given set of words Omega for the
+     * Compute the relation R-L of the given set of words Omega for the
      * DFA tool T.
      *
      * The result is saved in _toolRelationResults.
@@ -84,7 +84,7 @@ private:
     void computeRelation();
 
     /*
-     * 3) Runs PSO instances.
+     * Runs PSO instances.
      * Returns true if found solution.
      *
      * @s - number of states

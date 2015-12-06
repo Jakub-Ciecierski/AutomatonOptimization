@@ -2,8 +2,8 @@
 // Created by jakub on 11/24/15.
 //
 
-#ifndef AC_PSO_PARALLEL_H
-#define AC_PSO_PARALLEL_H
+#ifndef AC_PSO_COMMON_H
+#define AC_PSO_COMMON_H
 
 #include "words_generator.h"
 #include "particle.h"

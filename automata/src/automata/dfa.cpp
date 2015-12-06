@@ -4,23 +4,30 @@
 
 #include "dfa.h"
 
-DFA::DFA(TransitionFunction tf) :
+DFA::DFA(TransitionFunction* tf) :
         transitionFunction(tf){
     initialState = 0;
+
+    this->acceptingStates = new std::vector<unsigned int>();
+
     this->checkDeterminism();
 
     this->createAlphabet(this->getSymbolCount());
 }
 
-DFA::DFA(TransitionFunction tf, unsigned int initialState):
+DFA::DFA(TransitionFunction* tf, unsigned int initialState):
         transitionFunction(tf), initialState(initialState){
+    this->acceptingStates = new std::vector<unsigned int>();
+
     this->checkDeterminism();
 
     this->createAlphabet(this->getSymbolCount());
 }
 
-DFA::DFA(const DFA & dfa) :
-        transitionFunction(*(dfa.getTransitionFunction())){
+DFA::DFA(const DFA & dfa){
+    this->transitionFunction =
+            new TransitionFunction(*(dfa.transitionFunction));
+
     this->alphabet = new std::vector<int>(dfa.getSymbolCount());
     const std::vector<int>* oldAlphabet = dfa.getAlphabet();
 
@@ -30,11 +37,14 @@ DFA::DFA(const DFA & dfa) :
 
     this->initialState = dfa.getInitialState();
 
-    this->acceptingStates = *(dfa.getAcceptingStates());
+    this->acceptingStates =
+            new std::vector<unsigned int>(*(dfa.getAcceptingStates()));
 }
 
 DFA::~DFA(){
     delete this->alphabet;
+    delete this->transitionFunction;
+    delete this->acceptingStates;
 }
 
 //-----------------------------------------------------------//
@@ -52,7 +62,7 @@ void DFA::createAlphabet(unsigned int symbolCount){
 void DFA::checkDeterminism(){
     for(unsigned int i = 0; i < this->getStateCount(); i++){
         for(unsigned int j = 0; j < this->getSymbolCount(); j++){
-            int toState = this->transitionFunction.getState(i, j);
+            int toState = this->transitionFunction->getState(i, j);
             if(toState < 0 || toState >= (int)this->getStateCount()) {
                 throw std::invalid_argument("Determinism not satisfied "
                                                     "DFA_T::checkDeterminism");
@@ -65,12 +75,12 @@ void DFA::checkDeterminism(){
 //  PUBLIC METHODS
 //-----------------------------------------------------------//
 
-const TransitionFunction*DFA::getTransitionFunction() const{
-    return &(this->transitionFunction);
+const TransitionFunction* DFA::getTransitionFunction() const{
+    return (this->transitionFunction);
 }
 
-const std::vector<unsigned int>*DFA::getAcceptingStates() const{
-    return &(this->acceptingStates);
+const std::vector<unsigned int>* DFA::getAcceptingStates() const{
+    return (this->acceptingStates);
 }
 
 std::vector<int>*DFA::getAlphabet() const {
@@ -78,11 +88,11 @@ std::vector<int>*DFA::getAlphabet() const {
 }
 
 const unsigned int&DFA::getStateCount() const{
-    return this->transitionFunction.getStateCount();
+    return this->transitionFunction->getStateCount();
 }
 
 const unsigned int&DFA::getSymbolCount() const{
-    return this->transitionFunction.getSymbolCount();
+    return this->transitionFunction->getSymbolCount();
 }
 
 const unsigned int&DFA::getInitialState() const{
@@ -96,7 +106,7 @@ int DFA::compute(const Word& w) const{
 
     // for each symbol
     for(int i = 0; i < len; i++){
-        currentState = transitionFunction.getState(currentState, w[i]);
+        currentState = transitionFunction->getState(currentState, w[i]);
     }
 
     return currentState;

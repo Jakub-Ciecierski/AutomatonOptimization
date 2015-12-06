@@ -13,22 +13,22 @@
 #include <particle_factory.h>
 #include "pso_update_common.h"
 #include "thread_pool.h"
-#include "pso_main.h"
+#include "pso_common.h"
 
-PSO::PSO(int numberOfStates, int numberOfSymbols,
-         vector<int> *toolRelationResults, WordsGenerator *wordsGenerator) :
-        _consolePlot(100, 20),
-        _numberOfLinesToReset(0) {
+PSO::PSO(unsigned int numberOfStates, unsigned int numberOfSymbols,
+         vector<int> *toolRelationResults, WordsGenerator *wordsGenerator){
     this->_numberOfStates = numberOfStates;
     this->_numberOfSymbols = numberOfSymbols;
 
     this->_wordsGenerator = wordsGenerator;
     this->_toolRelationResults = toolRelationResults;
 
-    _loadSwarmSize();
-    _loadParticles();
+    _particleDecoder = new ParticleDecoder(numberOfStates, numberOfSymbols);
 
     _globalBestFitness = 0;
+
+    _loadSwarmSize();
+    _generateParticles();
 }
 
 
@@ -38,6 +38,8 @@ PSO::~PSO() {
         delete (*particle);
     }
     _particles.clear();
+
+    delete _particleDecoder;
 }
 
 //-----------------------------------------------------------//
@@ -45,9 +47,13 @@ PSO::~PSO() {
 //-----------------------------------------------------------//
 
 void PSO::compute() {
-    logger::log("Particle Swarm Optimization starts");
+    logger::log(Verbose(PSO_V),"Particle Swarm Optimization starts");
+
+    ConsolePlot* consolePlot = new ConsolePlot(100, 20);
+    int numberOfLinesToReset = 0;
+
     int t = 0;
-    _infoPrint(t);
+    _printInfoAndPlot(t, consolePlot, numberOfLinesToReset);
     while (!_isConverged(t++)) {
         // Calculate pbest using Fitness Function
         clk::startClock();
@@ -67,10 +73,10 @@ void PSO::compute() {
         timeMeasures.updateParticleTime = clk::stopClock();
 
         // Plot results so far
-        _infoPrint(t);
+        _printInfoAndPlot(t, consolePlot, numberOfLinesToReset);
     }
-    logger::log("Particle Swarm Optimization ends");
-    _numberOfLinesToReset = 0;
+    logger::log(Verbose(PSO_V), "Particle Swarm Optimization ends");
+    delete consolePlot;
 }
 
 std::vector<Particle *> PSO::getBestParticles() {
@@ -89,7 +95,7 @@ void PSO::_loadSwarmSize() {
     }
 }
 
-void PSO::_loadParticles(){
+void PSO::_generateParticles(){
     double posIntervalMin = global_settings::ENCODING_DELTA;
     double posIntervalMax = _numberOfStates + global_settings::ENCODING_DELTA
                             - global_settings::UPPER_BOUND_ERR;
@@ -102,12 +108,14 @@ void PSO::_loadParticles(){
 
     maxVelocity = maxVelocity > _numberOfStates ? _numberOfStates : maxVelocity;
 
+    unsigned int particleDimension = _numberOfStates * _numberOfSymbols;
+
     ParticleFactory pf;
-    _particles = pf.generateUniformParticles(_swarmSize,
-                                             _numberOfStates, _numberOfSymbols,
+    _particles = pf.generateUniformParticles(_swarmSize, particleDimension,
                                              posIntervalMin, posIntervalMax,
                                              velIntervalMin, velIntervalMax,
-                                             maxVelocity);
+                                             maxVelocity,
+                                             _particleDecoder);
 
     // Save particle position for faster Clustering process.
     _particlePositions.resize(_swarmSize);
@@ -161,9 +169,10 @@ bool PSO::_isConverged(const int &t) {
 
 // -----------------------------------------------------------------------------
 
-void PSO::_infoPrint(int t) {
+void PSO::_printInfoAndPlot(int t, ConsolePlot *cPlot,
+                            int &totalNumberOfLinesToReset) {
     // Clean previous entry
-    for (int i = 0; i < _numberOfLinesToReset; i++) {
+    for (int i = 0; i < totalNumberOfLinesToReset; i++) {
         cout << "\e[A\r";
     }
 
@@ -171,8 +180,8 @@ void PSO::_infoPrint(int t) {
     cout << endl;
     numberOfLinesToReset++;
 
-    _consolePlot.update(t - 1, _globalBestFitness);
-    numberOfLinesToReset +=_consolePlot.print();
+    cPlot->update(t - 1, _globalBestFitness);
+    numberOfLinesToReset += cPlot->print();
     cout << endl;
     numberOfLinesToReset++;
 
@@ -197,6 +206,6 @@ void PSO::_infoPrint(int t) {
     LOG_CALC("Particle Update Time",timeMeasures.updateParticleTime);
     numberOfLinesToReset++;
 
-    _numberOfLinesToReset = numberOfLinesToReset;
+    totalNumberOfLinesToReset = numberOfLinesToReset;
 }
 

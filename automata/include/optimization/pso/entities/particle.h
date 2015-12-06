@@ -12,6 +12,10 @@
 #include "utils.h"
 #include "global_settings.h"
 
+#include <particle_decoder.h>
+
+class ParticleDecoder;
+
 /*
  * Particle is used to travel through the solution space in PSO algorithm.
  *
@@ -31,11 +35,6 @@
  */
 class Particle {
 private:
-    unsigned int _length;
-
-    unsigned int _numberOfSymbols;
-    unsigned int _numberOfStates;
-
     // DFA Representation of current position
     DFA * _currentDFA = NULL;
     // DFA Representation of best position
@@ -68,16 +67,13 @@ private:
     // The upper bound of interval
     double _intervalMax;
 
-    /*
-     * Decodes Particle Position back to Natural Decoding
-     */
-    TransitionFunction _decodeToTransitionFunction();
+    // Used to decode particle into the object
+    ParticleDecoder* _pDecoder;
 
 public:
-    Particle(unsigned int numberOfStates, unsigned int numberOfSymbols,
-                double posMin, double posMax,
-                double maxVelocity,
-                Point<double> position, Point<double> velocity);
+    Particle(Point<double> position, Point<double> velocity,
+                    double intervalMin, double intervalMax,
+                    double maxVelocity, ParticleDecoder* pDecoder);
 
     Particle(const Particle& p);
 
@@ -86,7 +82,7 @@ public:
     /*
      * Updates the DFA representation of the particle
      */
-    void updateDFA();
+    void updateCurrentDFA();
 
     /*
      * Save current Configuration as Best result.
@@ -130,12 +126,14 @@ public:
     void setFitness(double fitness);
 
     void setPosition(Point<double> pos);
+
     /*
      * Set value of dim-th dimension of position vector
      */
     void setPositionDim(double value, int dim);
 
     void setVelocity(Point<double> vel);
+
     /*
      * Set value of dim-th dimension of velocity vector
      */

@@ -26,6 +26,12 @@ TransitionFunction::TransitionFunction(unsigned int stateCount,
     this->entries = entries;
 }
 
+TransitionFunction::TransitionFunction(const TransitionFunction& tf){
+    this->stateCount = tf.stateCount;
+    this->symbolCount = tf.symbolCount;
+    this->entries = tf.entries;
+}
+
 TransitionFunction::~TransitionFunction(){
 }
 

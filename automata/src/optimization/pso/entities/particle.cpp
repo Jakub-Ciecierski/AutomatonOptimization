@@ -6,13 +6,10 @@
 #include <logger.h>
 #include "particle.h"
 
-Particle::Particle(unsigned int numberOfStates, unsigned int numberOfSymbols,
-                    double intervalMin, double intervalMax,
-                    double maxVelocity,
-                    Point<double> position, Point<double> velocity) {
-    this->_numberOfSymbols = numberOfSymbols;
-    this->_numberOfStates = numberOfStates;
-    this->_length = _numberOfSymbols * _numberOfStates;
+Particle::Particle(Point<double> position, Point<double> velocity,
+                   double intervalMin, double intervalMax,
+                   double maxVelocity, ParticleDecoder* pDecoder){
+    this->_pDecoder = pDecoder;
 
     this->_intervalMin = intervalMin;
     this->_intervalMax = intervalMax;
@@ -23,16 +20,12 @@ Particle::Particle(unsigned int numberOfStates, unsigned int numberOfSymbols,
 
     this->_fitness = 0;
 
-    this->updateDFA();
+    this->updateCurrentDFA();
 
     this->saveCurrentConfigAsBest();
 }
 
 Particle::Particle(const Particle& p) {
-    this->_numberOfSymbols = p._numberOfSymbols;
-    this->_numberOfStates = p._numberOfStates;
-    this->_length = _numberOfSymbols * _numberOfStates;
-
     this->_currentDFA = new DFA(*(p._currentDFA));
     this->_pbestDFA = new DFA(*(p.getBestDFA()));
 
@@ -60,8 +53,8 @@ Particle::~Particle() {
 //  PUBLIC METHODS
 //-----------------------------------------------------------//
 
-void Particle::updateDFA(){
-    TransitionFunction tf = this->_decodeToTransitionFunction();
+void Particle::updateCurrentDFA(){
+    TransitionFunction* tf = this->_pDecoder->decodeToTransitionFunction(this);
 
     delete _currentDFA;
     _currentDFA = new DFA(tf);
@@ -159,26 +152,3 @@ void Particle::setLBest(Point<double> lbest){
 //-----------------------------------------------------------//
 //  PRIVATE METHODS
 //-----------------------------------------------------------//
-
-TransitionFunction Particle::_decodeToTransitionFunction(){
-    int size = this->_position.size();
-    vector<int> decodedParticle(size);
-
-    for (int i = 0; i < size; i++) {
-        int encodedValue;
-        double delta;
-
-        encodedValue = (int)this->_position[i];
-        delta = this->_position[i] - encodedValue;
-        if (delta >= global_settings::ENCODING_DELTA)
-            encodedValue++;
-
-        // We enumerate from 0
-        decodedParticle[i] = encodedValue - 1;
-    }
-
-    TransitionFunction tf(this->_numberOfStates, this->_numberOfSymbols,
-                          decodedParticle);
-
-    return tf;
-}

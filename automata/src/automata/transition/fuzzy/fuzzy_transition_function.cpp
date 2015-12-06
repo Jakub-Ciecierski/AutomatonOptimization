@@ -2,10 +2,11 @@
 // Created by jakub on 12/3/15.
 //
 
-#include <logger/log.h>
-#include <stdexcept>
 #include "fuzzy_transition_settings.h"
 #include "fuzzy_transition_function.h"
+#include "logger/log.h"
+#include <stdexcept>
+
 
 FuzzyTransitionFunction::FuzzyTransitionFunction(unsigned stateCount,
                                        unsigned symbolCount) :

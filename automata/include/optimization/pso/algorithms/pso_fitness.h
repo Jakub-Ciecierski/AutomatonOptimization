@@ -7,7 +7,7 @@
 
 #include "words_generator.h"
 #include "particle.h"
-#include "pso_main.h"
+#include "pso_common.h"
 
 /*
  * Contains parallel implementation of fitness function update.

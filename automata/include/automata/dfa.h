@@ -5,10 +5,12 @@
 #ifndef AC_DFA_T_H
 #define AC_DFA_T_H
 
+#include "word.h"
+
+#include <ostream>
 #include <vector>
-#include "fuzzy_transition_function.h"
-#include <word.h>
-#include <transition_function.h>
+
+#include "transition_function.h"
 
 /*
  * Deterministic Finite Automaton - DFA
@@ -41,12 +43,12 @@ private:
     //-----------------------------------------------------------//
 
     // Set of all accepting states
-    std::vector<unsigned int> acceptingStates;
+    std::vector<unsigned int>* acceptingStates;
 
     std::vector<int>* alphabet;
 
     // Transition Function
-    TransitionFunction transitionFunction;
+    TransitionFunction* transitionFunction;
 
     // Initial state
     unsigned int initialState;
@@ -60,9 +62,9 @@ private:
     void checkDeterminism();
 
 public:
-    DFA(TransitionFunction tf);
+    DFA(TransitionFunction* tf);
 
-    DFA(TransitionFunction tf, unsigned int initialState);
+    DFA(TransitionFunction* tf, unsigned int initialState);
 
     DFA(const DFA & dfa);
 

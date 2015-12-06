@@ -28,7 +28,8 @@ namespace dfa_loader
         unsigned int stateCount = stoi(entries_str[0]);
         unsigned int symbolCount = stoi(entries_str[1]);
 
-        TransitionFunction tf(stateCount, symbolCount);
+        TransitionFunction* tf = new TransitionFunction(stateCount,
+                                                        symbolCount);
 
         unsigned int currentState = 0;
         unsigned int currentSymbol = 0;
@@ -41,7 +42,7 @@ namespace dfa_loader
                 unsigned int toState = stoi(entries_str[(counter++) + 2]);
 
                 // toState - 1, We index states from 0
-                tf.addTransition(currentState, currentSymbol, toState-1);
+                tf->addTransition(currentState, currentSymbol, toState-1);
 
                 currentSymbol++;
             }

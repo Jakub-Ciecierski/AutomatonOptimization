@@ -2,13 +2,14 @@
 // Created by jakub on 12/3/15.
 //
 
-#ifndef AC_DETERMINISTIC_TRANSITION_FUNCTION_H
-#define AC_DETERMINISTIC_TRANSITION_FUNCTION_H
+#ifndef AC_TRANSITION_FUNCTION_H
+#define AC_TRANSITION_FUNCTION_H
 
-#include "matrix.h"
+#include <vector>
+#include <iostream>
 
 /*
- * Transition Function is of the following form:
+ * Transition Function is of the form known as Natural Decoding. Formally:
  *      - Transitions are stored in a virtual 2D array - physically 1D.
  *      - First stateCount entries or simply first row,
  *          represent transitions for consecutive states for first symbol.
@@ -59,6 +60,8 @@ public:
                         unsigned int symbolCount,
                         std::vector<int> entries);
 
+    TransitionFunction(const TransitionFunction& tf);
+
     ~TransitionFunction();
 
     //-----------------------------------------------------------//
@@ -91,4 +94,4 @@ public:
 };
 
 
-#endif //AC_DETERMINISTIC_TRANSITION_FUNCTION_H
+#endif //AC_TRANSITION_FUNCTION_H

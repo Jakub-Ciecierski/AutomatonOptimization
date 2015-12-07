@@ -7,8 +7,8 @@
 #include "error.h"
 #include <iostream>
 #include <optimizer.h>
-#include <graph.h>
 #include <dfa_loader.h>
+#include "drawer.h"
 #include "flag_reader.h"
 #include "log.h"
 #include "thread_util.h"
@@ -94,7 +94,7 @@ void summarize(Optimizer &opt){
     ss << *dfa;
     ss << "Fitness: " << result->getBestFitness();
 
-    graphics::drawGraph(*dfa, "dfa_result");
+    drawing::drawDFA(*dfa, "dfa_result");
 
     stringstream ssTool;
     const DFA * tool = opt.getTool();
@@ -102,7 +102,7 @@ void summarize(Optimizer &opt){
     ssTool << "Tool Summary" << std::endl;
     ssTool << *tool;
 
-    graphics::drawGraph(*tool, "dfa_tool");
+    drawing::drawDFA(*tool, "dfa_tool");
 
     logger::log(File("result.txt"), ss.str());
     logger::log(File("result.txt"), ssTool.str());

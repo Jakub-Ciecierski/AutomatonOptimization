@@ -13,17 +13,13 @@
 //  DECLARATIONS
 //-----------------------------------------------------------//
 
+DFA* createDFA();
+
 //-----------------------------------------------------------//
 //  DEFINITIONS
 //-----------------------------------------------------------//
 
-
-
-//-----------------------------------------------------------//
-//  TESTS
-//-----------------------------------------------------------//
-
-TEST(Automata, DFA_ComputeWord_CorrectState){
+DFA* createDFA(){
     unsigned int stateCount = 4;
     unsigned int symbolCount = 2;
 
@@ -39,21 +35,40 @@ TEST(Automata, DFA_ComputeWord_CorrectState){
     tf->addTransition(2, 1, 2);
     tf->addTransition(3, 1, 3);
 
-    DFA dfa(tf);
+    DFA* dfa = new DFA(tf);
+
+    return dfa;
+}
+
+//-----------------------------------------------------------//
+//  TESTS
+//-----------------------------------------------------------//
+
+TEST(Automata, DFA_ComputeMediumWord_CorrectState){
+    DFA* dfa = createDFA();
 
     std::vector<int> word_entries{0,1,1};
     Word w(word_entries);
 
     int expectedState = 2;
-    int actualState = dfa.compute(w);
+    int actualState = dfa->compute(w);
 
     EXPECT_EQ(expectedState, actualState);
+
+    delete dfa;
+}
+
+
+TEST(Automata, DFA_ComputeSmallWord_CorrectState){
+    DFA* dfa = createDFA();
 
     std::vector<int> word_entries2{0};
     Word w2(word_entries2);
 
-    expectedState = 1;
-    actualState = dfa.compute(w2);
+    int expectedState = 1;
+    int actualState = dfa->compute(w2);
 
     EXPECT_EQ(expectedState, actualState);
+
+    delete dfa;
 }

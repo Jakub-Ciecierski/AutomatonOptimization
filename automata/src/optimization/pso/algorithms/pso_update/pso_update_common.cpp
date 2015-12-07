@@ -4,6 +4,7 @@
 
 #include <entities/random_sphere.h>
 #include <algorithms/pso_update/pso_update_naive.h>
+#include <algorithms/pso_update/pso_update_sphere.h>
 #include "pso_update_common.h"
 
 namespace pso
@@ -16,6 +17,7 @@ namespace pso
                 Particle* p = (*particles)[i];
 
                 naive::update_naive(p);
+                //sphere::update_sphere(p);
 
                 boundPositionWithInterval(p);
                 p->updateCurrentDFA();

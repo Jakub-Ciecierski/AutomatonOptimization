@@ -16,7 +16,6 @@ namespace pso
                                 std::vector<const Point<double>*>*
                                     particlePositions,
                                 int& lastNumberOfClusters) {
-
             // Compute cluster evaluation.
             McClainRao<double> mc_r(global_settings::START_K,
                                     global_settings::END_K);

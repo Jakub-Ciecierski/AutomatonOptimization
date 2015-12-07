@@ -35,6 +35,11 @@ Point<T>::Point(T* data, int count){
     }
 }
 
+template <class T>
+Point<T>::Point(const Point& p){
+    elements = p.elements;
+}
+
 
 //-----------------------------------------------------------//
 //  PUBLIC METHODS

@@ -86,6 +86,7 @@ namespace console {
                              STRING, &global_settings::TOOL_URL));
 
         /* ------ OPTIMIZER SETTINGS ----- */
+
         flags.push_back(Flag("q", "state-min",
                              "Starting number of states in Optimizer",
                              INT, &global_settings::MIN_STATES));
@@ -95,6 +96,10 @@ namespace console {
                              INT, &global_settings::MAX_STATES));
 
         /* ------ PSO SETTINGS ----- */
+        flags.push_back(Flag("I", "max-iter",
+                             "Maximum iterations of PSO",
+                             INT, &global_settings::MAX_ITER));
+
         flags.push_back(Flag("l", "learn-fac",
                              "Learning Factor",
                              DOUBLE,

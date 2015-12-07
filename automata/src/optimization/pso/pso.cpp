@@ -181,8 +181,8 @@ void PSO::_printInfoAndPlot(int t, ConsolePlot *cPlot,
     cout << endl;
     numberOfLinesToReset++;
 
-    cPlot->update(t - 1, _globalBestFitness);
-    numberOfLinesToReset += cPlot->print();
+    //cPlot->update(t - 1, _globalBestFitness);
+    //numberOfLinesToReset += cPlot->print();
     cout << endl;
     numberOfLinesToReset++;
 

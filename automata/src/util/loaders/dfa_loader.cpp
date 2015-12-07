@@ -29,6 +29,14 @@ namespace dfa_loader
         unsigned int stateCount = stoi(entries_str[0]);
         unsigned int symbolCount = stoi(entries_str[1]);
 
+        unsigned int len = stateCount*symbolCount;
+
+        if(entries_str.size() != (len + 2)){
+            std::cout << entries_str.size() << std::endl;
+            std::cout << "Length: " << len << std::endl;
+            throw std::invalid_argument("Wrong content in file: " + dfaURL);
+        }
+
         TransitionFunction* tf = new TransitionFunction(stateCount,
                                                         symbolCount);
 

@@ -5,9 +5,12 @@
 #include "particle_decoder.h"
 
 ParticleDecoder::ParticleDecoder(unsigned int numberOfStates,
-                                 unsigned int numberOfSymbols){
+                                 unsigned int numberOfSymbols,
+                                 double encodingDelta){
     this->_numberOfStates = numberOfStates;
     this->_numberOfSymbols = numberOfSymbols;
+
+    this->_encodingDelta = encodingDelta;
 
 }
 ParticleDecoder::~ParticleDecoder(){

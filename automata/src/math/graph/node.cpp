@@ -4,8 +4,8 @@
 
 #include "node.h"
 
-Node::Node(unsigned int index){
-    this->index = index;
+Node::Node(unsigned int key){
+    this->key = key;
 
     color = "";
     label = "";
@@ -19,8 +19,8 @@ std::string Node::getLabel(){
     return this->label;
 }
 
-unsigned int Node::getIndex(){
-    return this->index;
+unsigned int Node::getKey(){
+    return this->key;
 }
 
 void Node::setColor(std::string color){
@@ -35,5 +35,5 @@ void Node::setLabel(std::string label){
 //-----------------------------------------------------------//
 
 bool Node::operator==(const Node& node) const{
-    return this->index == node.index;
+    return this->key == node.key;
 }

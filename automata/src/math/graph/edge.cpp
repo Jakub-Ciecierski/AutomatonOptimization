@@ -4,11 +4,11 @@
 
 #include "edge.h"
 
-Edge::Edge(Node* node1, Node* node2, unsigned int index){
+Edge::Edge(Node* node1, Node* node2, unsigned int key){
     this->node1 = node1;
     this->node2 = node2;
 
-    this->index = index;
+    this->key = key;
 
     color = "";
     label = "";
@@ -22,8 +22,8 @@ std::string Edge::getLabel(){
     return this->label;
 }
 
-unsigned int Edge::getIndex(){
-    return this->index;
+unsigned int Edge::getKey(){
+    return this->key;
 }
 
 Node* Edge::getNode1(){
@@ -46,5 +46,5 @@ void Edge::setLabel(std::string label){
 
 
 bool Edge::operator==(const Edge& edge) const{
-    return (this->index == edge.index);
+    return (this->key == edge.key);
 }

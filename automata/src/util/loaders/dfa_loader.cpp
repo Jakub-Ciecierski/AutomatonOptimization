@@ -7,11 +7,12 @@
 #include <fstream>
 #include <sstream>
 #include <string_utils.h>
+#include <logger/log.h>
+#include <settings/global_settings.h>
 
 namespace dfa_loader
 {
     DFA loadDFA(std::string dfaURL) {
-
         ifstream file;
         file.open(dfaURL);
 
@@ -52,6 +53,8 @@ namespace dfa_loader
         file.close();
 
         DFA dfa(tf);
+
+        logger::log(Verbose(DEBUG_V),"Loaded DFA from file:\n", dfaURL);
 
         return dfa;
     }

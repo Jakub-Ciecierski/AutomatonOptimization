@@ -13,7 +13,7 @@ private:
     //  PRIVATE FIELDS
     //-----------------------------------------------------------//
 
-    unsigned int index;
+    unsigned int key;
 
     std::string color;
     std::string label;
@@ -23,12 +23,12 @@ private:
     //-----------------------------------------------------------//
 
 public:
-    Node(unsigned int index);
+    Node(unsigned int key);
 
     std::string getColor();
     std::string getLabel();
 
-    unsigned int getIndex();
+    unsigned int getKey();
 
     void setColor(std::string color);
     void setLabel(std::string label);

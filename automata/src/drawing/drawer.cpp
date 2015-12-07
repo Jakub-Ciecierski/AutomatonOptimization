@@ -75,7 +75,7 @@ namespace drawing
             std::string label = node->getLabel();
             std::string color = node->getColor();
 
-            graphDOT << node->getIndex();
+            graphDOT << node->getKey();
             if(!label.empty()){
                 graphDOT << " [label= \"" << label << "\"]";
             }
@@ -95,7 +95,7 @@ namespace drawing
             std::string label = edge->getLabel();
             std::string color = edge->getColor();
 
-            graphDOT << node1->getIndex() << " -> " << node2->getIndex();
+            graphDOT << node1->getKey() << " -> " << node2->getKey();
 
             if(!label.empty()){
                 graphDOT << "[label= \"" << label << "\"]";
@@ -141,7 +141,7 @@ namespace drawing
         logger::log(Verbose(DEBUG_V),
                     "Drawing Graph. Input File\n", filepath_jpg);
 
-        std::string command = "../dot/dot -Tjpg " + filepath_dot +
+        std::string command = "./res/dot -Tjpg " + filepath_dot +
                               " -o " + filepath_jpg;
 
         system(command.c_str());

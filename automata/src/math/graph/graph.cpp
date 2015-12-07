@@ -62,14 +62,14 @@ void Graph::addEdge(Edge* edge){
 void Graph::removeNode(unsigned int index){
     for(unsigned int i = 0; i < nodes->size(); i++){
         Node* currNode = (*nodes)[i];
-        if (currNode->getIndex() == index)
+        if (currNode->getKey() == index)
             nodes->erase(nodes->begin() + i);
     }
 }
 void Graph::removeEdge(unsigned int index){
     for(unsigned int i = 0; i < edges->size(); i++){
         Edge* currEdge = (*edges)[i];
-        if (currEdge->getIndex() == index)
+        if (currEdge->getKey() == index)
             edges->erase(edges->begin() + i);
     }
 }
@@ -104,12 +104,12 @@ bool Graph::_findAndCombineParallelEdge(){
             if (*node1Edge1 == *node1Edge2 &&
                 *node2Edge1 == *node2Edge2) {
 
-                this->removeEdge(edge1->getIndex());
-                this->removeEdge(edge2->getIndex());
+                this->removeEdge(edge1->getKey());
+                this->removeEdge(edge2->getKey());
 
                 Edge *combinedEdge = new Edge(node1Edge1,
                                               node2Edge1,
-                                              edge1->getIndex());
+                                              edge1->getKey());
 
                 std::string combinedLabel = edge1->getLabel() + ", " +
                                             edge2->getLabel();

@@ -80,7 +80,7 @@ namespace global_settings {
         ss << MAX_STATES << std::endl;
 
 
-        ss << std::endl<< "POS SETTINGS" <<std::endl <<std::endl;
+        ss << std::endl<< "PSO SETTINGS" <<std::endl <<std::endl;
 
 
         s = "TOOL_URL ";

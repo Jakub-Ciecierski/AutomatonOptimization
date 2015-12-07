@@ -15,6 +15,10 @@
 
 using namespace std;
 
+//-----------------------------------------------------------//
+//  DECLARATIONS
+//-----------------------------------------------------------//
+
 /*
  * Initialises the application resources
  */
@@ -25,6 +29,9 @@ void initApp(int argc, char *argv[]);
  */
 void closeApp();
 
+/*
+ * Summarizes the results of optimizer
+ */
 void summarize(Optimizer &opt);
 
 //------------------------------------------------------------------------------
@@ -34,7 +41,6 @@ int main(int argc, char *argv[]) {
 
     logger::log("Main Computations Begin");
 
-    logger::log("Loading Tool DFA from file: ", global_settings::TOOL_URL);
     DFA dfaTool = dfa_loader::loadDFA(global_settings::TOOL_URL);
 
     logger::log("Starting Optimizer");
@@ -55,7 +61,9 @@ int main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------//
+//  DEFINITIONS
+//-----------------------------------------------------------//
 
 void initApp(int argc, char *argv[]) {
     // Start the seed

@@ -14,7 +14,7 @@ private:
     //  PRIVATE FIELDS
     //-----------------------------------------------------------//
 
-    unsigned int index;
+    unsigned int key;
 
     std::string color;
     std::string label;
@@ -27,12 +27,12 @@ private:
     //-----------------------------------------------------------//
 
 public:
-    Edge(Node* node1, Node* node2, unsigned int index);
+    Edge(Node* node1, Node* node2, unsigned int key);
 
     std::string getColor();
     std::string getLabel();
 
-    unsigned int getIndex();
+    unsigned int getKey();
 
     Node* getNode1();
     Node* getNode2();

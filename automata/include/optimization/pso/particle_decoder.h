@@ -29,12 +29,17 @@ private:
     unsigned int _numberOfStates;
     unsigned int _numberOfSymbols;
 
+    // Used to determine which integer value should given dimension be
+    // decoded to
+    double _encodingDelta;
+
     //-----------------------------------------------------------//
     //  PRIVATE METHODS
     //-----------------------------------------------------------//
 
 public:
-    ParticleDecoder(unsigned int numberOfStates, unsigned int numberOfSymbols);
+    ParticleDecoder(unsigned int numberOfStates, unsigned int numberOfSymbols,
+                    double encodingDelta);
 
     ~ParticleDecoder();
 

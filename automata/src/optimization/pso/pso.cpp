@@ -23,7 +23,8 @@ PSO::PSO(unsigned int numberOfStates, unsigned int numberOfSymbols,
     this->_wordsGenerator = wordsGenerator;
     this->_toolRelationResults = toolRelationResults;
 
-    _particleDecoder = new ParticleDecoder(numberOfStates, numberOfSymbols);
+    _particleDecoder = new ParticleDecoder(numberOfStates, numberOfSymbols,
+                            global_settings::ENCODING_DELTA);
 
     _globalBestFitness = 0;
 

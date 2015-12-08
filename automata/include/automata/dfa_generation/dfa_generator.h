@@ -11,6 +11,6 @@ namespace automata
 {
 
     void generateDFA(unsigned int stateCount, unsigned int symbolCount,
-                        std::string filename);
+                        std::string dirpath);
 }
 #endif //AC_DFA_GENERATOR_H

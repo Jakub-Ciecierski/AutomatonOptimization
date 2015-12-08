@@ -128,10 +128,8 @@ namespace drawing
     void drawGraph(const Graph &graph, std::string filepath){
         std::string graphDOT = graphToDOT(graph);
 
-        std::string filepath_dot = logger::settings::FULL_DIR_STR +
-                                   "/" + filepath + ".dot";
-        std::string filepath_jpg = logger::settings::FULL_DIR_STR +
-                                   "/" + filepath + ".jpg";
+        std::string filepath_dot = filepath + ".dot";
+        std::string filepath_jpg = filepath + ".jpg";
 
         std::ofstream fileStream;
         fileStream.open(filepath_dot.c_str());

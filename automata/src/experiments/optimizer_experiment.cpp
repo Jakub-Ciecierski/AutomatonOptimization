@@ -29,6 +29,8 @@ namespace experiments
     namespace optimizer
     {
         void summarize(Optimizer &opt){
+            std::string dirpath = logger::settings::FULL_DIR_STR;
+
             const Particle* result = opt.getBestParticle();
 
             const DFA * dfa = result->getBestDFA();
@@ -40,7 +42,8 @@ namespace experiments
             ss << *dfa;
             ss << "Fitness: " << result->getBestFitness();
 
-            drawing::drawDFA(*dfa, "dfa_result");
+            std::string resultFileName = dirpath + "/" + "dfa_result";
+            drawing::drawDFA(*dfa, resultFileName);
 
             stringstream ssTool;
             const DFA * tool = opt.getTool();
@@ -48,7 +51,8 @@ namespace experiments
             ssTool << "Tool Summary" << std::endl;
             ssTool << *tool;
 
-            drawing::drawDFA(*tool, "dfa_tool");
+            std::string toolFileName = dirpath + "/" + "dfa_tool";
+            drawing::drawDFA(*tool, toolFileName);
 
             logger::log(File("result.txt"), ss.str());
             logger::log(File("result.txt"), ssTool.str());

@@ -28,7 +28,7 @@ namespace automata
         unsigned int max = stateCount;
         for(unsigned int i = 0; i < transitionLength; i++){
 
-            unsigned int state = utils::generateRandomNumber(min, max);
+            unsigned int state = utils::generateRandomNumber(min, max+1);
 
             dfaStr += std::to_string(state);
             if(i != transitionLength-1){

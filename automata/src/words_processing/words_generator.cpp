@@ -15,7 +15,8 @@ WordsGenerator::WordsGenerator(vector<int> alphabet) : _alphabet(alphabet),
         //_checkGlobalConditions();
         //_fillBags();
 		_fillTestBag(SIZE_S);
-        _createAllWordsUpToLength(R_MAX);
+        //_createAllWordsUpToLength(R_MAX);
+        printAllKLength(_alphabet, R_MAX);
         _generatePairs();
         _generateTestPairs();
         
@@ -23,6 +24,7 @@ WordsGenerator::WordsGenerator(vector<int> alphabet) : _alphabet(alphabet),
 		std::stringstream ss;
 		ss << "Words Generated:" << std::endl;
 		ss << "All up to length:   " << R_MAX << std::endl;
+		ss << "Number of words:    " << _psoWords.size() << endl;
 		ss << "Size Test:    	   " << SIZE_S;
 		logger::log(File("words.txt"), ss.str());
         
@@ -260,7 +262,38 @@ void WordsGenerator::_createAllWordsUpToLength(int N) {
   	//for(unsigned int i = 0; i < _psoWords.size() ; i++) {
 	//	cout << _psoWords[i].toString() << endl;
 	//}
-  	
+	 	
 }
+
+void WordsGenerator::printAllKLength(vector<int> alphabet, int k) {
+        int n = alphabet.size();  
+        Word word;      
+        printAllKLengthRec(alphabet, word, n, k);
+}
+ 
+// The main recursive method to print all possible strings of length k
+void WordsGenerator::printAllKLengthRec(vector<int> alphabet, Word word, int n, int k) {
+	 
+	// Base case: k is 0, print prefix
+	if (k == 0) {
+		cout << word.toString();
+		_psoWords.push_back(word);
+		return;
+	}
+
+	// One by one add all characters from set and recursively 
+	// call for k equals to k-1
+	for (int i = 0; i < n; ++i) {
+		 cout << i << endl;
+		// Next character of input added
+		word.appendSymbol(alphabet[i]);
+		Word new_prefix(word);
+	
+		// k is decreased, because we have added a new character
+		printAllKLengthRec(alphabet, new_prefix, n, k - 1); 
+	}
+}
+
+
 
 

@@ -12,11 +12,18 @@
 #include "word.h"
 #include "utils.h"
 #include "pair_of_words.h"
+#include <algorithm>   
 
 using namespace global_settings;
 
 class WordsGenerator {
 public:
+
+    ///////// NEW SET OF FUNCTIONS /////////////
+	vector<Word> _psoWords;
+    void  _createAllWordsUpToLength(int N);
+
+
     WordsGenerator(vector<int> alphabet);
 
     int hammingDistance(Word w1, Word w2) const;
@@ -38,6 +45,7 @@ private:
     vector<PairOfWords> _pairs;
     vector<PairOfWords> _testPairs;
 
+	
     Word _generateWordStartingWith(int symbol, int length);
 
     Word _generateRandomWordOverAlphabet(int length);
@@ -67,6 +75,8 @@ private:
     Word _generateWordStartingWith(BagOfWords &bag, int startingSymbol, int wordLength);
 
     void _fillTestBag(int numberOfTestWords);
+    
+
 };
 
 #endif //AC_WORDS_GENERATOR_H

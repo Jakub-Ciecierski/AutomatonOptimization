@@ -22,7 +22,8 @@ public:
     ///////// NEW SET OF FUNCTIONS /////////////
 	vector<Word> _psoWords;
     void  _createAllWordsUpToLength(int N);
-
+	void printAllKLength(vector<int> alphabet, int k);
+	void printAllKLengthRec(vector<int> alphabet, Word word, int n, int k);
 
     WordsGenerator(vector<int> alphabet);
 

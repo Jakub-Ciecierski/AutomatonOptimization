@@ -284,7 +284,7 @@ void WordsGenerator::printAllKLengthRec(vector<int> alphabet, Word word, int n, 
 	// One by one add all characters from set and recursively 
 	// call for k equals to k-1
 	for (int i = 0; i < n; ++i) {
-		 cout << i << endl;
+		 //cout << i << endl;
 		// Next character of input added
 		word.appendSymbol(alphabet[i]);
 		Word new_prefix(word);

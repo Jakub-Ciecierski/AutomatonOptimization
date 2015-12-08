@@ -276,7 +276,7 @@ void WordsGenerator::printAllKLengthRec(vector<int> alphabet, Word word, int n, 
 	 
 	// Base case: k is 0, print prefix
 	if (k == 0) {
-		cout << word.toString();
+		//cout << word.toString();
 		_psoWords.push_back(word);
 		return;
 	}

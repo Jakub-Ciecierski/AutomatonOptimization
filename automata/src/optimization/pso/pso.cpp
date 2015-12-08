@@ -11,6 +11,7 @@
 #include <algorithms/pso_fitness.h>
 #include <algorithms/pso_neighbourhood.h>
 #include <particle_factory.h>
+#include <geometry.h>
 #include "pso_update_common.h"
 #include "thread_pool.h"
 #include "pso_common.h"
@@ -111,6 +112,14 @@ void PSO::_generateParticles(){
 
     unsigned int particleDimension = _numberOfStates * _numberOfSymbols;
 
+    std::stringstream ss;
+    ss << "Creating Particles" << std::endl;
+    ss << "Particle Position Interval: "
+        << "[" << posIntervalMin << ", " << posIntervalMax << "]" << std::endl;
+    ss << "Max Velocity: " << maxVelocity;
+
+    logger::log(ss.str());
+
     ParticleFactory pf;
     _particles = pf.generateUniformParticles(_swarmSize, particleDimension,
                                              posIntervalMin, posIntervalMax,
@@ -186,27 +195,82 @@ void PSO::_printInfoAndPlot(int t, ConsolePlot *cPlot,
     cout << endl;
     numberOfLinesToReset++;
 
-    LOG_CALC("t",t );
+    LOG_CALC("Iteration     ",t );
     numberOfLinesToReset++;
 
-    LOG_CALC("K",_lastNumberOfClusters);
+    cout << endl;
     numberOfLinesToReset++;
 
-    LOG_CALC("Swarm Size",this->_swarmSize);
+
+    LOG_CALC("Swarm Size    ",this->_swarmSize);
     numberOfLinesToReset++;
-    LOG_CALC("States Considered", _numberOfStates);
+    LOG_CALC("States        ", _numberOfStates);
+    numberOfLinesToReset++;
+    LOG_CALC("Symbols       ", _numberOfSymbols);
     numberOfLinesToReset++;
 
-    LOG_CALC("Global Best Fitness",_globalBestFitness );
+    cout << endl;
     numberOfLinesToReset++;
 
-    LOG_CALC("Neighbourhood Time",timeMeasures.neighbouthoodTime );
+    LOG_CALC("Clusters      ",_lastNumberOfClusters);
     numberOfLinesToReset++;
-    LOG_CALC("Fitness Time",timeMeasures.fitnessTime);
-    numberOfLinesToReset++;
-    LOG_CALC("Particle Update Time",timeMeasures.updateParticleTime);
+    LOG_CALC("GBest Fitness ",_globalBestFitness );
     numberOfLinesToReset++;
 
+    cout << endl;
+    numberOfLinesToReset++;
+
+    LOG_CALC("Fitness Time  ",timeMeasures.fitnessTime);
+    numberOfLinesToReset++;
+    LOG_CALC("Neighb Time   ",timeMeasures.neighbouthoodTime );
+    numberOfLinesToReset++;
+    LOG_CALC("Update Time   ",timeMeasures.updateParticleTime);
+    numberOfLinesToReset++;
+
+    cout << endl;
+    numberOfLinesToReset++;
+
+    if(t > 0) {
+        for (unsigned int i = 0; i < _particles.size(); i++) {
+/*
+            Particle *bestParticle = _bestParticles[0];
+
+            const Point<double> *currPos = (_particles[i]->getPosition());
+            const Point<double> *gbestPos = bestParticle->getPBest();
+
+            double distance = math::euclideanDistance(*currPos, *gbestPos);
+
+            std::string str =
+                    "P[" + std::to_string(i) + "] - Fitness";
+            LOG_CALC(str.c_str(), _particles[i]->getFitness());
+*/
+/*
+            Particle *bestParticle = _bestParticles[0];
+
+            const Point<double> *currPos = (_particles[i]->getPosition());
+            const Point<double> *gbestPos = bestParticle->getPBest();
+
+            double distance = math::euclideanDistance(*currPos, *gbestPos);
+
+            std::string str =
+                    "P[" + std::to_string(i) + "] - Distance To gbest";
+            LOG_CALC(str.c_str(), distance);
+*/
+
+/*
+            Point<double> currPos = *(_particles[i]->getPosition());
+            Point<double> oldPos = _particles[i]->oldPosition;
+            //std::cout << currPos.size() << " : " << oldPos.size() << std::endl;
+            double distance = math::euclideanDistance(
+                                    *(_particles[i]->getPosition()),
+                                    _particles[i]->oldPosition);
+
+            std::string str = "P[" + std::to_string(i) + "] - Delta Pos Distance";
+            LOG_CALC(str.c_str(), distance);
+            */
+            //numberOfLinesToReset++;
+        }
+    }
     totalNumberOfLinesToReset = numberOfLinesToReset;
 }
 

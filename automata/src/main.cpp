@@ -1,7 +1,6 @@
 #ifndef AC_MAIN_H
 #define AC_MAIN_H
 
-
 #define LOG_TYPE DEBUG_LOG
 
 #include "error.h"
@@ -14,6 +13,7 @@
 #include "thread_util.h"
 #include "dfa_gen_experiment.h"
 #include "optimizer_experiment.h"
+
 using namespace std;
 
 //-----------------------------------------------------------//
@@ -76,6 +76,7 @@ void initApp(int argc, char *argv[]) {
     global_settings::printSettings();
 
 }
+
 void closeApp(){
     logger::closeLog();
 }

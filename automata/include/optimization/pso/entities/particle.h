@@ -71,6 +71,8 @@ private:
     ParticleDecoder* _pDecoder;
 
 public:
+    Point<double> oldPosition;
+
     Particle(Point<double> position, Point<double> velocity,
                     double intervalMin, double intervalMax,
                     double maxVelocity, ParticleDecoder* pDecoder);

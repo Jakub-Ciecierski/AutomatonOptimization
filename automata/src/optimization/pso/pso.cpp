@@ -105,8 +105,7 @@ void PSO::_generateParticles(){
     double velIntervalMin = (double)-_numberOfStates;
     double velIntervalMax = (double)_numberOfStates;
 
-    double maxVelocity = (((double)_numberOfStates) / 2.0 )
-                         * global_settings::SPEED_FACTOR;
+    double maxVelocity = global_settings::MAX_VELOCITY;
 
     maxVelocity = maxVelocity > _numberOfStates ? _numberOfStates : maxVelocity;
 

@@ -63,6 +63,9 @@ namespace global_settings {
     // during a single PSO iteration.
     extern double SPEED_FACTOR;
 
+    // The maximum change that particle can make in single iteration
+    extern double MAX_VELOCITY;
+
     // The swarm size is scaled by this factor
     extern double POPULATION_FACTOR;
 

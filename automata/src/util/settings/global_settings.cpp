@@ -29,6 +29,7 @@ namespace global_settings {
     double ENCODING_DELTA       = 0.5f;
     double UPPER_BOUND_ERR      = 0.001f;
     double SPEED_FACTOR         = 0.05f;
+    double MAX_VELOCITY         = 0.3f;
     double POPULATION_FACTOR    = 1.0f;
     double FITNESS_TOLERANCE    = 1.0f;
 
@@ -170,6 +171,13 @@ namespace global_settings {
             ss << PATH_TO_VALUE;
         ss << " ";
         ss << SPEED_FACTOR << std::endl;
+
+        s = "MAX_VELOCITY ";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << MAX_VELOCITY << std::endl;
 
         s = "POPULATION_FACTOR ";
         ss << s;

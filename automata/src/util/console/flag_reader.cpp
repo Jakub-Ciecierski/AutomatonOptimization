@@ -140,6 +140,10 @@ namespace console {
                              DOUBLE,
                              &global_settings::SPEED_FACTOR));
 
+        flags.push_back(Flag("V", "max-vel",
+                             "Max Velocity",
+                             DOUBLE,
+                             &global_settings::MAX_VELOCITY));
 
         flags.push_back(Flag("p", "pop-fac",
                              "Population Factor",

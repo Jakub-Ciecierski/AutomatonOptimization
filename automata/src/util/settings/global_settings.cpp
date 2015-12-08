@@ -38,12 +38,12 @@ namespace global_settings {
     int TRUE_THREAD_COUNT       = 0;
 
     /* ------ WORDS GENERATION ----- */
-    int R_MAX                   = 300;
-    int SIZE_S                  = 100;
+    int R_MAX                   = 8;   // FOR_NOW: Max length of generated words
+    int SIZE_S                  = 100; // FOR_NOW: Size of test set
     int SIZE_M                  = 100;
     int SIZE_L                  = 100;
     int MIN_LENG_S              = 0;
-    int MAX_LENG_S              = 8;
+    int MAX_LENG_S              = 8;	
     int MIN_LENG_M              = 9;
     int MAX_LENG_M              = 16;
     int MIN_LENG_L              = 17;

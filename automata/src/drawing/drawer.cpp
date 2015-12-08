@@ -135,13 +135,20 @@ namespace drawing
         fileStream.open(filepath_dot.c_str());
         fileStream << graphDOT;
         fileStream.close();
-
+        
         logger::log(Verbose(DEBUG_V),
                     "Drawing Graph. Input File\n", filepath_jpg);
 
-        std::string command = "./res/dot -Tjpg " + filepath_dot +
+
+        std::string command5 = "./res/dot5/dot -Tjpg " + filepath_dot +
                               " -o " + filepath_jpg;
 
-        system(command.c_str());
+        std::string command6 = "./res/dot6/dot -Tjpg " + filepath_dot +
+                              " -o " + filepath_jpg;
+
+        int ret = system(command6.c_str());
+        if(ret != 0){
+            system(command5.c_str());
+        }
     }
 }

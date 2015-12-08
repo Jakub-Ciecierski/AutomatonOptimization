@@ -12,7 +12,8 @@
 #include "flag_reader.h"
 #include "log.h"
 #include "thread_util.h"
-
+#include "dfa_gen_experiment.h"
+#include "optimizer_experiment.h"
 using namespace std;
 
 //-----------------------------------------------------------//
@@ -29,34 +30,27 @@ void initApp(int argc, char *argv[]);
  */
 void closeApp();
 
-/*
- * Summarizes the results of optimizer
- */
-void summarize(Optimizer &opt);
-
 //------------------------------------------------------------------------------
 
 int main(int argc, char *argv[]) {
     initApp(argc, argv);
 
-    logger::log("Main Computations Begin");
-
-    DFA dfaTool = dfa_loader::loadDFA(global_settings::TOOL_URL);
-
-    logger::log("Starting Optimizer");
-    // Start Optimizer
-    Optimizer opt(&dfaTool);
-    opt.start();
-    logger::log("Optimizer Finished");
-
-    // Print summary
-    summarize(opt);
-
-    logger::log("After print");
+    // Choose experiment
+    switch (global_settings::EXPERIMENT_ID){
+        case 0:
+        experiments::runOptimizerExperiment();
+            break;
+        case 1:
+        experiments::runDFAGenerationExperiment();
+            break;
+        default:
+        std::string what = "Experiment ID: " +
+                            std::to_string(global_settings::EXPERIMENT_ID) +
+                            " is not a proper Experiment ID";
+        console::usage(argv[0], what.c_str());
+    }
 
     closeApp();
-
-    logger::log("Main Computations End");
 
     return EXIT_SUCCESS;
 }
@@ -88,33 +82,6 @@ void closeApp(){
 
 //------------------------------------------------------------------------------
 
-
-void summarize(Optimizer &opt){
-
-    const Particle* result = opt.getBestParticle();
-
-    const DFA * dfa = result->getBestDFA();
-
-    // Build string for result
-    stringstream ss;
-    ss << "Result Summary" << std::endl;
-
-    ss << *dfa;
-    ss << "Fitness: " << result->getBestFitness();
-
-    drawing::drawDFA(*dfa, "dfa_result");
-
-    stringstream ssTool;
-    const DFA * tool = opt.getTool();
-
-    ssTool << "Tool Summary" << std::endl;
-    ssTool << *tool;
-
-    drawing::drawDFA(*tool, "dfa_tool");
-
-    logger::log(File("result.txt"), ss.str());
-    logger::log(File("result.txt"), ssTool.str());
-}
 
 
 //------------------------------------------------------------------------------

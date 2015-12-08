@@ -107,7 +107,7 @@ GRAPHVIZ_ROOT = '../graphviz'
 
 #--------------- APPLICATION NAME -------------#
 
-APP_NAME = automaton
+APP_NAME = optimizer
 
 #--------------- FILE EXTENSIONS --------------#
 

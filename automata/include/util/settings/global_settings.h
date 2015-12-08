@@ -15,6 +15,17 @@
 // |--o   alphabet is represented by integers from interval [_alphabet[0], _alphabet.size()]
 
 namespace global_settings {
+    /* ------ EXPERIMENT SETTINGS----- */
+    // ID of experiment to run
+    // 0: Main optimizer
+    // 1: DFA Generation
+    extern int EXPERIMENT_ID;
+
+    /* ------ DFA GENERATION SETTINGS ----- */
+    extern std::string GEN_DFA_PATH;
+    extern int GEN_DFA_STATES;
+    extern int GEN_DFA_SYMBOLS;
+
     /* ------ OPTIMIZER SETTINGS ----- */
     // Minimum states to check
     extern int MIN_STATES;

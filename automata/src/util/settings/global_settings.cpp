@@ -9,6 +9,14 @@
 // Meaning of constants described in global_settings.h
 // This file is just for quick values manipulations
 namespace global_settings {
+    /* ------ EXPERIMENT SETTINGS ----- */
+    int EXPERIMENT_ID           = 0;
+
+    /* ------ DFA GENERATION SETTINGS ----- */
+    std::string GEN_DFA_PATH    = "";
+    int GEN_DFA_STATES          = 8;
+    int GEN_DFA_SYMBOLS         = 5;
+
     /* ------ OPTIMIZER SETTINGS ----- */
     int MIN_STATES              = 8;
     int MAX_STATES              = 8;
@@ -59,10 +67,41 @@ namespace global_settings {
         std::stringstream ss;
         std::string s = "";
 
-
         ss << std::endl<< "SETTINGS" <<std::endl;
 
-        ss << std::endl<< "OPTIMIZER SETTINGS" <<std::endl <<std::endl;;
+        ss << std::endl<< "EXPERIMENT SETTINGS" <<std::endl <<std::endl;
+
+        s = "EXPERIMENT_ID ";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << EXPERIMENT_ID << std::endl;
+
+        ss << std::endl<< "DFA GENERATION SETTINGS" <<std::endl <<std::endl;
+        s = "GEN_DFA_PATH ";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << GEN_DFA_PATH<< std::endl;
+
+
+        s = "GEN_DFA_STATES ";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << GEN_DFA_STATES<< std::endl;
+
+        s = "GEN_DFA_SYMBOLS";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << GEN_DFA_SYMBOLS<< std::endl;
+
+        ss << std::endl<< "OPTIMIZER SETTINGS" <<std::endl <<std::endl;
 
         s = "MIN_STATES ";
         ss << s;

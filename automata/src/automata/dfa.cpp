@@ -59,7 +59,7 @@ void DFA::createAlphabet(unsigned int symbolCount){
     }
 }
 
-void DFA::checkDeterminism(){
+void DFA::  checkDeterminism(){
     for(unsigned int i = 0; i < this->getStateCount(); i++){
         for(unsigned int j = 0; j < this->getSymbolCount(); j++){
             int toState = this->transitionFunction->getState(i, j);

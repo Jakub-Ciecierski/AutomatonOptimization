@@ -20,25 +20,25 @@ namespace console
  * simply add it to readFlags(), like "--help"
  */
 
-/*
- * Read flags from the command line
- */
+    /*
+     * Read flags from the command line
+     */
     void readFlags(int argc, char *argv[]);
 
-/*
- * Check if given flag has proper value
- * Error is stored in error
- */
+    /*
+     * Check if given flag has proper value
+     * Error is stored in error
+     */
     bool isError(int argc, char *argv[], int i, Flag flag, std::string &error);
 
-/*
- * Prints usages with what message
- */
-    void usage(char *appName, const char *what, std::vector<Flag> flags);
+    /*
+     * Prints usages with what message
+     */
+    void usage(char *appName, const char *what);
 
-/*
- * Returns of developer defined flags
- */
+    /*
+     * Returns of developer defined flags
+     */
     std::vector<Flag> getFlags();
 
 }

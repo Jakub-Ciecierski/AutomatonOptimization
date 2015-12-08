@@ -15,7 +15,7 @@ namespace console {
         while (i < argc) {
             // Print help and exit app
             if (std::string(argv[i]) == "--help") {
-                usage(argv[0], "Called for Help: ", flags);
+                usage(argv[0], "Called for Help: ");
                 exit(EXIT_FAILURE);
             }
                 // Or set all flags
@@ -26,7 +26,7 @@ namespace console {
                         std::string error;
                         // If value is missing
                         if (isError(argc, argv, i, flags[j], error)) {
-                            usage(argv[0], error.c_str(), flags);
+                            usage(argv[0], error.c_str());
                             exit(EXIT_FAILURE);
                         }
                         flags[j].apply(argv[i + 1]);
@@ -52,7 +52,8 @@ namespace console {
         return false;
     }
 
-    void usage(char *appName, const char *what, std::vector<Flag> flags) {
+    void usage(char *appName, const char *what) {
+        std::vector<Flag> flags = getFlags();
         std::string INTENT = "    ";
         std::string PATH_TO_INFO = ".";
         int infoIntentStartColumn = 50;
@@ -81,11 +82,34 @@ namespace console {
     std::vector<Flag> getFlags() {
 
         std::vector<Flag> flags;
+
+        /* ------ EXPERIMENTS SETTINGS ----- */
+
+        flags.push_back(Flag("E", "exp",
+                             "Expiriment ID - "
+                                     "0: Main Optimizer, "
+                                     "1: DFA Generation",
+                             INT, &global_settings::EXPERIMENT_ID));
+
+        /* ------ DFA GENERATION SETTINGS ----- */
+
+        flags.push_back(Flag("P", "gen-dfa-path",
+                             "DFA Generation: Path to save generated DFA",
+                             STRING, &global_settings::GEN_DFA_PATH));
+
+        flags.push_back(Flag("O", "gen-dfa-states",
+                             "DFA Generation: Number of states to generate",
+                             INT, &global_settings::GEN_DFA_STATES));
+
+        flags.push_back(Flag("o", "gen-dfa-symbols",
+                             "DFA Generation: Number of symbols to generate",
+                             INT, &global_settings::GEN_DFA_SYMBOLS));
+
+        /* ------ OPTIMIZER SETTINGS ----- */
+
         flags.push_back(Flag("A", "tool-url",
                              "Path to file with DFA Tool",
                              STRING, &global_settings::TOOL_URL));
-
-        /* ------ OPTIMIZER SETTINGS ----- */
 
         flags.push_back(Flag("q", "state-min",
                              "Starting number of states in Optimizer",

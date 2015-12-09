@@ -13,8 +13,8 @@
 namespace automata
 {
 
-    void generateDFA(unsigned int stateCount, unsigned int symbolCount,
-                     std::string dirpath){
+    void generateRandomDFA(unsigned int stateCount, unsigned int symbolCount,
+                           std::string dirpath){
         std::string DFA_EXT = ".dfa";
 
         std::string dfaStr = "";
@@ -54,7 +54,7 @@ namespace automata
 
         // Draw created DFA
         std::string filePathDraw = dirpath + "/" + fileName;
-        DFA dfa = dfa_loader::loadDFA(filePathDFA);
+        DFA dfa = dfa_loader::loadDFAFromFile(filePathDFA);
         drawing::drawDFA(dfa, filePathDraw);
     }
 

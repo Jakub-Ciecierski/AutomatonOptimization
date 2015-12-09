@@ -12,7 +12,7 @@
 
 namespace dfa_loader
 {
-    DFA loadDFA(std::string dfaURL) {
+    DFA loadDFAFromFile(std::string dfaURL) {
         ifstream file;
         file.open(dfaURL);
 
@@ -24,7 +24,18 @@ namespace dfa_loader
         std::string str;
         std::getline(file, str);
 
-        std::vector<std::string> entries_str = str_util::splitString(str,",");
+        file.close();
+
+        DFA dfa = loadDFAFromString(str);
+
+        logger::log(Verbose(DEBUG_V),"Loaded DFA from file:\n", dfaURL);
+
+        return dfa;
+    }
+
+    DFA loadDFAFromString(std::string dfaUnifiedForm){
+        std::vector<std::string> entries_str =
+                str_util::splitString(dfaUnifiedForm,",");
 
         unsigned int stateCount = stoi(entries_str[0]);
         unsigned int symbolCount = stoi(entries_str[1]);
@@ -34,7 +45,7 @@ namespace dfa_loader
         if(entries_str.size() != (len + 2)){
             std::cout << entries_str.size() << std::endl;
             std::cout << "Length: " << len << std::endl;
-            throw std::invalid_argument("Wrong content in file: " + dfaURL);
+            throw std::invalid_argument("Wrong content in : " + dfaUnifiedForm);
         }
 
         TransitionFunction* tf = new TransitionFunction(stateCount,
@@ -58,11 +69,7 @@ namespace dfa_loader
             currentState++;
         }
 
-        file.close();
-
         DFA dfa(tf);
-
-        logger::log(Verbose(DEBUG_V),"Loaded DFA from file:\n", dfaURL);
 
         return dfa;
     }

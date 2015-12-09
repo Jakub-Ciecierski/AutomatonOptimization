@@ -12,7 +12,7 @@ namespace experiments
     void runOptimizerExperiment(){
         logger::log("Optimizer Experiment Begin");
 
-        DFA dfaTool = dfa_loader::loadDFA(global_settings::TOOL_URL);
+        DFA dfaTool = dfa_loader::loadDFAFromFile(global_settings::TOOL_URL);
 
         logger::log("Starting Optimizer");
         // Start Optimizer

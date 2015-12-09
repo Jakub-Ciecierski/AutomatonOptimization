@@ -10,7 +10,14 @@
 namespace automata
 {
 
-    void generateDFA(unsigned int stateCount, unsigned int symbolCount,
-                        std::string dirpath);
+    /*
+     * Generates Random DFA and saves it in directory given by dirpath.
+     * Saves the DOT, JPG, DFA format files
+     * DOT - The graph representing DFA in DOT language.
+     * JPG - The graph visualization in jpg format
+     * DFA - the Unified Form of representing DFA.
+     */
+    void generateRandomDFA(unsigned int stateCount, unsigned int symbolCount,
+                           std::string dirpath);
 }
 #endif //AC_DFA_GENERATOR_H

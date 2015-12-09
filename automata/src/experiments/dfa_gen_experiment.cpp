@@ -19,9 +19,9 @@ namespace experiments
         ss << "Symbols#:  " << global_settings::GEN_DFA_SYMBOLS << std::endl;
         ss << "File Path: " << global_settings::GEN_DFA_PATH;
 
-        automata::generateDFA(global_settings::GEN_DFA_STATES,
-                              global_settings::GEN_DFA_SYMBOLS,
-                              global_settings::GEN_DFA_PATH);
+        automata::generateRandomDFA(global_settings::GEN_DFA_STATES,
+                                    global_settings::GEN_DFA_SYMBOLS,
+                                    global_settings::GEN_DFA_PATH);
 
         logger::log(ss.str());
 

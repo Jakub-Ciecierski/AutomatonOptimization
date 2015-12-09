@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 #include <vector>
+#include <map>
 
 TEST(STL, vector_iterator) {
     int expectedValue;
@@ -30,4 +31,16 @@ TEST(STL, vector_iterator) {
         }
 
     }
+}
+
+TEST(STL, map){
+    std::map<int, int> mapping;
+
+    mapping[0] = 1;
+    mapping[1] = 2;
+    mapping[2] = 2;
+
+    EXPECT_EQ(1, mapping[0]);
+    EXPECT_EQ(2, mapping[1]);
+    EXPECT_EQ(2, mapping[2]);
 }

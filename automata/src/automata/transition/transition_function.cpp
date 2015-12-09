@@ -80,8 +80,16 @@ void TransitionFunction::addTransition(
                                 const unsigned int toState){
     if(fromState < 0 || fromState >= stateCount ||
        symbol < 0 || symbol >= symbolCount ||
-       toState < 0 || toState >= stateCount)
-        throw std::invalid_argument("TransitionFunction::addTransition");
+       toState < 0 || toState >= stateCount) {
+        std::stringstream ss;
+        ss << "TransitionFunction::addTransition" << std::endl;
+        ss << "State Count  = " << stateCount<< std::endl;
+        ss << "Symbol Count = " << symbolCount<< std::endl;
+        ss << "From State   = " << fromState << std::endl;
+        ss << "Symbol       = " << symbol<< std::endl;
+        ss << "to state     = " << toState<< std::endl;
+                throw std::invalid_argument(ss.str());
+        }
 
     entries[getIndex(fromState, symbol)] = toState;
 }

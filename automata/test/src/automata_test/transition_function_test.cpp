@@ -84,7 +84,6 @@ TEST(Automata, TransitionFunction_AddTransition_CorrectState){
     int symbol = 0;
     int expectedToState = 1;
 
-
     TransitionFunction tf(stateCount, symbolCount);
 
     tf.addTransition(fromState, symbol, expectedToState);

@@ -12,15 +12,6 @@ namespace experiments
 {
 
     void runOptimizerExperiment();
-
-    namespace optimizer
-    {
-        /*
-         * Summarizes the results of optimizer
-         */
-        void summarize(Optimizer &opt);
-    }
-
 }
 
 

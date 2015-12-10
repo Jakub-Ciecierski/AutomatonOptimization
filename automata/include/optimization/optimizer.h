@@ -56,7 +56,7 @@ private:
     PSO* pso;
 
     // The DFA tool used to compute R-L.
-    DFA * tool_t;
+    DFA* tool;
 
     // Generates the sample set of words Omega
     WordsGenerator* _wordsGenerator;
@@ -65,6 +65,7 @@ private:
     vector<int> _toolRelationResults;
 
     Particle* bestParticle;
+    double bestTestingSetResult;
 
     //-----------------------------------------------------------//
     //  PRIVATE METHODS
@@ -85,12 +86,11 @@ private:
 
     /*
      * Runs PSO instances.
-     * Returns true if found solution.
      *
      * @s - number of states
      * @r - number of symbols in alphabet.
      */
-    bool runPSO(int s, int r);
+    void runPSOLogic(int s, int r);
 
     /*
      * Selects the best result.
@@ -104,9 +104,18 @@ private:
      * Compares the result with current bestResult
      * The better one is saved.
      */
-    void compareResultWithBestResult(Particle* result);
+    void compareResultWithBestResult(Particle* result,
+                                     double testSetResult);
 
-    void computeTestSetResults();
+    double computeTestSetResults(Particle* particle);
+
+    void summarize(Particle* particle,
+                   double testSetResult, int psoStateCount,
+                   std::string headerInfo);
+
+    void summarizeBestPSOResult();
+
+    void summarizeTool(DFA* tool);
 
 public:
     //-----------------------------------------------------------//

@@ -5,6 +5,9 @@
 #include "optimizer.h"
 
 #include <set>
+#include <drawer.h>
+#include <sys/stat.h>
+#include <error.h>
 
 #include "relation_induced.h"
 
@@ -15,7 +18,7 @@
 Optimizer::Optimizer(DFA * tool){
     _wordsGenerator = NULL;
     bestParticle = NULL;
-    tool_t = tool;
+    this->tool = tool;
 }
 
 
@@ -29,23 +32,22 @@ Optimizer::~Optimizer() {
 //-----------------------------------------------------------//
 
 void Optimizer::start() {
+    summarizeTool(tool);
+
     // 1) Generate sample set of words
     generateWords();
 
     // 2) Compute the relation R-L and save the results
     computeRelation();
 
-    logger::log(Verbose(OPTIMIZER_V), "Starting PSO Logic");
-    int r = tool_t->getSymbolCount();
+    int r = tool->getSymbolCount();
     // 3) Run PSO instances
     for (int s = global_settings::MIN_STATES;
             s <= global_settings::MAX_STATES; s++) {
-        if (runPSO(s, r))
-            break;
+        runPSOLogic(s, r);
     }
 
-    // 4) Run test set
-    computeTestSetResults();
+    summarizeBestPSOResult();
 }
 
 const Particle* Optimizer::getBestParticle() const{
@@ -53,7 +55,7 @@ const Particle* Optimizer::getBestParticle() const{
 }
 
 const DFA* Optimizer::getTool() const{
-    return this->tool_t;
+    return this->tool;
 }
 
 //-----------------------------------------------------------//
@@ -63,7 +65,7 @@ const DFA* Optimizer::getTool() const{
 void Optimizer::generateWords() {
     logger::log(Verbose(OPTIMIZER_V), "Generating Words");
 
-    std::vector<int>* alphabet = tool_t->getAlphabet();
+    std::vector<int>* alphabet = tool->getAlphabet();
 
     _wordsGenerator = new WordsGenerator(*alphabet);
 }
@@ -76,7 +78,7 @@ void Optimizer::computeRelation() {
     // TODO(dybisz) check for errors
 
     for (auto pair = pairs->begin(); pair != pairs->end(); ++pair) {
-        bool inRelation = automata::isInRelationInduced(*tool_t,
+        bool inRelation = automata::isInRelationInduced(*tool,
                                                         (*pair).word1,
                                                         (*pair).word2);
 
@@ -85,16 +87,13 @@ void Optimizer::computeRelation() {
     }
 }
 
-
-void Optimizer::computeTestSetResults() {
-    logger::log(Verbose(OPTIMIZER_V), "Generating Test Set");
-
+double Optimizer::computeTestSetResults(Particle* particle) {
     vector<PairOfWords> *pairs = _wordsGenerator->getTestPairs();
     int count = 0;
     unsigned int pairsSize = pairs->size();
     double result = -1;
 
-    const DFA * dfaResult = bestParticle->getBestDFA();
+    const DFA * dfaResult = particle->getBestDFA();
 
     for (unsigned int i = 0; i < pairsSize; i++) {
         PairOfWords* pair = &((*pairs)[i]);
@@ -102,7 +101,7 @@ void Optimizer::computeTestSetResults() {
         const Word& w1 = pair->word1;
         const Word& w2 = pair->word2;
 
-        bool inRelationTool = automata::isInRelationInduced(*tool_t, w1, w2);
+        bool inRelationTool = automata::isInRelationInduced(*tool, w1, w2);
 
         bool inRelationTest = automata::isInRelationInduced(*dfaResult, w1, w2);
 
@@ -110,11 +109,16 @@ void Optimizer::computeTestSetResults() {
     }
 
     result = count / (double) pairsSize;
-    logger::log(Verbose(OPTIMIZER_V), "Test Set Results\n", result);
+
+    return result;
 }
 
-bool Optimizer::runPSO(int s, int r) {
-    bool returnValue = false;
+void Optimizer::runPSOLogic(int s, int r) {
+    std::stringstream ss;
+    ss << "Starting PSO" << std::endl;
+    ss << "States:  " << s << std::endl;
+    ss << "Symbols: " << r;
+    logger::log(Verbose(OPTIMIZER_V), ss.str());
 
     pso = new PSO(s, r, &_toolRelationResults, _wordsGenerator);
     pso->compute();
@@ -122,18 +126,15 @@ bool Optimizer::runPSO(int s, int r) {
     std::vector<Particle *> psoResults = pso->getBestParticles();
 
     // Find the result with minimum state usage
-    Particle *bestPSOResult = selectParticleUsingMinimumStates(psoResults);
-    compareResultWithBestResult(bestPSOResult);
+    Particle* bestPSOResult = selectParticleUsingMinimumStates(psoResults);
+    double testSetResult = computeTestSetResults(bestPSOResult);
+    compareResultWithBestResult(bestPSOResult, testSetResult);
 
-    // If it is what we are looking for, stop.
-    if (this->bestParticle->getBestFitness() >=
-                global_settings::FITNESS_TOLERANCE) {
-        returnValue = true;
-    }
+    std::string info = "PSO Result Summary - States = " + std::to_string(s);
+    summarize(bestPSOResult, testSetResult, s, info);
 
     delete pso;
 
-    return returnValue;
 }
 
 Particle *Optimizer::selectParticleUsingMinimumStates(
@@ -171,14 +172,76 @@ Particle *Optimizer::selectParticleUsingMinimumStates(
     return results[minIndex];
 }
 
-void Optimizer::compareResultWithBestResult(Particle *particle) {
+
+void Optimizer::compareResultWithBestResult(Particle *particle,
+                                            double testSetResult) {
     // Check if it is better than previous
     if (this->bestParticle == NULL) {
         this->bestParticle = new Particle(*particle);
     }
-    else if (this->bestParticle->getBestFitness() < particle->getBestFitness()){
+    else if (bestTestingSetResult < testSetResult){
         delete this->bestParticle;
         this->bestParticle = new Particle(*particle);
+
+        bestTestingSetResult = testSetResult;
     }
 }
 
+void Optimizer::summarize(Particle* particle,
+                            double testSetResult, int psoStateCount,
+                            std::string headerInfo){
+    std::string dirpath = logger::settings::FULL_DIR_STR;
+
+    const DFA* dfa = particle->getBestDFA();
+
+    // Build string for result
+    stringstream ss;
+
+    ss << headerInfo << std::endl;
+    ss << *dfa << std::endl;
+    ss << "Fitness:  " << particle->getBestFitness() << std::endl;
+    ss << "Test Set: " << testSetResult;
+
+    std::string resultDirpath = dirpath + "/" +
+            "pso_s" + std::to_string(psoStateCount);
+
+    if (mkdir(resultDirpath.c_str(), 0777) < 0)
+        if (errno !=EEXIST) ERR("mkdir");
+
+    std::string resultFileName =
+            resultDirpath + "/" +
+                    "dfa_result_pso_s" +  std::to_string(psoStateCount);
+
+    drawing::drawDFA(*dfa, resultFileName);
+    logger::log(Verbose(OPTIMIZER_V), File("result.txt"), ss.str());
+}
+
+void Optimizer::summarizeTool(DFA* tool){
+    std::string dirpath = logger::settings::FULL_DIR_STR;
+    std::string toolDirpath = dirpath + "/" + "tool";
+
+    if (mkdir(toolDirpath.c_str(), 0777) < 0)
+        if (errno !=EEXIST) ERR("mkdir");
+    stringstream ssTool;
+
+    ssTool << "Tool Summary" << std::endl;
+    ssTool << *tool;
+
+    std::string toolFileName = toolDirpath + "/" + "dfa_tool";
+    drawing::drawDFA(*tool, toolFileName);
+    logger::log(Verbose(OPTIMIZER_V), File("result.txt"), ssTool.str());
+}
+
+void Optimizer::summarizeBestPSOResult(){
+    const DFA* dfa = bestParticle->getBestDFA();
+
+    // Build string for result
+    stringstream ss;
+
+    ss << "Best PSO Result" << std::endl;
+    ss << *dfa << std::endl;
+    ss << "Fitness:  " << bestParticle->getBestFitness() << std::endl;
+    ss << "Test Set: " << bestTestingSetResult;
+
+    logger::log(Verbose(OPTIMIZER_V), File("result.txt"), ss.str());
+}

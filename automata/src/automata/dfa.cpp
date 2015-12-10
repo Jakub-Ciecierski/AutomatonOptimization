@@ -120,7 +120,7 @@ std::ostream& operator<<(std::ostream& os,
                                 const DFA & dfa){
     os << "States#: " << dfa.getStateCount() << std::endl;
     os << "Symbol#: " << dfa.getSymbolCount() << std::endl;
-    os << "Transition: " << *(dfa.getTransitionFunction()) << std::endl;
+    os << "Transition: " << *(dfa.getTransitionFunction());
 
     return os;
 }

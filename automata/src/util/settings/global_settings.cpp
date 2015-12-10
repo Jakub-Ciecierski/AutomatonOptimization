@@ -18,8 +18,8 @@ namespace global_settings {
     int GEN_DFA_SYMBOLS         = 5;
 
     /* ------ OPTIMIZER SETTINGS ----- */
-    int MIN_STATES              = 8;
-    int MAX_STATES              = 8;
+    int MIN_STATES              = 3;
+    int MAX_STATES              = 15;
 
     /* ------ PSO SETTINGS ----- */
     std::string TOOL_URL        = "test_jastrz.txt";

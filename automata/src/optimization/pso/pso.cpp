@@ -50,6 +50,7 @@ PSO::~PSO() {
 
 void PSO::compute() {
     logger::log(Verbose(PSO_V),"Particle Swarm Optimization starts");
+    _lastNumberOfClusters = 0;
 
     ConsolePlot* consolePlot = new ConsolePlot(100, 20);
     int numberOfLinesToReset = 0;
@@ -117,7 +118,7 @@ void PSO::_generateParticles(){
         << "[" << posIntervalMin << ", " << posIntervalMax << "]" << std::endl;
     ss << "Max Velocity: " << maxVelocity;
 
-    logger::log(ss.str());
+    logger::log(Verbose(PSO_V), ss.str());
 
     ParticleFactory pf;
     _particles = pf.generateUniformParticles(_swarmSize, particleDimension,
@@ -228,9 +229,11 @@ void PSO::_printInfoAndPlot(int t, ConsolePlot *cPlot,
 
     cout << endl;
     numberOfLinesToReset++;
+    totalNumberOfLinesToReset = numberOfLinesToReset;
 
+    /*
     if(t > 0) {
-        for (unsigned int i = 0; i < _particles.size(); i++) {
+        for (unsigned int i = 0; i < _particles.size(); i++) */
 /*
             Particle *bestParticle = _bestParticles[0];
 
@@ -267,9 +270,6 @@ void PSO::_printInfoAndPlot(int t, ConsolePlot *cPlot,
             std::string str = "P[" + std::to_string(i) + "] - Delta Pos Distance";
             LOG_CALC(str.c_str(), distance);
             */
-            //numberOfLinesToReset++;
-        }
-    }
-    totalNumberOfLinesToReset = numberOfLinesToReset;
-}
 
+
+}

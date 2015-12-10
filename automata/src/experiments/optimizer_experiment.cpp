@@ -12,11 +12,11 @@ namespace experiments
     void runOptimizerExperiment(){
         logger::log("Optimizer Experiment Begin");
 
-        DFA dfaTool = dfa_loader::loadDFAFromFile(global_settings::TOOL_URL);
+        DFA* dfaTool = dfa_loader::loadDFAFromFile(global_settings::TOOL_URL);
 
         logger::log("Starting Optimizer");
         // Start Optimizer
-        Optimizer opt(&dfaTool);
+        Optimizer opt(dfaTool);
         opt.start();
         logger::log("Optimizer Finished");
 
@@ -24,6 +24,8 @@ namespace experiments
         optimizer::summarize(opt);
 
         logger::log("Optimizer Experiment Finish");
+
+        delete dfaTool;
     }
 
     namespace optimizer
@@ -33,7 +35,7 @@ namespace experiments
 
             const Particle* result = opt.getBestParticle();
 
-            const DFA * dfa = result->getBestDFA();
+            const DFA* dfa = result->getBestDFA();
 
             // Build string for result
             stringstream ss;

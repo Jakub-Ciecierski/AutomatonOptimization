@@ -12,6 +12,9 @@ namespace automata
 
     /*
      * Generates Random DFA and saves it in directory given by dirpath.
+     * If dirpath does not exist, it will be created
+     * Generated DFA has no unreachable states
+     *
      * Saves the DOT, JPG, DFA format files
      * DOT - The graph representing DFA in DOT language.
      * JPG - The graph visualization in jpg format

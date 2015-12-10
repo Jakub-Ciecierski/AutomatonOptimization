@@ -29,12 +29,12 @@ namespace dfa_loader
     /*
      * Loads DFA from file
      */
-    DFA loadDFAFromFile(std::string filename);
+    DFA* loadDFAFromFile(std::string filename);
 
     /*
      * Loads DFA from a string in Unified Form
      */
-    DFA loadDFAFromString(std::string dfaURL);
+    DFA* loadDFAFromString(std::string dfaURL);
 }
 
 #endif //AC_DFA_LOADER_H

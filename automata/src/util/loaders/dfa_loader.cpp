@@ -12,7 +12,7 @@
 
 namespace dfa_loader
 {
-    DFA loadDFAFromFile(std::string dfaURL) {
+    DFA* loadDFAFromFile(std::string dfaURL) {
         ifstream file;
         file.open(dfaURL);
 
@@ -26,14 +26,14 @@ namespace dfa_loader
 
         file.close();
 
-        DFA dfa = loadDFAFromString(str);
+        DFA* dfa = loadDFAFromString(str);
 
         logger::log(Verbose(DEBUG_V),"Loaded DFA from file:\n", dfaURL);
 
         return dfa;
     }
 
-    DFA loadDFAFromString(std::string dfaUnifiedForm){
+    DFA* loadDFAFromString(std::string dfaUnifiedForm){
         std::vector<std::string> entries_str =
                 str_util::splitString(dfaUnifiedForm,",");
 
@@ -69,7 +69,7 @@ namespace dfa_loader
             currentState++;
         }
 
-        DFA dfa(tf);
+        DFA* dfa = new DFA(tf);
 
         return dfa;
     }

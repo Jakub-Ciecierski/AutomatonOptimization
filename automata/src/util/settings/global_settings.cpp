@@ -12,6 +12,14 @@ namespace global_settings {
     /* ------ EXPERIMENT SETTINGS ----- */
     int EXPERIMENT_ID           = 0;
 
+    /* ------ Words GENERATION SETTINGS ----- */
+    int GEN_WORDS_SYMBOL_COUNT      = 5;
+    int GEN_WORD_C                  = 5;
+    int GEN_WORD_TRAIN_COUNT        = 4000;
+    int GEN_WORD_TRAIN_MAX_LENGTH   = 20;
+    int GEN_WORD_TEST_COUNT         = 4000;
+    int GEN_WORD_TEST_MAX_LENGTH    = 30;
+
     /* ------ DFA GENERATION SETTINGS ----- */
     std::string GEN_DFA_PATH    = "";
     int GEN_DFA_STATES          = 8;
@@ -23,6 +31,7 @@ namespace global_settings {
 
     /* ------ PSO SETTINGS ----- */
     std::string TOOL_URL        = "test_jastrz.txt";
+    std::string WORDS_PATH      = "";
     int MAX_ITER                = 99;
     double LEARNING_FACTOR      = 0.5 + log(2.0);
     double PARTICLE_VEL_WEIGHT  = 1.0 / (2.0 * log(2.0));
@@ -104,6 +113,20 @@ namespace global_settings {
 
         ss << std::endl<< "OPTIMIZER SETTINGS" <<std::endl <<std::endl;
 
+        s = "TOOL_URL ";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << TOOL_URL << std::endl;
+
+        s = "WORDS_PATH ";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << WORDS_PATH << std::endl;
+
         s = "MIN_STATES ";
         ss << s;
         for(unsigned int i = 0;i < startColumn-s.length(); i++)
@@ -122,13 +145,6 @@ namespace global_settings {
 
         ss << std::endl<< "PSO SETTINGS" <<std::endl <<std::endl;
 
-
-        s = "TOOL_URL ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << TOOL_URL << std::endl;
 
         s = "MAX_ITER ";
         ss << s;
@@ -211,6 +227,82 @@ namespace global_settings {
 
 
         ss << std::endl << "WORDS GENERATION SETTINGS" <<std::endl << std::endl;
+
+
+        s = "GEN_WORDS_SYMBOL_COUNT";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << GEN_WORDS_SYMBOL_COUNT<< std::endl;
+
+        s = "GEN_WORD_C";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << GEN_WORD_C<< std::endl;
+
+
+        s = "GEN_WORD_TRAIN_COUNT";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << GEN_WORD_TRAIN_COUNT << std::endl;
+
+
+        s = "GEN_WORD_TRAIN_MAX_LENGTH";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << GEN_WORD_TRAIN_MAX_LENGTH<< std::endl;
+
+
+        s = "GEN_WORD_TEST_COUNT";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << GEN_WORD_TEST_COUNT<< std::endl;
+
+
+
+        s = "GEN_WORD_TEST_MAX_LENGTH";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << GEN_WORD_TEST_MAX_LENGTH<< std::endl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         s = "R_MAX ";

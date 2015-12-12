@@ -85,6 +85,11 @@ private:
     void computeRelation();
 
     /*
+     * Computes error of given particle and word set
+     */
+    double computeError(Particle* particle, const std::vector<Word*>* set);
+
+    /*
      * Runs PSO instances.
      *
      * @s - number of states
@@ -109,9 +114,12 @@ private:
 
     double computeTestSetResults(Particle* particle);
 
-    void summarize(Particle* particle,
-                   double testSetResult, int psoStateCount,
-                   std::string headerInfo);
+    void summarize(Particle* particle, int psoStateCount,
+                              double testSetResult,
+                              double trainingShortResult,
+                              double trainingLongResult,
+                              double trainingAllResult,
+                              std::string headerInfo);
 
     void summarizeBestPSOResult();
 

@@ -80,25 +80,34 @@ namespace pso
         double fitnessValue(Particle *p, WordsGenerator *wg,
                             vector<int> *toolRelationResults)
         {
-            vector<PairOfWords>* pairs = wg->getPairs();
-
             double count = 0;
+            int pairCount = 0;
 
-            unsigned int pairsSize = pairs->size();
-            for (unsigned int i = 0; i < pairsSize; i++) {
-                PairOfWords* pair = &((*pairs)[i]);
+            const DFA* dfa = p->getCurrentDFA();
 
-                const Word& w1 = pair->word1;
-                const Word& w2 = pair->word2;
+            const vector<Word*>* trainingSet = wg->getTrainingAllSet();
+            unsigned int wordCount = trainingSet->size();
 
-                const DFA * dfa = p->getCurrentDFA();
-                bool inRelation = automata::isInRelationInduced(*(dfa), w1, w2);
-
-                int result = (inRelation) ? 1 : 0;
-                count += (result == (*toolRelationResults)[i]) ? 1 : 0;
+            vector<int> stateVector(wordCount);
+            // Pre compute all words. Save results in stateVector
+            for(unsigned int i = 0; i < wordCount; i++){
+                Word* word = (*trainingSet)[i];
+                stateVector[i] = dfa->compute(*word);
             }
 
-            return count / (double) pairsSize;
+            // For all distinct pairs
+            for(unsigned int i = 0; i < wordCount-1; i++){
+                for(unsigned int j = i+1; j < wordCount; j++){
+                    bool inRelation = stateVector[i] == stateVector[j];
+                    int result = inRelation ? 1:0;
+                    count += (result ==
+                                    (*toolRelationResults)[pairCount]) ? 1 : 0;
+
+                    pairCount++;
+                }
+            }
+
+            return count / (double) pairCount;
         }
 
         void calculateGBestFitness(Particle* particle,

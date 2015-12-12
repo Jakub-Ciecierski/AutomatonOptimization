@@ -64,5 +64,5 @@ Comment:
     Cmake reload this method is presented.
 ################################################################################
 
-for 'dot'
-    sudo apt-get install graphviz
+To generate Words:
+./bin/optimizer -E 2 -C 5 -T 8000 -t 10000

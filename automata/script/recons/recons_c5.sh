@@ -1,20 +1,19 @@
 #!/bin/bash
 
-DIR_LOG="RECONS"
+DIR_LOG="RECONS_C5"
 
 #############################################################
 # Settings
 #############################################################
 
+#MAX_ITER=500
 MAX_ITER=1
+SWARM_SIZE=250
 
 START_Q=3
 END_Q=15
 
-MAX_LEN_C=3
-
 CLASS_SIZE=10
-
 ONE=1
 CLASS_MAX=$((CLASS_SIZE - ONE))
 STATE_MAX=$((PSO_STATES_LENGTH - ONE))
@@ -23,8 +22,7 @@ STATE_MAX=$((PSO_STATES_LENGTH - ONE))
 # Paths to Words
 #############################################################
 
-TRAIN_PATH=''
-TEST_PATH=''
+WORD_SET_PATH='./res/words_C5_Train8000_Test10000.txt'
 
 #############################################################
 # Paths to DFA Tools
@@ -97,7 +95,7 @@ run_optimizer(){
 		-q $2 -Q $3 \
 		-I ${MAX_ITER} \
 		--log-dir $4 \
-		-R ${MAX_LEN_C} 
+		-W ${WORD_SET_PATH}
 }
 
 for i in `seq 0 ${CLASS_MAX}`;do

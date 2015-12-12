@@ -1,14 +1,14 @@
 #!/bin/bash
 
-DIR_LOG="APPROX"
+DIR_LOG="APPROX_C5"
 
 #############################################################
 # Settings
 #############################################################
 
+#MAX_ITER=500
 MAX_ITER=1
-
-MAX_LEN_C=2
+SWARM_SIZE=250
 
 PSO_STATES_LENGTH=5
 PSO_STATES=(4 6 8 10 12)
@@ -23,8 +23,7 @@ STATE_MAX=$((PSO_STATES_LENGTH - ONE))
 # Paths to Words
 #############################################################
 
-TRAIN_PATH=''
-TEST_PATH=''
+WORD_SET_PATH='./res/words_C5_Train8000_Test10000.txt'
 
 #############################################################
 # Paths to DFA Tools
@@ -94,7 +93,8 @@ run_optimizer(){
 	./bin/optimizer -E 0 -A $1 \
 		-q $2 -Q $2 \
 		--log-dir $3 \
-		-I ${MAX_ITER} -R ${MAX_LEN_C} 
+		-W ${WORD_SET_PATH} \
+		-I ${MAX_ITER}
 }
 
 for i in `seq 0 ${CLASS_MAX}`;do

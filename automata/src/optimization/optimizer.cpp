@@ -104,20 +104,26 @@ double Optimizer::computeError(Particle* particle,
 
     unsigned int wordCount = set->size();
 
-    vector<int> stateVector(wordCount);
+    vector<int> stateVectorResult(wordCount);
+    vector<int> stateVectorTool(wordCount);
 
     // Pre compute all words. Save results in stateVector
     for(unsigned int i = 0; i < wordCount; i++){
         Word* word = (*set)[i];
-        stateVector[i] = dfaResult->compute(*word);
+        stateVectorResult[i] = dfaResult->compute(*word);
+        stateVectorTool[i] = tool->compute(*word);
     }
 
+    std::vector<int> toolRelation;
     // For all distinct pairs
     for(unsigned int i = 0; i < wordCount-1; i++){
         for(unsigned int j = i+1; j < wordCount; j++){
-            bool inRelation = stateVector[i] == stateVector[j];
-            int result = inRelation ? 1:0;
-            count += (result == (_toolRelationResults)[pairCount]) ? 1 : 0;
+            bool inRelationResult = 
+					(stateVectorResult[i] == stateVectorResult[j]);
+            bool inRelationTool = 
+					(stateVectorTool[i] == stateVectorTool[j]);
+            count += (inRelationResult == inRelationTool) ? 1:0;
+            
             pairCount++;
         }
     }
@@ -138,23 +144,24 @@ void Optimizer::runPSOLogic(int s, int r) {
     pso->compute();
 
     std::vector<Particle *> psoResults = pso->getBestParticles();
-
+logger::log("be");
     // Find the result with minimum state usage
     Particle* bestPSOResult = selectParticleUsingMinimumStates(psoResults);
 
     double testSetResult =
             computeError(bestPSOResult, _wordsGenerator->getTestSet());
+logger::log("After1");
     double trainingShortResult =
             computeError(bestPSOResult, _wordsGenerator->getTrainingShortSet());
-
+logger::log("After2");
     double trainingLongResult =
             computeError(bestPSOResult, _wordsGenerator->getTrainingLongSet());
-
+logger::log("After3");
     double trainingAllResult =
             computeError(bestPSOResult, _wordsGenerator->getTrainingAllSet());
-
+logger::log("After4");
     compareResultWithBestResult(bestPSOResult, testSetResult);
-
+	
     std::string info = "PSO Result Summary - States = " + std::to_string(s);
     summarize(bestPSOResult, s,
               testSetResult,

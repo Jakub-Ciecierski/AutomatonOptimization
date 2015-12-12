@@ -22,19 +22,36 @@ using namespace global_settings;
 
 class WordsGenerator {
 public:
-		vector<Word> _trainingSet;
-		vector<Word> _firstSubset;
-		vector<Word> _secondSubset;
-		vector<Word> _testingSet;
-		WordsGenerator(vector<int> alphabet);
-		WordsGenerator(vector<int> alphabet, int c, int trainSet);
-		// URL to file; training and testing sets are loaded
-		WordsGenerator(string url);
-		int hammingDistance(Word w1, Word w2) const;
-		void _saveWordsToFIle();
-		void _loadWordsFromFile(string url);
-		vector<PairOfWords>* getPairs();
-		vector<PairOfWords>* getTestPairs();
+    vector<Word> _trainingSet;
+    vector<Word> _firstSubset;
+    vector<Word> _secondSubset;
+    vector<Word> _testingSet;
+
+    vector<Word*> _trainingAllSet;
+    vector<Word*> _trainingShortSet;
+    vector<Word*> _trainingLongSet;
+    vector<Word*> _testSet;
+
+    WordsGenerator(vector<int> alphabet);
+    WordsGenerator(vector<int> alphabet,
+               int c, int trainSetCount,
+               int trainSetMaxLength,
+               int testSetCount,
+               int testSetMaxLength);
+    // URL to file; training and testing sets are loaded
+    WordsGenerator(string url);
+    ~WordsGenerator();
+
+    int hammingDistance(Word w1, Word w2) const;
+    void _saveWordsToFIle();
+    void _loadWordsFromFile(string url);
+    vector<PairOfWords>* getPairs();
+    vector<PairOfWords>* getTestPairs();
+
+    const vector<Word*>* getTrainingAllSet() const;
+    const vector<Word*>* getTrainingShortSet() const;
+    const vector<Word*>* getTrainingLongSet() const;
+    const vector<Word*>* getTestSet() const;
 
 		void print();
 
@@ -67,7 +84,7 @@ private:
 		void _loadHeader(ifstream & infile);
     int _generateRandomSymbolFromAlphabet();
 		void _printInfo();
-		vector<Word> _parseWords(ifstream & infile);
+		vector<Word*> _parseWords(ifstream & infile);
 
     vector<PairOfWords> _combineIntoPairs(vector<Word> words);
     void _generateWords();

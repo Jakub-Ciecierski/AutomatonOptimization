@@ -8,13 +8,17 @@ WordsGenerator::WordsGenerator(vector<int> alphabet) {}
 WordsGenerator::WordsGenerator(string url) {
   _loadWordsFromFile(url);
 }
-WordsGenerator::WordsGenerator(vector<int> alphabet, int c, int trainSet) : _alphabet(alphabet),
-                                                       _C(c),
-                                                       _wordsInTrainingSet(trainSet),
-                                                       _maxWordLengthTraining(c + 10),
-                                                       _wordsInTestingSet(3001),
-                                                       _maxWordLengthTesting(c + 20) {
-                                                          //TODO hwdp
+WordsGenerator::WordsGenerator(vector<int> alphabet,
+                               int c, int trainSetCount,
+                               int trainSetMaxLength,
+                               int testSetCount,
+                               int testSetMaxLength) :
+        _alphabet(alphabet),
+        _C(c),
+        _wordsInTrainingSet(trainSetCount),
+        _maxWordLengthTraining(c + trainSetMaxLength),
+        _wordsInTestingSet(testSetCount),
+        _maxWordLengthTesting(c + testSetMaxLength) {
     try {
         utils::seed();
         _calculateNumberOfWords();
@@ -26,6 +30,30 @@ WordsGenerator::WordsGenerator(vector<int> alphabet, int c, int trainSet) : _alp
         catch (std::exception &e) {
         LOG_ERROR(e.what())
     }
+}
+
+WordsGenerator::~WordsGenerator(){
+    for(unsigned int i = 0; i < _trainingAllSet.size(); i++){
+        delete _trainingAllSet[i];
+    }
+    for(unsigned int i = 0; i < _testSet.size(); i++){
+        delete _testSet[i];
+    }
+}
+
+const vector<Word*>* WordsGenerator::getTrainingAllSet() const{
+    return &_trainingAllSet;
+}
+const vector<Word*>* WordsGenerator::getTrainingShortSet() const{
+    return &_trainingShortSet;
+}
+
+const vector<Word*>* WordsGenerator::getTrainingLongSet() const{
+    return &_trainingLongSet;
+}
+
+const vector<Word*>* WordsGenerator::getTestSet() const{
+    return &_testSet;
 }
 
 void WordsGenerator::_loadWordsFromFile(string url) {
@@ -47,13 +75,22 @@ void WordsGenerator::_loadWordsFromFile(string url) {
     _loadHeader(infile);
 
     // FIRST subset
-    _firstSubset = _parseWords(infile);
+    _trainingShortSet = _parseWords(infile);
 
     // SECOND subset
-    _secondSubset = _parseWords(infile);
+    _trainingLongSet = _parseWords(infile);
 
     // TESTING set
-    _testingSet = _parseWords(infile);
+    _testSet = _parseWords(infile);
+
+    // Append Training All with both subsets
+    for(unsigned int i = 0; i < _trainingShortSet.size();i++){
+        _trainingAllSet.push_back(_trainingShortSet[i]);
+    }
+    for(unsigned int i = 0; i < _trainingLongSet.size();i++){
+        _trainingAllSet.push_back(_trainingLongSet[i]);
+    }
+
 }
 void WordsGenerator::_loadHeader(ifstream & infile) {
   string line;
@@ -73,9 +110,9 @@ void WordsGenerator::_createAlphabet(int n) {
     cout << "Alphabet loaded: " << utils::vectorToString(_alphabet) << endl;
 }
 
-vector<Word> WordsGenerator::_parseWords(ifstream & infile) {
+vector<Word*> WordsGenerator::_parseWords(ifstream & infile) {
   string line;
-  vector<Word> words;
+  vector<Word*> words;
 
 
   while (infile)
@@ -86,15 +123,15 @@ vector<Word> WordsGenerator::_parseWords(ifstream & infile) {
 
     istringstream ss( s );
     vector <string> record;
-    Word _word;
+    Word* _word = new Word();
     while (ss)
     {
       string s;
       if (!getline( ss, s, ',' )) break;
-      _word.appendSymbol(stoi(s));
+      _word->appendSymbol(stoi(s));
     }
 
-    if(_word.length() !=0) words.push_back(_word);
+    if(_word->length() !=0) words.push_back(_word);
   }
 
   // for(int i = 0 ; i < words.size(); i++) {
@@ -109,7 +146,13 @@ vector<Word> WordsGenerator::_parseWords(ifstream & infile) {
 
 void WordsGenerator::_saveWordsToFIle() {
   fstream file;
-  file.open("./res/generated_words.txt",fstream::out);
+    std::stringstream ss;
+    ss << "./res/words_C" << this->_C
+        << "_Train" << this->_wordsInTrainingSet
+        << "_Test" << this->_wordsInTestingSet
+        << ".txt";
+
+  file.open(ss.str() ,fstream::out);
 
   //INFO
   file << "#TRAINING SET CONST: " << _firstSubset.size() << endl;

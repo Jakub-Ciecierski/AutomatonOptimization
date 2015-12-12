@@ -93,6 +93,32 @@ namespace console {
 
         /* ------ DFA GENERATION SETTINGS ----- */
 
+        flags.push_back(Flag("R", "gen-w-sym-count",
+                             "Words Generation: Alphabet Size",
+                             INT, &global_settings::GEN_WORDS_SYMBOL_COUNT));
+
+        flags.push_back(Flag("C", "gen-w-c",
+                             "Words Generation: The constant C",
+                             INT, &global_settings::GEN_WORD_C));
+
+        flags.push_back(Flag("T", "gen-w-train-size",
+                             "Words Generation: Total train set count",
+                             INT, &global_settings::GEN_WORD_TRAIN_COUNT));
+
+        flags.push_back(Flag("Y", "gen-w-train-max-length",
+                             "Words Generation: Train Set max word length",
+                             INT, &global_settings::GEN_WORD_TRAIN_MAX_LENGTH));
+
+        flags.push_back(Flag("t", "gen-w-test-size",
+                             "Words Generation: Total test set count",
+                             INT, &global_settings::GEN_WORD_TEST_COUNT));
+
+        flags.push_back(Flag("y", "gen-w-test-max-length",
+                             "Words Generation: Test Set max word length",
+                             INT, &global_settings::GEN_WORD_TEST_MAX_LENGTH));
+
+        /* ------ DFA GENERATION SETTINGS ----- */
+
         flags.push_back(Flag("P", "gen-dfa-path",
                              "DFA Generation: Path to save generated DFA",
                              STRING, &global_settings::GEN_DFA_PATH));
@@ -110,6 +136,10 @@ namespace console {
         flags.push_back(Flag("A", "tool-url",
                              "Path to file with DFA Tool",
                              STRING, &global_settings::TOOL_URL));
+
+        flags.push_back(Flag("W", "word-url",
+                             "Path to file with Words",
+                             STRING, &global_settings::WORDS_PATH));
 
         flags.push_back(Flag("q", "state-min",
                              "Starting number of states in Optimizer",
@@ -158,14 +188,14 @@ namespace console {
 
         /* ------ THREADING ----- */
 
-        flags.push_back(Flag("T", "d-thread-count",
+        flags.push_back(Flag("g", "d-thread-count",
                              "Default Thread Count - used only when system"
                                      " can't determine optimal number of "
                                      "threads",
                              INT,
                              &global_settings::DEFAULT_THREAD_COUNT));
 
-        flags.push_back(Flag("Y", "t-thread-count",
+        flags.push_back(Flag("G", "t-thread-count",
                              "True Thread Count - How many threads should be "
                                      "activated. If value is below 1 then "
                                      "Optimal number of threads will be chosen",
@@ -173,7 +203,7 @@ namespace console {
                              &global_settings::TRUE_THREAD_COUNT));
 
         /* ------ WORDS GENERATION ----- */
-
+/*
         flags.push_back(Flag("R", "r-max",
                              "Maximum number of words",
                              INT,
@@ -223,10 +253,10 @@ namespace console {
                              "Maximum Length of Large Words",
                              INT,
                              &global_settings::MAX_LENG_L));
-
+*/
         /* ------ CLUSTERING ----- */
 
-        flags.push_back(Flag("t", "km-tol",
+        flags.push_back(Flag("m", "km-tol",
                              "K-means convergance tolerance",
                              DOUBLE,
                              &global_settings::KM_TOL));

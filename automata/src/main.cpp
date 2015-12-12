@@ -7,6 +7,7 @@
 #include <iostream>
 #include <optimizer.h>
 #include <dfa_loader.h>
+#include <words_gen_experiment.h>
 #include "drawer.h"
 #include "flag_reader.h"
 #include "log.h"
@@ -43,6 +44,9 @@ int main(int argc, char *argv[]) {
         case 1:
         experiments::runDFAGenerationExperiment();
             break;
+        case 2:
+        experiments::runWordsGenerationExperiment();
+        break;
         default:
         std::string what = "Experiment ID: " +
                             std::to_string(global_settings::EXPERIMENT_ID) +

@@ -10,6 +10,7 @@
 #include <error.h>
 
 #include "relation_induced.h"
+#include "automata_algs.h"
 
 //-----------------------------------------------------------//
 //  CONSTRUCTORS
@@ -67,48 +68,61 @@ void Optimizer::generateWords() {
 
     std::vector<int>* alphabet = tool->getAlphabet();
 
-    _wordsGenerator = new WordsGenerator(*alphabet);
+    _wordsGenerator = new WordsGenerator(global_settings::WORDS_PATH);
 }
 
 void Optimizer::computeRelation() {
     logger::log(Verbose(OPTIMIZER_V), "Computing Relation");
 
-    vector<PairOfWords> *pairs = _wordsGenerator->getPairs();
+    const vector<Word*>* trainingSet = _wordsGenerator->getTrainingAllSet();
+    unsigned int wordCount = trainingSet->size();
 
-    // TODO(dybisz) check for errors
+    vector<int> stateVector(wordCount);
 
-    for (auto pair = pairs->begin(); pair != pairs->end(); ++pair) {
-        bool inRelation = automata::isInRelationInduced(*tool,
-                                                        (*pair).word1,
-                                                        (*pair).word2);
+    // Pre compute all words. Save results in stateVector
+    for(unsigned int i = 0; i < wordCount; i++){
+        Word* word = (*trainingSet)[i];
+        stateVector[i] = tool->compute(*word);
+    }
 
-        int result = (inRelation) ? 1 : 0;
-        _toolRelationResults.push_back(result);
+    // For all distinct pairs
+    for(unsigned int i = 0; i < wordCount-1; i++){
+        for(unsigned int j = i+1; j < wordCount; j++){
+            bool inRelation = stateVector[i] == stateVector[j];
+            int result = inRelation ? 1:0;
+            _toolRelationResults.push_back(result);
+        }
     }
 }
 
-double Optimizer::computeTestSetResults(Particle* particle) {
-    vector<PairOfWords> *pairs = _wordsGenerator->getTestPairs();
+double Optimizer::computeError(Particle* particle,
+                                        const std::vector<Word*>* set) {
+    const DFA* dfaResult = particle->getBestDFA();
+
     int count = 0;
-    unsigned int pairsSize = pairs->size();
-    double result = -1;
+    int pairCount = 0;
 
-    const DFA * dfaResult = particle->getBestDFA();
+    unsigned int wordCount = set->size();
 
-    for (unsigned int i = 0; i < pairsSize; i++) {
-        PairOfWords* pair = &((*pairs)[i]);
+    vector<int> stateVector(wordCount);
 
-        const Word& w1 = pair->word1;
-        const Word& w2 = pair->word2;
-
-        bool inRelationTool = automata::isInRelationInduced(*tool, w1, w2);
-
-        bool inRelationTest = automata::isInRelationInduced(*dfaResult, w1, w2);
-
-        count += (inRelationTest && inRelationTool) ? 1 : 0;
+    // Pre compute all words. Save results in stateVector
+    for(unsigned int i = 0; i < wordCount; i++){
+        Word* word = (*set)[i];
+        stateVector[i] = dfaResult->compute(*word);
     }
 
-    result = count / (double) pairsSize;
+    // For all distinct pairs
+    for(unsigned int i = 0; i < wordCount-1; i++){
+        for(unsigned int j = i+1; j < wordCount; j++){
+            bool inRelation = stateVector[i] == stateVector[j];
+            int result = inRelation ? 1:0;
+            count += (result == (_toolRelationResults)[pairCount]) ? 1 : 0;
+            pairCount++;
+        }
+    }
+
+    double result = count / (double) pairCount;
 
     return result;
 }
@@ -127,35 +141,49 @@ void Optimizer::runPSOLogic(int s, int r) {
 
     // Find the result with minimum state usage
     Particle* bestPSOResult = selectParticleUsingMinimumStates(psoResults);
-    double testSetResult = computeTestSetResults(bestPSOResult);
+
+    double testSetResult =
+            computeError(bestPSOResult, _wordsGenerator->getTestSet());
+    double trainingShortResult =
+            computeError(bestPSOResult, _wordsGenerator->getTrainingShortSet());
+
+    double trainingLongResult =
+            computeError(bestPSOResult, _wordsGenerator->getTrainingLongSet());
+
+    double trainingAllResult =
+            computeError(bestPSOResult, _wordsGenerator->getTrainingAllSet());
+
     compareResultWithBestResult(bestPSOResult, testSetResult);
 
     std::string info = "PSO Result Summary - States = " + std::to_string(s);
-    summarize(bestPSOResult, testSetResult, s, info);
+    summarize(bestPSOResult, s,
+              testSetResult,
+              trainingShortResult,
+              trainingLongResult,
+              trainingAllResult,info);
 
     delete pso;
-
 }
 
 Particle *Optimizer::selectParticleUsingMinimumStates(
         const std::vector<Particle *>& results) {
+    const vector<Word*>* wordSet = _wordsGenerator->getTrainingAllSet();
     std::vector<std::set<int>> stateCountVec;
 
-    vector<PairOfWords> *pairs = _wordsGenerator->getPairs();
     // For each result check how many states it uses.
     for (unsigned int i = 0; i < results.size(); i++) {
-        Particle *result = results[i];
+        Particle* result = results[i];
+        const DFA* dfa = result->getBestDFA();
+
         std::set<int> s;
 
-        const DFA * dfa = result->getBestDFA();
-
-        for (auto pair = pairs->begin(); pair != pairs->end(); ++pair) {
-            int state;
-
-            state = dfa->compute((*pair).word1);
-            s.insert(state);
-            state = dfa->compute((*pair).word2);
-            s.insert(state);
+        unsigned int wordCount = wordSet->size();
+        vector<int> stateVector(wordCount);
+        // Pre compute all words. Save results in stateVector
+        for(unsigned int i = 0; i < wordCount; i++){
+            Word* word = (*wordSet)[i];
+            stateVector[i] = dfa ->compute(*word);
+            s.insert(dfa->compute(*word));
         }
         stateCountVec.push_back(s);
     }
@@ -178,6 +206,7 @@ void Optimizer::compareResultWithBestResult(Particle *particle,
     // Check if it is better than previous
     if (this->bestParticle == NULL) {
         this->bestParticle = new Particle(*particle);
+        bestTestingSetResult = testSetResult;
     }
     else if (bestTestingSetResult < testSetResult){
         delete this->bestParticle;
@@ -187,20 +216,29 @@ void Optimizer::compareResultWithBestResult(Particle *particle,
     }
 }
 
-void Optimizer::summarize(Particle* particle,
-                            double testSetResult, int psoStateCount,
+void Optimizer::summarize(Particle* particle, int psoStateCount,
+                            double testSetResult,
+                            double trainingShortResult,
+                            double trainingLongResult,
+                            double trainingAllResult,
                             std::string headerInfo){
     std::string dirpath = logger::settings::FULL_DIR_STR;
 
     const DFA* dfa = particle->getBestDFA();
+    DFA* reducedDFA = new DFA(*dfa);
+    double unreachableCount = automata::removeUnreachableStates(reducedDFA);
 
     // Build string for result
     stringstream ss;
 
     ss << headerInfo << std::endl;
     ss << *dfa << std::endl;
-    ss << "Fitness:  " << particle->getBestFitness() << std::endl;
-    ss << "Test Set: " << testSetResult;
+    ss << "Fitness:             " << particle->getBestFitness() << std::endl;
+    ss << "Test Set:            " << testSetResult  << std::endl;
+    ss << "Train Short Set:     " << trainingShortResult  << std::endl;
+    ss << "Train Long Set:      " << trainingLongResult  << std::endl;
+    ss << "Train All            " << trainingAllResult << std::endl;
+    ss << "Unreachable Count    " << unreachableCount;
 
     std::string resultDirpath = dirpath + "/" +
             "pso_s" + std::to_string(psoStateCount);
@@ -212,8 +250,10 @@ void Optimizer::summarize(Particle* particle,
             resultDirpath + "/" +
                     "dfa_result_pso_s" +  std::to_string(psoStateCount);
 
-    drawing::drawDFA(*dfa, resultFileName);
+    drawing::drawDFA(*reducedDFA, resultFileName);
     logger::log(Verbose(OPTIMIZER_V), File("result.txt"), ss.str());
+
+    delete reducedDFA;
 }
 
 void Optimizer::summarizeTool(DFA* tool){

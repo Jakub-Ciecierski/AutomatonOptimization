@@ -25,3 +25,5 @@ bin
 CMakeLists.txt
 
 .idea
+
+core

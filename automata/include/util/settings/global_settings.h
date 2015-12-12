@@ -21,6 +21,14 @@ namespace global_settings {
     // 1: DFA Generation
     extern int EXPERIMENT_ID;
 
+    /* ------ Words GENERATION SETTINGS ----- */
+    extern int GEN_WORDS_SYMBOL_COUNT;
+    extern int GEN_WORD_C;
+    extern int GEN_WORD_TRAIN_COUNT;
+    extern int GEN_WORD_TRAIN_MAX_LENGTH;
+    extern int GEN_WORD_TEST_COUNT;
+    extern int GEN_WORD_TEST_MAX_LENGTH;
+
     /* ------ DFA GENERATION SETTINGS ----- */
     extern std::string GEN_DFA_PATH;
     extern int GEN_DFA_STATES;
@@ -35,6 +43,7 @@ namespace global_settings {
     /* ------ PSO SETTINGS ----- */
     // URL to file with tool automaton
     extern std::string TOOL_URL;
+    extern std::string WORDS_PATH;
     // Maximum iterations of PSO algorithm
     extern int MAX_ITER;
     // TODO comment

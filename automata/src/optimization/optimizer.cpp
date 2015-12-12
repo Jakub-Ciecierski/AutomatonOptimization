@@ -228,7 +228,7 @@ void Optimizer::summarizeTool(DFA* tool){
     ssTool << *tool;
 
     std::string toolFileName = toolDirpath + "/" + "dfa_tool";
-    drawing::drawDFA(*tool, toolFileName);
+    //drawing::drawDFA(*tool, toolFileName);
     logger::log(Verbose(OPTIMIZER_V), File("result.txt"), ssTool.str());
 }
 

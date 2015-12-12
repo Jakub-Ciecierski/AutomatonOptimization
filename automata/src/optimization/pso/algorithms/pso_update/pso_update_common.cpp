@@ -16,8 +16,8 @@ namespace pso
             for(unsigned long i = 0; i < size; i ++){
                 Particle* p = (*particles)[i];
 
-                //naive::update_naive(p);
-                sphere::update_sphere(p);
+                naive::update_naive(p);
+                //sphere::update_sphere(p);
 
                 boundPositionWithInterval(p);
                 p->updateCurrentDFA();

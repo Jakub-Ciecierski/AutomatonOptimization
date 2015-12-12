@@ -144,22 +144,22 @@ void Optimizer::runPSOLogic(int s, int r) {
     pso->compute();
 
     std::vector<Particle *> psoResults = pso->getBestParticles();
-logger::log("be");
+
     // Find the result with minimum state usage
     Particle* bestPSOResult = selectParticleUsingMinimumStates(psoResults);
 
     double testSetResult =
             computeError(bestPSOResult, _wordsGenerator->getTestSet());
-logger::log("After1");
+
     double trainingShortResult =
             computeError(bestPSOResult, _wordsGenerator->getTrainingShortSet());
-logger::log("After2");
+
     double trainingLongResult =
             computeError(bestPSOResult, _wordsGenerator->getTrainingLongSet());
-logger::log("After3");
+
     double trainingAllResult =
             computeError(bestPSOResult, _wordsGenerator->getTrainingAllSet());
-logger::log("After4");
+
     compareResultWithBestResult(bestPSOResult, testSetResult);
 	
     std::string info = "PSO Result Summary - States = " + std::to_string(s);

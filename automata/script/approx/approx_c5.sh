@@ -8,7 +8,8 @@ DIR_LOG="APPROX_C5"
 
 #MAX_ITER=500
 MAX_ITER=1
-SWARM_SIZE=250
+#SWARM_SIZE=200
+SWARM_SIZE=2
 
 PSO_STATES_LENGTH=5
 PSO_STATES=(4 6 8 10 12)
@@ -94,15 +95,16 @@ run_optimizer(){
 		-q $2 -Q $2 \
 		--log-dir $3 \
 		-W ${WORD_SET_PATH} \
+		-S ${SWARM_SIZE} \
 		-I ${MAX_ITER}
 }
 
 for i in `seq 0 ${CLASS_MAX}`;do
 	for s in `seq 0 ${STATE_MAX}`;do
-		run_optimizer ${CLASS_S20_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_c20_s${s}_$i"
-		run_optimizer ${CLASS_S30_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_c30_s${s}_$i"
-		run_optimizer ${CLASS_S50_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_c50_s${s}_$i"
-		run_optimizer ${CLASS_S80_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_c80_s${s}_$i"
+		run_optimizer ${CLASS_S20_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl20_s${PSO_STATES[$s]}_$i"
+		run_optimizer ${CLASS_S30_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl30_s${PSO_STATES[$s]}_$i"
+		run_optimizer ${CLASS_S50_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl50_s${PSO_STATES[$s]}_$i"
+		run_optimizer ${CLASS_S80_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl80_s${PSO_STATES[$s]}_$i"
 	done
 done
 

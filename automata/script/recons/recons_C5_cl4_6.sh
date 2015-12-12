@@ -8,7 +8,8 @@ DIR_LOG="RECONS_C5"
 
 #MAX_ITER=500
 MAX_ITER=1
-SWARM_SIZE=250
+#SWARM_SIZE=200
+SWARM_SIZE=2
 
 START_Q=3
 END_Q=15
@@ -95,12 +96,11 @@ run_optimizer(){
 		-q $2 -Q $3 \
 		-I ${MAX_ITER} \
 		--log-dir $4 \
+		-S ${SWARM_SIZE} \
 		-W ${WORD_SET_PATH}
 }
 
 for i in `seq 0 ${CLASS_MAX}`;do
-	run_optimizer ${CLASS_S4_PATH[$i]} ${START_Q} ${END_Q} ${D} "${DIR_LOG}_c4_$i"
-	run_optimizer ${CLASS_S6_PATH[$i]} ${START_Q} ${END_Q} ${D} "${DIR_LOG}_c6_$i"
-	run_optimizer ${CLASS_S10_PATH[$i]} ${START_Q} ${END_Q} ${D} "${DIR_LOG}_c10_$i"
-	run_optimizer ${CLASS_S15_PATH[$i]} ${START_Q} ${END_Q} ${D} "${DIR_LOG}_c15_$i"
+	run_optimizer ${CLASS_S4_PATH[$i]} ${START_Q} ${END_Q} ${D} "${DIR_LOG}_cl4_$i"
+	run_optimizer ${CLASS_S6_PATH[$i]} ${START_Q} ${END_Q} ${D} "${DIR_LOG}_cl6_$i"
 done

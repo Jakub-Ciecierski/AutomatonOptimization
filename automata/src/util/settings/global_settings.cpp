@@ -41,6 +41,7 @@ namespace global_settings {
     double MAX_VELOCITY         = 0.3f;
     double POPULATION_FACTOR    = 1.0f;
     double FITNESS_TOLERANCE    = 1.0f;
+    int SWARM_SIZE              = 100;
 
     /* ------ THREAD SETTINGS ----- */
     int DEFAULT_THREAD_COUNT    = 4;
@@ -209,6 +210,13 @@ namespace global_settings {
         ss << " ";
         ss << FITNESS_TOLERANCE << std::endl;
 
+        s = "SWARM_SIZE";
+        ss << s;
+        for(unsigned int i = 0;i < startColumn-s.length(); i++)
+            ss << PATH_TO_VALUE;
+        ss << " ";
+        ss << SWARM_SIZE << std::endl;
+
         ss << std::endl << "THREADS SETTINGS" <<std::endl << std::endl;
 
         s = "DEFAULT_THREAD_COUNT ";
@@ -275,28 +283,6 @@ namespace global_settings {
             ss << PATH_TO_VALUE;
         ss << " ";
         ss << GEN_WORD_TEST_MAX_LENGTH<< std::endl;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -186,6 +186,11 @@ namespace console {
                              DOUBLE,
                              &global_settings::FITNESS_TOLERANCE));
 
+        flags.push_back(Flag("S", "swarm-size",
+                             "Swarm size",
+                             INT,
+                             &global_settings::SWARM_SIZE));
+
         /* ------ THREADING ----- */
 
         flags.push_back(Flag("g", "d-thread-count",

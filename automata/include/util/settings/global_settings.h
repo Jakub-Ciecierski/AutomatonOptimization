@@ -81,6 +81,7 @@ namespace global_settings {
     // Look for fitness value no bigger than FITNESS_TOLERANCE
     // Possible values: [0, 1], where 1 is the most optimal DFA.
     extern double FITNESS_TOLERANCE;
+    extern int SWARM_SIZE;
 
     /* ------ THREAD SETTINGS ----- */
 

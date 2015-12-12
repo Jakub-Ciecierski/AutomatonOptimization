@@ -91,10 +91,9 @@ std::vector<Particle *> PSO::getBestParticles() {
 //-----------------------------------------------------------//
 
 void PSO::_loadSwarmSize() {
-    _swarmSize = (unsigned int)(_numberOfStates * _numberOfSymbols *
-                          global_settings::POPULATION_FACTOR);
-    if (_swarmSize < 1) {
-        throw invalid_argument("swarmSize < 1");
+    _swarmSize = (unsigned int)(global_settings::SWARM_SIZE);
+    if (_swarmSize <= 1) {
+        throw invalid_argument("swarmSize <= 1");
     }
 }
 

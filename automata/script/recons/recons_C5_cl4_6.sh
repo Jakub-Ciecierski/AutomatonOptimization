@@ -6,10 +6,8 @@ DIR_LOG="RECONS_C5"
 # Settings
 #############################################################
 
-#MAX_ITER=500
-MAX_ITER=1
-#SWARM_SIZE=200
-SWARM_SIZE=2
+MAX_ITER=500
+SWARM_SIZE=200
 
 START_Q=3
 END_Q=15

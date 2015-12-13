@@ -1,13 +1,13 @@
 #!/bin/bash
 
-MAIN_DIR_LOG="./logs/RECONS_C5"
-DIR_LOG="RECONS_C5"
+MAIN_DIR_LOG="./logs/RECONS_C4"
+DIR_LOG="RECONS_C4"
 
 #############################################################
 # Settings
 #############################################################
 
-MAX_ITER=300
+MAX_ITER=500
 SWARM_SIZE=100
 
 START_Q=3
@@ -22,7 +22,7 @@ STATE_MAX=$((PSO_STATES_LENGTH - ONE))
 # Paths to Words
 #############################################################
 
-WORD_SET_PATH='./res/words_C5_Train8000_Test10000.txt'
+WORD_SET_PATH='./res/words_C4_Train2000_Test5000.txt'
 
 #############################################################
 # Paths to DFA Tools

@@ -1,13 +1,14 @@
 #!/bin/bash
 
+MAIN_DIR_LOG="./logs/RECONS_C5"
 DIR_LOG="RECONS_C5"
 
 #############################################################
 # Settings
 #############################################################
 
-MAX_ITER=500
-SWARM_SIZE=200
+MAX_ITER=300
+SWARM_SIZE=100
 
 START_Q=3
 END_Q=15
@@ -94,6 +95,7 @@ run_optimizer(){
 		-q $2 -Q $3 \
 		-I ${MAX_ITER} \
 		--log-dir $4 \
+		--log-main-dir ${MAIN_DIR_LOG} \
 		-S ${SWARM_SIZE} \
 		-W ${WORD_SET_PATH}
 }

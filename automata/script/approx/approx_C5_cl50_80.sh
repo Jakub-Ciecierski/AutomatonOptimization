@@ -1,14 +1,14 @@
 #!/bin/bash
 
-MAIN_DIR_LOG="./logs/APPROX_C4"
+MAIN_DIR_LOG="./logs/APPROX_C5"
 
-DIR_LOG="APPROX_C4"
+DIR_LOG="APPROX_C5"
 
 #############################################################
 # Settings
 #############################################################
 
-MAX_ITER=500
+MAX_ITER=300
 SWARM_SIZE=100
 
 PSO_STATES_LENGTH=5
@@ -24,7 +24,7 @@ STATE_MAX=$((PSO_STATES_LENGTH - ONE))
 # Paths to Words
 #############################################################
 
-WORD_SET_PATH='./res/words_C4_Train2000_Test5000.txt'
+WORD_SET_PATH='./res/words_C5_Train8000_Test10000.txt'
 
 #############################################################
 # Paths to DFA Tools
@@ -102,8 +102,6 @@ run_optimizer(){
 
 for i in `seq 0 ${CLASS_MAX}`;do
 	for s in `seq 0 ${STATE_MAX}`;do
-		run_optimizer ${CLASS_S20_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl20_s${PSO_STATES[$s]}_$i"
-		run_optimizer ${CLASS_S30_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl30_s${PSO_STATES[$s]}_$i"
 		run_optimizer ${CLASS_S50_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl50_s${PSO_STATES[$s]}_$i"
 		run_optimizer ${CLASS_S80_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl80_s${PSO_STATES[$s]}_$i"
 	done

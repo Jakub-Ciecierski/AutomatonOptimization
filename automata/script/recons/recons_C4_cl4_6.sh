@@ -1,13 +1,15 @@
 #!/bin/bash
 
+MAIN_DIR_LOG="./logs/RECONS_C4"
+
 DIR_LOG="RECONS_C4"
 
 #############################################################
 # Settings
 #############################################################
 
-MAX_ITER=1000
-SWARM_SIZE=400
+MAX_ITER=500
+SWARM_SIZE=100
 
 START_Q=3
 END_Q=15
@@ -94,6 +96,7 @@ run_optimizer(){
 		-q $2 -Q $3 \
 		-I ${MAX_ITER} \
 		--log-dir $4 \
+		--log-main-dir ${MAIN_DIR_LOG} \
 		-S ${SWARM_SIZE} \
 		-W ${WORD_SET_PATH}
 }
@@ -101,6 +104,4 @@ run_optimizer(){
 for i in `seq 0 ${CLASS_MAX}`;do
 	run_optimizer ${CLASS_S4_PATH[$i]} ${START_Q} ${END_Q} ${D} "${DIR_LOG}_cl4_$i"
 	run_optimizer ${CLASS_S6_PATH[$i]} ${START_Q} ${END_Q} ${D} "${DIR_LOG}_cl6_$i"
-	run_optimizer ${CLASS_S10_PATH[$i]} ${START_Q} ${END_Q} ${D} "${DIR_LOG}_cl10_$i"
-	run_optimizer ${CLASS_S15_PATH[$i]} ${START_Q} ${END_Q} ${D} "${DIR_LOG}_cl15_$i"
 done

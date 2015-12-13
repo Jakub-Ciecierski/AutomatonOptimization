@@ -1,13 +1,15 @@
 #!/bin/bash
 
+MAIN_DIR_LOG="./logs/APPROX_C5"
+
 DIR_LOG="APPROX_C5"
 
 #############################################################
 # Settings
 #############################################################
 
-MAX_ITER=500
-SWARM_SIZE=200
+MAX_ITER=300
+SWARM_SIZE=100
 
 PSO_STATES_LENGTH=5
 PSO_STATES=(4 6 8 10 12)
@@ -92,6 +94,7 @@ run_optimizer(){
 	./bin/optimizer -E 0 -A $1 \
 		-q $2 -Q $2 \
 		--log-dir $3 \
+		--log-main-dir ${MAIN_DIR_LOG} \
 		-W ${WORD_SET_PATH} \
 		-S ${SWARM_SIZE} \
 		-I ${MAX_ITER}
@@ -101,8 +104,6 @@ for i in `seq 0 ${CLASS_MAX}`;do
 	for s in `seq 0 ${STATE_MAX}`;do
 		run_optimizer ${CLASS_S20_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl20_s${PSO_STATES[$s]}_$i"
 		run_optimizer ${CLASS_S30_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl30_s${PSO_STATES[$s]}_$i"
-		run_optimizer ${CLASS_S50_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl50_s${PSO_STATES[$s]}_$i"
-		run_optimizer ${CLASS_S80_PATH[$i]} ${PSO_STATES[$s]} "${DIR_LOG}_cl80_s${PSO_STATES[$s]}_$i"
 	done
 done
 

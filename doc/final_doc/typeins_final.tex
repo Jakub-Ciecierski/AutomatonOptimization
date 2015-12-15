@@ -177,7 +177,7 @@
     \newcommand{\beginGroupPlot}[0]{
     \begin{groupplot}[
         group style={group size= 2 by 2,  vertical sep=50pt},
-        %        height = 4.5gcm, 
+        height = 5.5cm, 
         ybar=4*\pgflinewidth, 
         ymin=0, 
         ymax=1,
@@ -220,7 +220,7 @@
         legend cell align=right, 
         legend columns=-1
         legend style={
-            at={(-0.76, -0.7)}, 
+            at={(0.0, 0.0)}, 
             anchor=south east,
             column sep=15ex
         }
@@ -794,75 +794,108 @@ Through out the computations, we might find several equally best automatons. In 
 
 
 
-\section{Modeling}
+\section{Modeling}\label{sec:modeling}
 
-\begin{figure}[h]
-\label{fig:class_automata}
-\caption{Class diagram of Automata module}
+In this section the project implementation is discussed. 
+
+The figure~\ref{fig:class_automata} presents the Automata module. The \textit{DFA} class represents a Deterministic Finite Automaton which includes a Transition Table. DFA contains a method which checks whether a input transition table is deterministic. The Algorithms module includes a DFA Reduction functionality. Firstly \textit{getReachabilityFlags} returns a vector informing whether a corresponding state is reachable or not. The \textit{reduceDFA} removes all states that are not flagged in the input vector. Finally \textit{removeUnreachableStates} encapsulates both previous functions to reduce the automaton by removing all unreachable states.
+
+In figure~\ref{fig:class_opt_main} the Optimization module is shown. \textit{Optimizer} is responsible for starting \textit{PSO}, computing relation and errors. \textit{ParticleDecoder} is used to decode a particle into a transition function. Finally the \textit{ParticleFactory} is responsible for generating particles for \textit{PSO}.
+
+Optimization algorithms are presented in figure~\ref{fig:class_opt_alg}. The classes: \textit{PSOFitness}, \textit{PSONeighbourhood} and \textit{PSOUpdate} are all responsible for calculating their respective roles in PSO computations.
+
+A state diagram of finding the optimal automaton is shown in figure~\ref{fig:state_opt}. Moreover, the details of PSO process is presented in figure~\ref{fig:state_pso}.
+
+
+\begin{figure}[H]
+    \caption{Class diagram of Automata module}
+    \label{fig:class_automata}
+    
     \includegraphics[width=0.85\textwidth]{res/uml/classes/automata.jpg}
 \end{figure}
 
-\begin{figure}[h]
-\label{fig:class_opt_main}
-\caption{Class diagram of Optimization module }
+\begin{figure}[H]
+    \caption{Class diagram of Optimization module }
+    \label{fig:class_opt_main}
+    
     \includegraphics[width=0.85\textwidth]{res/uml/classes/optimizationMain.jpg}
+    
 \end{figure}
 
 
-\begin{figure}[h]
-\label{fig:class_opt_alg}
-\caption{Class diagram of Optimization Algorithm module}
+\begin{figure}[H]
+    \caption{Class diagram of Optimization Algorithm module}
+    \label{fig:class_opt_alg}
+    
     \includegraphics[width=0.85\textwidth]{res/uml/classes/optimizationAlg.jpg}
+    
 \end{figure}
 
-\begin{figure}[h]
-\label{fig:state_opt}
-\caption{State diagram of Optimization}
+\begin{figure}[H]
+    \caption{State diagram of Optimization}
+    \label{fig:state_opt}
+    
     \includegraphics[width=0.85\textwidth]{res/uml/states/optimizer.jpg}
+    
 \end{figure}
 
-\begin{figure}[h]
-\label{fig:state_pso}
-\caption{State diagram of PSO}
+\begin{figure}[H]
+    \caption{State diagram of PSO}
+    \label{fig:state_pso}
+    
     \includegraphics[width=0.85\textwidth]{res/uml/states/pso.jpg}
+    
 \end{figure}
 
 
+%--------------------------------------------------------------------------------------
+\section{Experiments}\label{sec:exp}
+Training and testing sets were generated in two ways. Firstly, training set distinguished two subsets: all possible words with length up to constant $C=4$ and set of words longer than $4$ and not shorter than $20$. The entire training set had $2000$ words. The testing set contained $5000$ words with minimum length $21$ and maximum $30$. For convenience we will denote this set of words $C=4$.
 
-\section{Experiments}
+Second, larger set of words contained training set having all words up to length $5$ and words longer than $5$ but not shorter than $20$. In total training set contained $8000$ words. Testing set contained $10000$ words with minimum length 21 and maximum 30. Let us denote this set by $C=5$.
 
+In both cases the alphabet size was equal to $5$, maximum iteration of PSO was $100$ and the swarm size $50$.
+
+%--------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------
 \subsection{Reconstruction}
+In reconstruction experiments four classes of automata, having $4,6,10,15$ states respectively, were considered. Ten automata in each class were generated randomly. Automata with unreachable states was discarded and generated again.
+
+The PSO algorithm was ran for states in the continues interval: $[3,15]$.
+
+%--------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------
 \subsection{Approximation}
+Similarly to reconstruction. four classes, each having ten automata, were generated. This time the number of states were much higher: $20, 30, 50, 80$ respectively.
 
+The PSO algorithm was ran for states: ${4,6,8,10,12}$.
+
+%--------------------------------------------------------------------------------------
 \section{Results}
-
+In this section results to our experiments are introduced. The results compare the accuracy of finding automaton of different classes and the accuracy depending on different set words: $C=4$ and $C=5$(c.f. section~\ref{sec:exp}). The accuracy was computed on two subsets of training set, on the union of both and on testing set.
 
 %--------------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------------
 \subsection{Reconstruction}
+Results of all ten automata in each class have been averaged and presented in figure~\ref{fig:recons_results}. Each plot shows results for a single class and compares behavior for two kinds of input words, $C=4$ and $C=5$.
 
+The accuracy within a single class is nearly the same across all sets of words. It is also clear to see that the accuracy grows with the growth of the number of states that the input automaton had. The class of automata with 15 states had the highest accuracy.
 
+The figure~\ref{fig:recons_pso} shows the results in a form of testing set accuracy of each iteration of PSO from the interval [3,15]. The algorithm was not successful in finding automata with proper number of states for classes 4,6,10. The accuracy grew together with increasing the number of states in the output automata. Moreover, judging by the growth of the give function, it is probable that class of 15 automata would receive even higher accuracy for bigger number of states than 15.
 
-%--------------------------------------------------------------------------------------
-%--------------------------------------------------------------------------------------
-
-
-
+Finally the time of computations of each class for both $C=4$ and $C=5$ is presented in figure~\ref{fig:recons_time}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GROUP BAR PLOT
 % RECON     {C4, C5}
 % CLASSES   {4, 6, 10, 15.}
-% DFA ID    [1, 5]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{figure}[h]
-\caption{Reconstruction. Five Automata Classes 4, 6, 10, 15}
-
-
+\begin{figure}[H]
+    \caption{Reconstruction. The average accuracy of 10 automata from each class: 4, 6, 10, 15}
+    \label{fig:recons_results}
 
 \setPlotStyle
-\hspace{-3.2cm}
 \begin{tikzpicture}
 
 %%%%%%%%%%%%%%%%%%%%
@@ -870,12 +903,13 @@ Through out the computations, we might find several equally best automatons. In 
 %%%%%%%%%%%%%%%%%%%%
 
 \beginGroupPlot
-    
 
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  1
-%%%%%%%%%%%%%%%%%%%%
-    \nextgroupplot[title=Class 4,  ylabel=Accuracy]%
+
+    \nextgroupplot[title=Class 4,  ylabel=Accuracy]
+    %%%%%%%%%%%%%%%%%%%%
+    % LEGEND
+    %%%%%%%%%%%%%%%%%%%%
+    \setPlotLegend
     \saveResultsFirst   {0.75}{0.76}{0.76}{0.76}
     \saveResultsSecond  {0.76}{0.76}{0.76}{0.76}
     \addBarPlotResults  {C=4}{C=5}
@@ -891,24 +925,74 @@ Through out the computations, we might find several equally best automatons. In 
     \addBarPlotResults  {C=4}{C=5}
     
     
-    \nextgroupplot[title=Class 15]%TODO
+    \nextgroupplot[title=Class 15]
     \saveResultsFirst   {0.86}{0.86}{0.86}{0.86}
     \saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
     \addBarPlotResults  {C=4}{C=5}
-        
-
-%%%%%%%%%%%%%%%%%%%%
-% LEGEND
-%%%%%%%%%%%%%%%%%%%%
-
-\setPlotLegend
-
 
 \end{groupplot}
-    
 \end{tikzpicture}
-    
+\end{figure}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TIME OF COMPUTATIONS
+% RECON     {C4, C5}
+% CLASSES   {4, 6, 10, 15.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[H]
+    \caption{Reconstruction. Time of computations (in minutes) for classes 4,6,10,15 for both set of words}
+    \label{fig:recons_time}
+
+
+\setPlotStyle
+\begin{tikzpicture}
+
+\begin{groupplot}[group style={group size= 1 by 1,
+    vertical sep=50pt, horizontal sep=40pt}, 
+height=5cm,
+width=9cm,
+xlabel=Classes,
+xtick={4,6,10,15},
+legend cell align=left, 
+legend columns=-1, 
+legend style={
+    at={(-0.76, -0.7)}, 
+    anchor=south east, 
+    column sep=2ex
+}
+]
+
+%%%%%%%%%%%%%%%%%%%%
+% CLASS     4
+%%%%%%%%%%%%%%%%%%%%
+
+\nextgroupplot[title=Time of Computations, ylabel=Time [min]]
+
+% RECONS_C4_CL4
+\addplot[color=bblue, mark=x] coordinates {
+    (4, 8.0)
+    (6, 8.0)
+    (10, 8.0)
+    (15, 8.0)
+};
+
+
+% RECONS_C5_CL4
+\addplot[color=rred, mark=o] coordinates {
+    (4, 62.0)
+    (6, 63.0)
+    (10, 64.0)
+    (15, 64.0)
+};
+
+
+\addlegendentry{C=4}
+\addlegendentry{C=5}
+
+\end{groupplot}
+\end{tikzpicture}
 \end{figure}
 
 
@@ -917,18 +1001,17 @@ Through out the computations, we might find several equally best automatons. In 
 
 
 
-\begin{figure}[h]
-    \caption{Reconstruction. Example of Testing Set Quality across the PSO interval One Automaton $A(4.1)$}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GROUP LINE PLOT
 % RECON     {C4, C5}
 % CLASSES   {4, 6, 10, 15.}
-% DFA ID    {0}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[H]
+    \caption{Reconstruction. Testing Set Accuracy across the PSO interval for all classes}
+    \label{fig:recons_pso}
 
 \setPlotStyle
-\hspace{-2.5cm}
 \begin{tikzpicture}
 
 \begin{groupplot}[group style={group size= 2 by 2,
@@ -953,10 +1036,9 @@ Through out the computations, we might find several equally best automatons. In 
 
 %%%%%%%%%%%%%%%%%%%%
 % CLASS     4
-% DFA ID    1
 %%%%%%%%%%%%%%%%%%%%
 
-\nextgroupplot[title=Class 4.1,  ylabel=Testing Set Quality]
+\nextgroupplot[title=Class 4, ylabel=Testing Set Accuracy]
 
 % RECONS_C4_CL4_1
 \addplot[color=bblue, mark=x] coordinates {
@@ -996,9 +1078,8 @@ Through out the computations, we might find several equally best automatons. In 
 
 %%%%%%%%%%%%%%%%%%%%
 % CLASS     6
-% DFA ID    1
 %%%%%%%%%%%%%%%%%%%%
-\nextgroupplot[title=Class 6.1]
+\nextgroupplot[title=Class 6]
 % RECONS_C4_CL6_1
 \addplot[color=bblue, mark=x] coordinates {
     (3, 0.63)
@@ -1037,9 +1118,8 @@ Through out the computations, we might find several equally best automatons. In 
 
 %%%%%%%%%%%%%%%%%%%%
 % CLASS     10
-% DFA ID    1
 %%%%%%%%%%%%%%%%%%%%
-\nextgroupplot[title=Class 10.1]
+\nextgroupplot[title=Class 10, ylabel=Testing Set Accuracy]
 
 % RECONS_C4_CL10_1
 \addplot[color=bblue, mark=x] coordinates {
@@ -1078,11 +1158,10 @@ Through out the computations, we might find several equally best automatons. In 
 
 %%%%%%%%%%%%%%%%%%%%
 % CLASS     15
-% DFA ID    1
 %%%%%%%%%%%%%%%%%%%%
-\nextgroupplot[title=Class 15.1]
+\nextgroupplot[title=Class 15]
 
-% RECONS_C4_CL15_1
+% RECONS_C4_CL15
 \addplot[color=bblue, mark=x] coordinates {
     (3, 0.66)
     (4, 0.72)
@@ -1100,7 +1179,7 @@ Through out the computations, we might find several equally best automatons. In 
 };
 
 
-% RECONS_C5_CL15_1
+% RECONS_C5_CL15
 \addplot[color=rred, mark=o] coordinates {
     (3, 0.66)
     (4, 0.72)
@@ -1132,21 +1211,24 @@ Through out the computations, we might find several equally best automatons. In 
 %--------------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------------
 \subsection{Approximation}
+As in the case of reconstruction the results are presented in the same form.
+Figure~\ref{fig:approx_results} presents the results for all classes. Again, the results for all set of words seems to be stable.
+
+The tendency of accuracy growth together with increased number of states remain the same. This is proved in the figure~\ref{fig:approx_pso} which shows us that the accuracy of the output automaton is higher for higher number of states.
 
 
-
-\begin{figure}[h]
-    \caption{Approximation. Automata [1,5]. Classes 20, 30, 50, 80}
-    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GROUP BAR PLOT
 % APPROX    {C4, C5}
 % CLASSES   {20, 30, 50, 80.}
 % DFA ID    [1, 5]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[H]
+
+    \caption{Approximation Results. Automata Classes 20, 30, 50, 80}
+    \label{fig:approx_results}
 
 \setPlotStyle
-\hspace{-3.2cm}
 \begin{tikzpicture}
 
 %%%%%%%%%%%%%%%%%%%%
@@ -1192,9 +1274,6 @@ Through out the computations, we might find several equally best automatons. In 
 \end{figure}
 
 
-
-\begin{figure}[h]
-\caption{Approximation. Example of Testing quality across the PSO interval. Classes 20, 30, 50, 80}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GROUP LINE PLOT
 % APPROX    {C4, C5}
@@ -1202,12 +1281,13 @@ Through out the computations, we might find several equally best automatons. In 
 % DFA ID    {0}
 % STATES    {4,6,8,10,12}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[H]
+
+\caption{Approximation. Testing accuracy across the PSO interval. Classes 20, 30, 50, 80}
+\label{fig:approx_pso}
 
 \setPlotStyle
-\hspace{-2.0cm}
 \begin{tikzpicture}
-
-
 
 \begin{groupplot}[group style={group size= 2 by 2,  
         vertical sep=50pt, horizontal sep=50pt},
@@ -1234,7 +1314,7 @@ Through out the computations, we might find several equally best automatons. In 
 % DFA ID    1
 %%%%%%%%%%%%%%%%%%%%
 
-\nextgroupplot[title=Class 20.1,  ylabel=Testing Set Quality]
+\nextgroupplot[title=Class 20,  ylabel=Testing Set Accuracy]
 % APPROX_C4_CL20_1
 \addplot[color=bblue, mark=x] coordinates {
 	(4, 0.73)
@@ -1254,14 +1334,12 @@ Through out the computations, we might find several equally best automatons. In 
     (12, 0.86)
 };
 
-
-
 %%%%%%%%%%%%%%%%%%%%
 % CLASS     30
 % DFA ID    1
 %%%%%%%%%%%%%%%%%%%%
 
-\nextgroupplot[title=Class 30.1]
+\nextgroupplot[title=Class 30]
 % APPROX_C4_CL30_1
 \addplot[color=bblue, mark=x] coordinates {
 	(4, 0.73)
@@ -1288,7 +1366,7 @@ Through out the computations, we might find several equally best automatons. In 
 % CLASS     50
 % DFA ID    1
 %%%%%%%%%%%%%%%%%%%%
-\nextgroupplot[title=Class 50.1, ylabel=Testing Set Quality]
+\nextgroupplot[title=Class 50, ylabel=Testing Set Accuracy]
 % APPROX_C4_CL50_1
 \addplot[color=bblue, mark=x] coordinates {
 	(4, 0.74)
@@ -1314,7 +1392,7 @@ Through out the computations, we might find several equally best automatons. In 
 % DFA ID    1
 %%%%%%%%%%%%%%%%%%%%
 
-\nextgroupplot[title=Class 80.1]
+\nextgroupplot[title=Class 80]
 % APPROX_C4_CL80_1
 \addplot[color=bblue, mark=x] coordinates {
 	(4, 0.74)
@@ -1337,26 +1415,7 @@ Through out the computations, we might find several equally best automatons. In 
 
 \end{groupplot}
 \end{tikzpicture}
-
-
 \end{figure}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

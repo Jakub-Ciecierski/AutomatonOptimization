@@ -2114,11 +2114,11 @@
 							"containerChangeable": false,
 							"containerExtending": false,
 							"left": 320,
-							"top": 488,
+							"top": 480,
 							"width": 100,
 							"height": 77,
 							"autoResize": false,
-							"text": "Best Particle Based on Testng Set Quality",
+							"text": "Best Particle Based on Testng Set Accuracy",
 							"wordWrap": true
 						},
 						{
@@ -2143,7 +2143,7 @@
 								"$ref": "AAAAAAFRpNQvP0p3zMc="
 							},
 							"lineStyle": 0,
-							"points": "414:576;414:564"
+							"points": "414:576;414:556"
 						},
 						{
 							"_type": "UMLTransitionView",

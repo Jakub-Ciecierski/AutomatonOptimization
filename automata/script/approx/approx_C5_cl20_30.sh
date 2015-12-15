@@ -8,8 +8,8 @@ DIR_LOG="APPROX_C5"
 # Settings
 #############################################################
 
-MAX_ITER=300
-SWARM_SIZE=100
+MAX_ITER=100
+SWARM_SIZE=50
 
 PSO_STATES_LENGTH=5
 PSO_STATES=(4 6 8 10 12)

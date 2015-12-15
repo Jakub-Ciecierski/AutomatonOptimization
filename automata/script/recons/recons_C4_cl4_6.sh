@@ -8,8 +8,8 @@ DIR_LOG="RECONS_C4"
 # Settings
 #############################################################
 
-MAX_ITER=500
-SWARM_SIZE=100
+MAX_ITER=100
+SWARM_SIZE=50
 
 START_Q=3
 END_Q=15

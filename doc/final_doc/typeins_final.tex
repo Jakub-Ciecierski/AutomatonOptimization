@@ -47,33 +47,10 @@
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\enspace\ignorespaces#1}
 
-\begin{document}
 
-\mainmatter  % start of an individual contribution
 
-\title{A Stochastic Approach to Optimization of Deterministic Finite Automata}
 
-% a short form should be given in case it is too long for the running head
-\titlerunning{Algorithms and Computability}
 
-\author{Jakub Ciecierski \and Bartlomiej Dybisz \\ 
-\textit{Warsaw University of Technology, \\
-Faculty of Mathematics and Information Science.}}
-%
-\authorrunning{Algorithms and Computability}
-
-\toctitle{Algorithms and Computability}
-\tocauthor{Methodology}
-\maketitle
-
-\section{Modeling}
-
-\section{Experiments}
-
-\subsection{Reconstruction}
-\subsection{Approximation}
-
-\section{Results}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -155,17 +132,17 @@ Faculty of Mathematics and Information Science.}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Adds needed style to pgfplot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\setPlotStyle}[0]{
-	\pgfplotsset{xticklabel style={text width=2em, align=center}}
-}
+    \newcommand{\setPlotStyle}[0]{
+        \pgfplotsset{xticklabel style={text width=2em, align=center}}
+    }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Starts groupplot with given style
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\beginGroupPlot}[0]{
-\begin{groupplot}[
+    \newcommand{\beginGroupPlot}[0]{
+    \begin{groupplot}[
         group style={group size= 4 by 10,  vertical sep=50pt},
-%        height = 4.5gcm, 
+        %        height = 4.5gcm, 
         ybar=4*\pgflinewidth, 
         ymin=0, 
         ymax=1,
@@ -212,19 +189,73 @@ Faculty of Mathematics and Information Science.}}
             anchor=south east,
             column sep=15ex
         }
-    ]
-}%beginGroupPlot
-
+        ]
+    }%beginGroupPlot
+    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sets legends for Bar plot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\setPlotLegend}[0]{
-	\legend{Training $|w|<C$,  Training $|w|>C$,  Training All,  Testing}
-}
-
+    \newcommand{\setPlotLegend}[0]{
+        \legend{Training $|w|<C$,  Training $|w|>C$,  Training All,  Testing}
+    }
+    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %           END OF COMMANDS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+\title{A Stochastic Approach to Optimization of Deterministic Finite Automata}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Algorithms and Computability}
+
+\author{Jakub Ciecierski \and Bartlomiej Dybisz \\ 
+\textit{Warsaw University of Technology, \\
+Faculty of Mathematics and Information Science.}}
+%
+\authorrunning{Algorithms and Computability}
+
+\toctitle{Algorithms and Computability}
+\tocauthor{Methodology}
+\maketitle
+
+\section{Modeling}
+
+\begin{figure}[h]
+    \includegraphics[width=0.85\textwidth]{res/uml/classes/automata.jpg}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=0.85\textwidth]{res/uml/classes/optimizationMain.jpg}
+\end{figure}
+
+
+\begin{figure}[h]
+    \includegraphics[width=0.85\textwidth]{res/uml/classes/optimizationAlg.jpg}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=0.85\textwidth]{res/uml/states/optimizer.jpg}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[width=0.85\textwidth]{res/uml/states/pso.jpg}
+\end{figure}
+
+
+
+\section{Experiments}
+
+\subsection{Reconstruction}
+\subsection{Approximation}
+
+\section{Results}
 
 
 %--------------------------------------------------------------------------------------
@@ -245,6 +276,11 @@ Faculty of Mathematics and Information Science.}}
 % CLASSES   {4, 6, 10, 15.}
 % DFA ID    [1, 5]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[h]
+\caption{Reconstruction. Five Automata Classes 4, 6, 10, 15}
+
+
 
 \setPlotStyle
 \hspace{-3.2cm}
@@ -404,7 +440,7 @@ Faculty of Mathematics and Information Science.}}
 \end{tikzpicture}
     
     
-    
+\end{figure}
     
     
     %--------------------------------------------------------------------------------------
@@ -416,7 +452,11 @@ Faculty of Mathematics and Information Science.}}
 % CLASSES   {4, 6, 10, 15.}
 % DFA ID    [6, 10]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+
+\begin{figure}[h]
+\caption{Reconstruction. Automata [6,10] Classes 4, 6, 10, 15}
+
+
 \setPlotStyle
 \hspace{-3.2cm}
 \begin{tikzpicture}
@@ -565,6 +605,7 @@ Faculty of Mathematics and Information Science.}}
     
 \end{tikzpicture}
 
+\end{figure}
 
 
 
@@ -575,6 +616,8 @@ Faculty of Mathematics and Information Science.}}
 
 
 
+\begin{figure}[h]
+    \caption{Reconstruction. Example of Testing Set Quality across the PSO interval One Automaton $A(4.1)$}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GROUP LINE PLOT
@@ -780,6 +823,7 @@ Faculty of Mathematics and Information Science.}}
 \end{tikzpicture}
 
 
+\end{figure}
 
 
 
@@ -790,6 +834,9 @@ Faculty of Mathematics and Information Science.}}
 
 
 
+\begin{figure}[h]
+    \caption{Approximation. Automata [1,5]. Classes 20, 30, 50, 80}
+    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GROUP BAR PLOT
 % APPROX    {C4, C5}
@@ -990,9 +1037,14 @@ Faculty of Mathematics and Information Science.}}
 
 \end{tikzpicture}
 
+\end{figure}
 
 
 
+
+
+\begin{figure}[h]
+    \caption{Approximation. Automata [6,10]. Classes 20, 30, 50, 80}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GROUP BAR PLOT
 % APPROX    {C4, C5}
@@ -1199,9 +1251,11 @@ Faculty of Mathematics and Information Science.}}
 \end{groupplot}
 
 \end{tikzpicture}
+\end{figure}
 
 
-
+\begin{figure}[h]
+\caption{Approximation. Example of Testing quality across the PSO interval. Classes 20, 30, 50, 80}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GROUP LINE PLOT
 % APPROX    {C4, C5}
@@ -1346,6 +1400,7 @@ Faculty of Mathematics and Information Science.}}
 \end{tikzpicture}
 
 
+\end{figure}
 
 
 
@@ -1366,18 +1421,6 @@ Faculty of Mathematics and Information Science.}}
 
 
 
-
-
-
-
-
-
-
-
-
-
-%--------------------------------------------------------------------------------
-\section{Appendix}
 
 \begin{thebibliography}{4}
 

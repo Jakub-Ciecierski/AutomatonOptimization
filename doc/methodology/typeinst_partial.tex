@@ -383,10 +383,9 @@ We now concentrate on describing in details each step of the PSO algorithm. The 
 As an input, the PSO algorithm takes number of states $n$ and number of symbols in the alphabet $r$.
 Solution that the PSO is trying to find is an automaton. Let us recall that automaton is a system: $A = (Q, \Sigma, \delta, q_0, F)$. In a single PSO instance we assume that a set of states $Q$ and alphabet $\Sigma$ is invariant. Through the nature of our problem we can conclude that distinguishing the set $F$ of accepting states is not necessary. Namely, the tool given to us (DFA) described in section~\ref{sub:definition} only answers whether any arbitrary two words are in the relation induced by the language. That information suffices in the process of recreating that DFA. Thus, we only need to represent the transition function and initial state.
 
-The position of our particles will be represented by the natural decoding vector of size $n*r$ of an automaton described in section~\ref{sec:auto_dec} with more freedom allowed. Namely, all of the dimensions of the position will take real values in the interval $[1, n]$. Whenever we need to encode the automaton back, we simply round up the values, taking the closest integer value. The real number $3.4$ becomes $3$ and $3.5$ becomes 4.
+The position of our particles will be represented by the natural decoding vector of size $n*r$ of an automaton described in the methodology with more freedom allowed. Namely, all of the dimensions of the position will take real values in the interval $[0.5, (n+0.5)]$. Whenever we need to encode the automaton back, we simply round up the values, taking the closest integer value. The real number $3.4$ becomes $3$ and $3.5$ becomes 4. Notice that the interval is expanded by the value $0.5$. Such procedure is needed to allow for equal distribution of the first and last states. Namely, the first state will be encoded for values: $[0.5, 1.5]$ and the last state: $[(n-0.5), (n+0.5)]$.
 
 As we may learn further in the article, the method of updating the particle will make a good use of continuous interval. On the other hand, the method of rounding up real numbers, might be vulnerable to error.
-
 
 
 %---------------------------------------------------------------------
@@ -470,58 +469,15 @@ Concerning given example, $F = \frac{3}{5} = 0.6$. One needs to note that this f
 The naive approach of updating the particles' positions was proposed in the original PSO algorithm~\cite{pso_origin}.
 
 \begin{equation}
-		V_p(t+1) = V_p(t) + c_1 * \mu_1 *(pbest_p - X_p(t)) + c_2 * \mu_2 *(lbest_p - X_p(t))
-	\end{equation}
+	V_p(t+1) = V_p(t) + c_1 * \mu_1 *(pbest_p - X_p(t)) + c_2 * \mu_2 *(lbest_p - X_p(t))
+\end{equation}
 
-	\begin{equation}
+\begin{equation}
 		X_p(t+1) = X_p(t) + V_p(t)
-	\end{equation}
-	where:\\
-	$c_1, c_2$ are the constant learning factors.\\
-	$\mu_1, \mu_2$ are random numbers in the range [0,1]. {\color{red} TODO What distribution function - uniform ?} \\
-
-The following method of updating the particles has its origins in the Standard Particle Swarm Optimization version 2011 presented in~\cite{pso_11}
-
-Let $G_p(t)$ be the centre of gravity of the three points:
-\begin{enumerate}
-	\item Current position. \\
-	$X_p(t)$
-	
-	\item Point a bit beyond $pbest_p$. \\
-	$Y_{p1}(t) = c*(pbest_p-X_p(t))$
-	
-	\item Point a bit beyond $lbest_p$. \\
-	$Y_{p2}(t) = c*(lbest_p-X_p(t))$
-			
-\end{enumerate}
-
-The constant $c = \frac{1}{2} + ln(2)$ called a learning factor, together with the inertia parameter that weights the particle's velocity $\omega = \frac{1}{2 * ln(2)}$ used in further equations, was proposed by Clerc in~\cite{pso_anal}.
-
-Formally $G_p(t)$ it is defined by the following formula 
-\begin{equation}
-	G_p(t) = \frac{X_p(t) + Y_{p1}(t) + Y_{p2}(t)} {3}
 \end{equation}
-
-We now define a random point $X^{'}_p$ in the hypersphere
-\begin{center}
-	$\mathcal{H}_p(G_p, d(G_p, X_p))$ 
-\end{center}
-of centre $G_p$ and of radius $d(G_p, X_p)$ where the function $d$ is an euclidean distance between two points. The time $t$ has been omitted for simplicity.
-
-The velocity update is computed by
-\begin{equation}
-	V_p(t+1) = \omega * V_p(t) + X^{'}_p(t) - X_p(t)
-\end{equation}
-Thus the position is updated by the equation
-
-\begin{equation}
-	X_p(t+1) = \omega * V_p(t) + X^{'}_p(t)
-\end{equation}
-
-% Exploitation vs Exploration
-
-%This method of updating the particles grants adequate definitions for $exploitation$ and $exploration$. Namely the exploitation occurs when $X_p(t+1)$ is inside atleast one hypersphere $\mathcal{H}_q$, otherwise we recognize exploration.
-
+where:\\
+$c_1, c_2$ are the constant learning factors.\\
+$\mu_1, \mu_2$ are random numbers in the range [0,1].\\
 
 % Interval confinement
 It may happen that the particle might leave the search space, in means that the particle lies outside the acceptable interval. If that happens we generally try to lead the particle back to its right course. For each dimension $x_{d} \in X_p$ that lies  outside the acceptable interval we apply the following:

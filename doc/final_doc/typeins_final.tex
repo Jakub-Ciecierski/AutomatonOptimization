@@ -141,7 +141,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \newcommand{\beginGroupPlot}[0]{
     \begin{groupplot}[
-        group style={group size= 4 by 10,  vertical sep=50pt},
+        group style={group size= 2 by 2,  vertical sep=50pt},
         %        height = 4.5gcm, 
         ybar=4*\pgflinewidth, 
         ymin=0, 
@@ -306,319 +306,41 @@ Faculty of Mathematics and Information Science.}}
 %%%%%%%%%%%%%%%%%%%%
 % DFA ID:  1
 %%%%%%%%%%%%%%%%%%%%
-
-    \nextgroupplot[title=Class 4.1,  ylabel=Accuracy]%
-    \saveResultsFirst   {0.71}{0.71}{0.71}{0.71}
-    \saveResultsSecond  {0.71}{0.71}{0.71}{0.71}
-    \addBarPlotResults  {C=4 Q=11}{C=5 Q=11}
+    \nextgroupplot[title=Class 4,  ylabel=Accuracy]%
+    \saveResultsFirst   {0.75}{0.76}{0.76}{0.76}
+    \saveResultsSecond  {0.76}{0.76}{0.76}{0.76}
+    \addBarPlotResults  {C=4}{C=5}
     
-    
-    \nextgroupplot[title=Class 6.1]
+    \nextgroupplot[title=Class 6]%
     \saveResultsFirst   {0.77}{0.77}{0.77}{0.77}
-    \saveResultsSecond  {0.77}{0.77}{0.77}{0.77}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
+    \saveResultsSecond  {0.77} {0.77}{0.77}{0.77}
+    \addBarPlotResults  {C=4}{C=5}
     
-    
-    \nextgroupplot[title=Class 10.1]
-    \saveResultsFirst   {0.83}{0.83}{0.82}{0.83}
+    \nextgroupplot[title=Class 10, ylabel=Accuracy]
+    \saveResultsFirst   {0.83}{0.83}{0.83}{0.83}
     \saveResultsSecond  {0.83}{0.83}{0.83}{0.83}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
+    \addBarPlotResults  {C=4}{C=5}
     
     
-    \nextgroupplot[title=Class 15.1]
-    \saveResultsFirst   {0.85}{0.84}{0.84}{0.84}
-    \saveResultsSecond  {0.84}{0.84}{0.84}{0.83}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
+    \nextgroupplot[title=Class 15]%TODO
+    \saveResultsFirst   {0.86}{0.86}{0.86}{0.86}
+    \saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
+    \addBarPlotResults  {C=4}{C=5}
+        
+
 %%%%%%%%%%%%%%%%%%%%
 % LEGEND
 %%%%%%%%%%%%%%%%%%%%
-    
-    \setPlotLegend
-    
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  2
-%%%%%%%%%%%%%%%%%%%%
 
-    \nextgroupplot[title=Class 4.2,  ylabel=Accuracy]
-    \saveResultsFirst   {0.73}{0.71}{0.71}{0.71}
-    \saveResultsSecond  {0.72}{0.71}{0.71}{0.72}
-    \addBarPlotResults  {C=4 Q=9}{C=5 Q=5}
-    
-    \nextgroupplot[title=Class 6.2]
-    \saveResultsFirst   {0.73}{0.73}{0.73}{0.73}
-    \saveResultsSecond  {0.73}{0.73}{0.73}{0.73}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-    \nextgroupplot[title=Class 10.2]
-    \saveResultsFirst   {0.82}{0.81}{0.81}{0.81}
-    \saveResultsSecond  {0.82}{0.82}{0.82}{0.82}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 15.2]
-    \saveResultsFirst   {0.86}{0.86}{0.86}{0.86}
-    \saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
+\setPlotLegend
 
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  3
-%%%%%%%%%%%%%%%%%%%%
-    
-    \nextgroupplot[title=Class 4.3,  ylabel=Accuracy]
-    \saveResultsFirst   {0.73}{0.78}{0.76}{0.79}
-    \saveResultsSecond  {0.81}{0.83}{0.82}{0.83}
-    \addBarPlotResults  {C=4 Q=7}{C=5 Q=4}
-    
-    
-    \nextgroupplot[title=Class 6.3]
-    \saveResultsFirst   {0.78}{0.78}{0.78}{0.78}
-    \saveResultsSecond  {0.78}{0.78}{0.78}{0.78}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-    \nextgroupplot[title=Class 10.3]
-    \saveResultsFirst   {0.82}{0.82}{0.82}{0.82}
-    \saveResultsSecond  {0.82}{0.82}{0.82}{0.82}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-    \nextgroupplot[title=Class 15.3]
-    \saveResultsFirst   {0.86}{0.86}{0.86}{0.86}
-    \saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  4
-%%%%%%%%%%%%%%%%%%%%
-    
-    \nextgroupplot[title=Class 4.4,  ylabel=Accuracy]
-    \saveResultsFirst   {0.73}{0.72}{0.73}{0.73}
-    \saveResultsSecond  {0.70}{0.70}{0.70}{0.71}
-    \addBarPlotResults  {C=4 Q=6}{C=5 Q=3}
-    
-    
-    \nextgroupplot[title=Class 6.4]
-    \saveResultsFirst   {0.78}{0.78}{0.78}{0.78}
-    \saveResultsSecond  {0.78}{0.78}{0.78}{0.78}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-    \nextgroupplot[title=Class 10.4]
-    \saveResultsFirst   {0.83}{0.83}{0.83}{0.83}
-    \saveResultsSecond  {0.83}{0.83}{0.83}{0.83}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-    \nextgroupplot[title=Class 15.4]
-    \saveResultsFirst   {0.87}{0.87}{0.87}{0.87}
-    \saveResultsSecond  {0.87}{0.86}{0.86}{0.86}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  5
-%%%%%%%%%%%%%%%%%%%%
-    
-    \nextgroupplot[title=Class 4.5,  ylabel=Accuracy]
-    \saveResultsFirst   {0.83}{0.89}{0.87}{0.89}
-    \saveResultsSecond  {0.91}{0.90}{0.90}{0.89}
-    \addBarPlotResults  {C=4 Q=7}{C=5 Q=4}
-    
-    
-    \nextgroupplot[title=Class 6.5]
-    \saveResultsFirst   {0.77}{0.77}{0.77}{0.77}
-    \saveResultsSecond  {0.77}{0.77}{0.77}{0.77}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-    \nextgroupplot[title=Class 10.5]
-    \saveResultsFirst   {0.83}{0.83}{0.83}{0.83}
-    \saveResultsSecond  {0.83}{0.83}{0.83}{0.83}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-    \nextgroupplot[title=Class 15.5]
-    \saveResultsFirst   {0.86}{0.85}{0.85}{0.86}
-    \saveResultsSecond  {0.85}{0.85}{0.85}{0.85}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=12}
 
 \end{groupplot}
     
 \end{tikzpicture}
     
-    
-\end{figure}
-    
-    
-    %--------------------------------------------------------------------------------------
-    
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% GROUP BAR PLOT
-% RECON     {C4, C5}
-% CLASSES   {4, 6, 10, 15.}
-% DFA ID    [6, 10]
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{figure}[h]
-\caption{Reconstruction. Automata [6,10] Classes 4, 6, 10, 15}
-
-
-\setPlotStyle
-\hspace{-3.2cm}
-\begin{tikzpicture}
-
-%%%%%%%%%%%%%%%%%%%%
-% GROUPPLOT
-%%%%%%%%%%%%%%%%%%%%
-    
-    \beginGroupPlot
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  6
-%%%%%%%%%%%%%%%%%%%%
-    
-    \nextgroupplot[title=Class 4.6,  ylabel=Accuracy]
-    \saveResultsFirst   {0.73}{0.74}{0.74}{0.75}
-    \saveResultsSecond  {0.71}{0.71}{0.71}{0.71}
-    \addBarPlotResults  {C=4 Q=6}{C=5 Q=7}
-    
-    
-    \nextgroupplot[title=Class 6.6]
-    \saveResultsFirst   {0.76}{0.76}{0.76}{0.76}
-    \saveResultsSecond  {0.76}{0.76}{0.76}{0.76}
-    \addBarPlotResults  {C=4 Q=13}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 10.6]
-    \saveResultsFirst   {0.82}{0.82}{0.82}{0.82}
-    \saveResultsSecond  {0.82}{0.82}{0.82}{0.82}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-    \nextgroupplot[title=Class 15.6]
-    \saveResultsFirst   {0.87}{0.87}{0.87}{0.87}
-    \saveResultsSecond  {0.87}{0.87}{0.87}{0.87}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  7
-%%%%%%%%%%%%%%%%%%%%
-    
-    \nextgroupplot[title=Class 4.7,  ylabel=Accuracy]
-    \saveResultsFirst   {0.72}{0.71}{0.71}{0.71}
-    \saveResultsSecond  {0.72}{0.71}{0.71}{0.71}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 6.7]
-    \saveResultsFirst   {0.78}{0.78}{0.78}{0.78}
-    \saveResultsSecond  {0.78}{0.78}{0.78}{0.78}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    
-    \nextgroupplot[title=Class 10.7]
-    \saveResultsFirst   {0.84}{0.83}{0.83}{0.84}
-    \saveResultsSecond  {0.83}{0.83}{0.83}{0.83}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 15.7]
-    \saveResultsFirst   {0.87}{0.87}{0.87}{0.87}
-    \saveResultsSecond  {0.87}{0.87}{0.87}{0.87}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=12}
-    
-    
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  8
-%%%%%%%%%%%%%%%%%%%%
-    
-    \nextgroupplot[title=Class 4.8,  ylabel=Accuracy]
-    \saveResultsFirst   {0.68}{0.68}{0.68}{0.68}
-    \saveResultsSecond  {0.68}{0.66}{0.68}{0.68}
-    \addBarPlotResults  {C=4 Q=14}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 6.8]
-    \saveResultsFirst   {0.77}{0.77}{0.77}{0.77}
-    \saveResultsSecond  {0.77}{0.77}{0.77}{0.77}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 10.8]
-    \saveResultsFirst   {0.83}{0.83}{0.83}{0.83}
-    \saveResultsSecond  {0.83}{0.83}{0.83}{0.83}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 15.8]
-    \saveResultsFirst   {0.86}{0.86}{0.86}{0.86}
-    \saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=12}
-    
-    
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  9
-%%%%%%%%%%%%%%%%%%%%
-
-    \nextgroupplot[title=Class 4.9,  ylabel=Accuracy]
-    \saveResultsFirst   {0.74}{0.74}{0.74}{0.74}
-    \saveResultsSecond  {0.73}{0.73}{0.73}{0.73}
-    \addBarPlotResults  {C=4 Q=4}{C=5 Q=6}
-    
-    
-    \nextgroupplot[title=Class 6.9]
-    \saveResultsFirst   {0.75}{0.75}{0.75}{0.75}
-    \saveResultsSecond  {0.75}{0.75}{0.75}{0.75}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 10.9]
-    \saveResultsFirst   {0.83}{0.83}{0.83}{0.83}
-    \saveResultsSecond  {0.83}{0.83}{0.83}{0.83}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 15.9]
-    \saveResultsFirst   {0.87}{0.87}{0.87}{0.87}
-    \saveResultsSecond  {0.87}{0.87}{0.87}{0.87}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  10
-%%%%%%%%%%%%%%%%%%%%
-
-    \nextgroupplot[title=Class 4.10,  ylabel=Accuracy]
-    \saveResultsFirst   {0.91}{0.93}{0.92}{0.92}
-    \saveResultsSecond  {0.89}{0.93}{0.91}{0.93}
-    \addBarPlotResults  {C=4 Q=3}{C=5 Q=6}
-    
-    
-    \nextgroupplot[title=Class 6.10]
-    \saveResultsFirst   {0.78}{0.78}{0.78}{0.78}
-    \saveResultsSecond  {0.78}{0.78}{0.78}{0.78}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 10.10]
-    \saveResultsFirst   {0.83}{0.83}{0.83}{0.83}
-    \saveResultsSecond  {0.83}{0.83}{0.83}{0.83}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-    
-    \nextgroupplot[title=Class 15.10]
-    \saveResultsFirst   {0.86}{0.86}{0.86}{0.86}
-    \saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
-    \addBarPlotResults  {C=4 Q=15}{C=5 Q=12}
-    
-
-%%%%%%%%%%%%%%%%%%%%
-% LEGEND
-%%%%%%%%%%%%%%%%%%%%
-    
-    \setPlotLegend
-    \end{groupplot}
-    
-\end{tikzpicture}
 
 \end{figure}
-
-
-
 
 
 
@@ -868,174 +590,25 @@ Faculty of Mathematics and Information Science.}}
 % DFA ID:  1
 %%%%%%%%%%%%%%%%%%%%
 
-\nextgroupplot[title=Class 20.1,  ylabel=Accuracy]
+\nextgroupplot[title=Class 20, ylabel=Accuracy]
 \saveResultsFirst   {0.87}{0.87}{0.87}{0.87}
 \saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
+\addBarPlotResults  {C=4}{C=5}
 
-\nextgroupplot[title=Class 30.1]
+\nextgroupplot[title=Class 30]
 \saveResultsFirst   {0.88}{0.88}{0.88}{0.88}
 \saveResultsSecond  {0.88}{0.88}{0.88}{0.88}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
+\addBarPlotResults  {C=4}{C=5}
 
-
-\nextgroupplot[title=Class 50.1]
-\saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.89}{0.89}{0.89}{0.89}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-
-\nextgroupplot[title=Class 80.1]
-\saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.90}{0.90}{0.90}{0.90}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  2
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Class 20.2,  ylabel=Accuracy]
-\saveResultsFirst   {0.87}{0.87}{0.87}{0.87}
-\saveResultsSecond  {0.86}{0.87}{0.87}{0.87}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.87}{0.87}{0.87}{0.87}%DONE s12
-%				{0.86}{0.87}{0.87}{0.87}%DONE s12
-     
-\nextgroupplot[title=Class 30.2]
-\saveResultsFirst   {0.88}{0.88}{0.88}{0.88}
-\saveResultsSecond  {0.88}{0.88}{0.88}{0.88}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.88}{0.88}{0.88}{0.88}%DONE s12
-%				{0.88}{0.88}{0.88}{0.88}%DONE s12
-	       		
-\nextgroupplot[title=Class 50.2]
-\saveResultsFirst   {0.89}{0.90}{0.90}{0.89}
-\saveResultsSecond  {0.89}{0.89}{0.89}{0.90}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.89}{0.90}{0.90}{0.89}%DONE s12
-%				{0.89}{0.89}{0.89}{0.90}%DONE s12
-
-\nextgroupplot[title=Class 80.2]
-\saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.90}{0.90}{0.90}{0.90}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.90}{0.90}{0.90}{0.90}%DONE s12
-%				{0.90}{0.90}{0.90}{0.90}%DONE s12
-
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  3
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Class 20.3,  ylabel=Accuracy]
-\saveResultsFirst   {0.86}{0.86}{0.86}{0.86}
-\saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.86}{0.86}{0.86}{0.86}%DONE s12
-%				{0.86}{0.86}{0.86}{0.86}%DONE s12
-      
-\nextgroupplot[title=Class 30.3]
-\saveResultsFirst   {0.88}{0.88}{0.88}{0.88}
-\saveResultsSecond  {0.88}{0.88}{0.88}{0.88}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.88}{0.88}{0.88}{0.88}%DONE s12
-%				{0.88}{0.88}{0.88}{0.88}%DONE s12
-
-\nextgroupplot[title=Class 50.3]
+\nextgroupplot[title=Class 50, ylabel=Accuracy]
 \saveResultsFirst   {0.89}{0.89}{0.89}{0.89}
 \saveResultsSecond  {0.89}{0.89}{0.89}{0.89}
-\addBarPlotResults  {C=4}{C=5 Q=12}
+\addBarPlotResults  {C=4}{C=5}
 
-%\addFourPlots	{0.89}{0.89}{0.89}{0.89}%DONE s12
-%				{0.89}{0.89}{0.89}{0.89}%DONE s12
-       		    		
-\nextgroupplot[title=Class 80.3]
+\nextgroupplot[title=Class 80]
 \saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
 \saveResultsSecond  {0.90}{0.90}{0.90}{0.90}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.90}{0.90}{0.90}{0.90}%DONE s12
-%				{0.90}{0.90}{0.90}{0.90}%DONE s12
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  4
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Class 20.4,  ylabel=Accuracy],
-\saveResultsFirst   {0.86}{0.86}{0.86}{0.86}
-\saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.86}{0.86}{0.86}{0.86}%DONE s12
-%				{0.86}{0.86}{0.86}{0.86}%DONE s12
-     
-\nextgroupplot[title=Class 30.4]
-\saveResultsFirst   {0.88}{0.88}{0.88}{0.88}
-\saveResultsSecond  {0.88}{0.88}{0.88}{0.88}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.88}{0.88}{0.88}{0.88}%DONE s12
-%				{0.88}{0.88}{0.88}{0.88}%DONE s12
-
-\nextgroupplot[title=Class 50.4]
-\saveResultsFirst   {0.90}{0.89}{0.89}{0.89}
-\saveResultsSecond  {0.90}{0.89}{0.89}{0.90}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.90}{0.89}{0.89}{0.89}%DONE s12
-%				{0.90}{0.89}{0.89}{0.90}%DONE s12
-
-\nextgroupplot[title=Class 80.4]
-\saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.90}{0.90}{0.90}{0.90}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.90}{0.90}{0.90}{0.90}%DONE s12
-%				{0.90}{0.90}{0.90}{0.90}%DONE s12
-
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  5
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Class 20.5,  ylabel=Accuracy]
-\saveResultsFirst   {0.87}{0.87}{0.87}{0.87}
-\saveResultsSecond  {0.87}{0.87}{0.87}{0.87}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.87}{0.87}{0.87}{0.87}%DONE s12
-%				{0.87}{0.87}{0.87}{0.87}%DONE s12
- 
-\nextgroupplot[title=Class 30.5]
-\saveResultsFirst   {0.88}{0.88}{0.88}{0.88}
-\saveResultsSecond  {0.88}{0.88}{0.88}{0.88}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.88}{0.88}{0.88}{0.88}%DONE s12
-%				{0.88}{0.88}{0.88}{0.88}%DONE s12
-
-\nextgroupplot[title=Class 50.5]
-\saveResultsFirst   {0.89}{0.89}{0.89}{0.89}
-\saveResultsSecond  {0.89}{0.89}{0.89}{0.89}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.89}{0.89}{0.89}{0.89}%DONE s12
-%				{0.89}{0.89}{0.89}{0.89}%DONE s12
-
-\nextgroupplot[title=Class 80.5]
-\saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.90}{0.90}{0.90}{0.90}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.90}{0.90}{0.90}{0.90}%DONE s12
-%				{0.90}{0.90}{0.90}{0.90}%DONE s12
+\addBarPlotResults  {C=4}{C=5}
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -1049,219 +622,6 @@ Faculty of Mathematics and Information Science.}}
 
 \end{figure}
 
-
-
-
-
-\begin{figure}[h]
-    \caption{Approximation. Automata [6,10]. Classes 20, 30, 50, 80}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% GROUP BAR PLOT
-% APPROX    {C4, C5}
-% CLASSES   {20, 30, 50, 80.}
-% DFA ID    [6, 10]
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\setPlotStyle
-\hspace{-3.2cm}
-\begin{tikzpicture}
-
-%%%%%%%%%%%%%%%%%%%%
-% GROUPPLOT
-%%%%%%%%%%%%%%%%%%%%
-
-\beginGroupPlot
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  6
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Class 20.6,  ylabel=Accuracy]
-\saveResultsFirst   {0.86}{0.87}{0.87}{0.86}
-\saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.86}{0.87}{0.87}{0.86}%DONE s12
-%				{0.86}{0.86}{0.86}{0.86}%DONE s12
-
-\nextgroupplot[title=Class 30.6]
-\saveResultsFirst   {0.88}{0.88}{0.88}{0.88}
-\saveResultsSecond  {0.88}{0.88}{0.88}{0.88}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.88}{0.88}{0.88}{0.88}%DONE s12
-%				{0.88}{0.88}{0.88}{0.88}%DONE s12
-		       		
-\nextgroupplot[title=Class 50.6]
-\saveResultsFirst   {0.89}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.89}{0.89}{0.89}{0.89}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.89}{0.90}{0.90}{0.90}%DONE s12
-%				{0.89}{0.89}{0.89}{0.89}%DONE s12
-
-\nextgroupplot[title=Class 80.6]
-\saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.90}{0.90}{0.90}{0.90}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.90}{0.90}{0.90}{0.90}%DONE s12
-%				{0.90}{0.90}{0.90}{0.90}%DONE s12
-
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  7
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Class 20.7,  ylabel=Accuracy]
-\saveResultsFirst   {0.86}{0.87}{0.87}{0.86}
-\saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.86}{0.87}{0.87}{0.86}%DONE s12
-%				{0.86}{0.86}{0.86}{0.86}%DONE s12
-     
-\nextgroupplot[title=Class 30.7]
-\saveResultsFirst   {0.88}{0.88}{0.88}{0.88}
-\saveResultsSecond  {0.88}{0.88}{0.88}{0.88}
-\addBarPlotResults  {C=4}{C=5 Q=12}
-
-%\addFourPlots	{0.88}{0.88}{0.88}{0.88}%DONE s12
-%				{0.88}{0.88}{0.88}{0.88}%DONE s12
-	       		
-\nextgroupplot[title=Class 50.7]
-\saveResultsFirst   {0.89}{0.89}{0.89}{0.89}
-\saveResultsSecond  {0.89}{0.89}{0.89}{0.89}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.89}{0.89}{0.89}{0.89}%DONE s12
-%				{0.89}{0.89}{0.89}{0.89}%DONE s12
-
-\nextgroupplot[title=Class 80.7]
-\saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.90}{0.90}{0.90}{0.90}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.90}{0.90}{0.90}{0.90}%DONE s12
-%				{0.90}{0.90}{0.90}{0.90}%DONE s12
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  8
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Class 20.8,  ylabel=Accuracy]
-\saveResultsFirst   {0.86}{0.86}{0.86}{0.86}
-\saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.86}{0.86}{0.86}{0.86}%DONE s12
-%				{0.86}{0.86}{0.86}{0.86}%DONE s12
- 
-\nextgroupplot[title=Class 30.8]
-\saveResultsFirst   {0.88}{0.88}{0.88}{0.88}
-\saveResultsSecond  {0.88}{0.88}{0.88}{0.88}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.88}{0.88}{0.88}{0.88}%DONE s12
-%				{0.88}{0.88}{0.88}{0.88}%DONE s12
-
-\nextgroupplot[title=Class 50.8]
-\saveResultsFirst   {0.89}{0.89}{0.89}{0.89}
-\saveResultsSecond  {0.89}{0.89}{0.89}{0.89}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.89}{0.89}{0.89}{0.89}%DONE s12
-%				{0.89}{0.89}{0.89}{0.89}%DONE s12
-
-\nextgroupplot[title=Class 80.8]
-\saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.90}{0.90}{0.90}{0.90}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.90}{0.90}{0.90}{0.90}%DONE s12
-%				{0.90}{0.90}{0.90}{0.90}%DONE s12
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  9
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Class 20.9,  ylabel=Accuracy]
-\saveResultsFirst   {0.86}{0.87}{0.87}{0.87}
-\saveResultsSecond  {0.87}{0.86}{0.86}{0.87}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.86}{0.87}{0.87}{0.87}%DONE s12
-%				{0.87}{0.86}{0.86}{0.87}%DONE s12
-      
-\nextgroupplot[title=Class 30.9]
-\saveResultsFirst   {0.88}{0.88}{0.88}{0.88}
-\saveResultsSecond  {0.88}{0.88}{0.88}{0.88}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.88}{0.88}{0.88}{0.88}%DONE s12
-%				{0.88}{0.88}{0.88}{0.88}%DONE s12
-
-\nextgroupplot[title=Class 50.9]
-\saveResultsFirst   {0.89}{0.89}{0.89}{0.89}
-\saveResultsSecond  {0.89}{0.89}{0.89}{0.89}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.89}{0.89}{0.89}{0.89}%DONE s12
-%				{0.89}{0.89}{0.89}{0.89}%DONE s12
-       		    		
-\nextgroupplot[title=Class 80.9]
-\saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.90}{0.90}{0.90}{0.90}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.90}{0.90}{0.90}{0.90}%DONE s12
-%				{0.90}{0.90}{0.90}{0.90}%DONE s12
-
-%%%%%%%%%%%%%%%%%%%%
-% DFA ID:  10
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Class 20.10,  ylabel=Accuracy]
-\saveResultsFirst   {0.87}{0.87}{0.87}{0.87}
-\saveResultsSecond  {0.87}{0.87}{0.87}{0.87}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.87}{0.87}{0.87}{0.87}%DONE s12
-%				{0.87}{0.87}{0.87}{0.87}%DONE s12
-     
-\nextgroupplot[title=Class 30.10]
-\saveResultsFirst   {0.88}{0.88}{0.88}{0.88}
-\saveResultsSecond  {0.88}{0.88}{0.88}{0.88}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.88}{0.88}{0.88}{0.88}%DONE s12
-%				{0.88}{0.88}{0.88}{0.88}%DONE s12
-
-\nextgroupplot[title=Class 50.10]
-\saveResultsFirst   {0.89}{0.89}{0.89}{0.89}
-\saveResultsSecond  {0.89}{0.89}{0.89}{0.89}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.89}{0.89}{0.89}{0.89}%DONE s12
-%				{0.89}{0.89}{0.89}{0.89}%DONE s12
-
-\nextgroupplot[title=Class 80.10]
-\saveResultsFirst   {0.90}{0.90}{0.90}{0.90}
-\saveResultsSecond  {0.90}{0.90}{0.90}{0.90}
-\addBarPlotResults  {C=4 Q=12}{C=5 Q=12}
-
-%\addFourPlots	{0.90}{0.90}{0.90}{0.90}%DONE s12
-%				{0.90}{0.90}{0.90}{0.90}%DONE s12
-
-%%%%%%%%%%%%%%%%%%%%
-% LEGEND
-%%%%%%%%%%%%%%%%%%%%
-    \setPlotLegend
-
-\end{groupplot}
-
-\end{tikzpicture}
-\end{figure}
 
 
 \begin{figure}[h]

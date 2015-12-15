@@ -163,56 +163,57 @@ Faculty of Mathematics and Information Science.}}
 % Starts groupplot with given style
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\beginGroupPlot}[0]{
-\begin{groupplot}[group style={group size= 4 by 10,  vertical sep=50pt}, %
-	    height = 4cm, 
-    	ybar=4*\pgflinewidth, 
-  		ymin=0, 
-  		ymax=1,
+\begin{groupplot}[
+        group style={group size= 4 by 10,  vertical sep=50pt},
+%        height = 4.5gcm, 
+        ybar=4*\pgflinewidth, 
+        ymin=0, 
+        ymax=1,
         width  = 0.37*\textwidth, 
-    	enlarge x limits={abs=0.85cm}, 
-	 	major x tick style = transparent, 
-       	ymajorgrids = true, 
-       	symbolic x coords={C=4,
-                            C=4 Q=3,
-                            C=4 Q=4,
-                            C=4 Q=5,
-                            C=4 Q=6,
-                            C=4 Q=7,
-                            C=4 Q=8,
-                            C=4 Q=9,
-                            C=4 Q=10,
-                            C=4 Q=11,
-                            C=4 Q=12,
-                            C=4 Q=13,
-                            C=4 Q=14,
-                            C=4 Q=15,
-                            C=5,
-                            C=5 Q=3,
-                            C=5 Q=4,
-                            C=5 Q=5,
-                            C=5 Q=6,
-                            C=5 Q=7,
-                            C=5 Q=8,
-                            C=5 Q=9,
-                            C=5 Q=10,
-                            C=5 Q=11,
-                            C=5 Q=12,
-                            C=5 Q=13,
-                            C=5 Q=14,
-                            C=5 Q=15
-                           },
+        enlarge x limits={abs=0.85cm}, 
+        major x tick style = transparent, 
+        ymajorgrids = true, 
+        symbolic x coords={
+            C=4,
+            C=4 Q=3,
+            C=4 Q=4,
+            C=4 Q=5,
+            C=4 Q=6,
+            C=4 Q=7,
+            C=4 Q=8,
+            C=4 Q=9,
+            C=4 Q=10,
+            C=4 Q=11,
+            C=4 Q=12,
+            C=4 Q=13,
+            C=4 Q=14,
+            C=4 Q=15,
+            C=5,
+            C=5 Q=3,
+            C=5 Q=4,
+            C=5 Q=5,
+            C=5 Q=6,
+            C=5 Q=7,
+            C=5 Q=8,
+            C=5 Q=9,
+            C=5 Q=10,
+            C=5 Q=11,
+            C=5 Q=12,
+            C=5 Q=13,
+            C=5 Q=14,
+            C=5 Q=15
+        },
         xtick = data, 
         scaled y ticks = false, 
-        legend cell align=left, 
-        legend columns=-5
+        legend cell align=right, 
+        legend columns=-1
         legend style={
-            at={(-5.76, -0.7)}, 
-            anchor=south east, 
-            column sep=10ex
+            at={(-0.76, -0.7)}, 
+            anchor=south east,
+            column sep=15ex
         }
- 	]
-
-}
+    ]
+}%beginGroupPlot
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sets legends for Bar plot
@@ -254,6 +255,7 @@ Faculty of Mathematics and Information Science.}}
 %%%%%%%%%%%%%%%%%%%%
 
 \beginGroupPlot
+    
 
 %%%%%%%%%%%%%%%%%%%%
 % DFA ID:  1
@@ -281,7 +283,13 @@ Faculty of Mathematics and Information Science.}}
     \saveResultsFirst   {0.85}{0.84}{0.84}{0.84}
     \saveResultsSecond  {0.84}{0.84}{0.84}{0.83}
     \addBarPlotResults  {C=4 Q=15}{C=5 Q=15}
-
+    
+%%%%%%%%%%%%%%%%%%%%
+% LEGEND
+%%%%%%%%%%%%%%%%%%%%
+    
+    \setPlotLegend
+    
 %%%%%%%%%%%%%%%%%%%%
 % DFA ID:  2
 %%%%%%%%%%%%%%%%%%%%
@@ -390,14 +398,8 @@ Faculty of Mathematics and Information Science.}}
     \saveResultsFirst   {0.86}{0.85}{0.85}{0.86}
     \saveResultsSecond  {0.85}{0.85}{0.85}{0.85}
     \addBarPlotResults  {C=4 Q=15}{C=5 Q=12}
-    
-    
-%%%%%%%%%%%%%%%%%%%%
-% LEGEND
-%%%%%%%%%%%%%%%%%%%%
-    
-    \setPlotLegend
-    \end{groupplot}
+
+\end{groupplot}
     
 \end{tikzpicture}
     

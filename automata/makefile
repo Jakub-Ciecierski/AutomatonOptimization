@@ -243,7 +243,7 @@ utest:
 	@$(MAKE) -C $(TST)
 
 # Install rule	
-install: $(MAKE_EXTERNAL) info_prefix init ${APP_NAME} info_suffix init_install clean
+install: $(MAKE_EXTERNAL) info_prefix init ${APP_NAME} info_suffix init_install
 
 ################################################
 #--------------- LINKER / COMPILER ------------#
@@ -296,6 +296,7 @@ init:
 
 clean:
 	@$(RM) *.o *~ ${OBJ}/*.o ${OBJ}/*.d ${OBJ}/*~ ${BIN}/*
+	@${RM} -rf ${OBJ} ${BIN}
 	@$(MAKE) -C $(TST) clean
 
 .PHONY: $(SUBDIRS) clean
@@ -314,6 +315,7 @@ init_install:
 	@echo "Installing scripts"
 	@cp -r ./script ${INSTALL_PATH_ARG}
 	@cp ${BIN}/${APP_NAME} ${INSTALL_PATH_ARG}
+	@cp ./HOWTO.txt ${INSTALL_PATH_ARG}
 
 ################################################
 #----------------- PRINT RULES-----------------#

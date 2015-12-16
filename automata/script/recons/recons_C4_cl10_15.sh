@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MAIN_DIR_LOG="./logs/RECONS_C4"
+MAIN_DIR_LOG="./logs"
 DIR_LOG="RECONS_C4"
 
 #############################################################

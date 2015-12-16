@@ -88,6 +88,8 @@
 #	or:
 #		#include "math/clustering/kmeans.h"
 #
+# 15.12.2015 - Added install rule
+#
 #---------------------------------------------------------------------
 
 
@@ -100,14 +102,13 @@
 ######################################################################
 #------------------ DYNAMIC SUBSECTION - CAN MODIFY -----------------#
 ######################################################################
+#--------------- APPLICATION NAME -------------#
+
+APP_NAME = optimizer
 
 #--------------- EXTERNAL APPS ----------------#
 
 GRAPHVIZ_ROOT = '../graphviz'
-
-#--------------- APPLICATION NAME -------------#
-
-APP_NAME = optimizer
 
 #--------------- FILE EXTENSIONS --------------#
 
@@ -143,9 +144,7 @@ MAKE_EXTERNAL =
 #---------------- LIBRARIES -------------------#
 
 # Paths and names of libraries to link with
-LIBS += -lpthread \
-
-
+LIBS += -lpthread
 # -L /opt/cuda/lib64 \
 #		-L /usr/local/cuda/lib64 \
 #		-lGL -lglut -lGLEW -lcudart -lcuda
@@ -176,6 +175,14 @@ INFO_FILLER = "  <<  "
 ######################################################################
 #------------------ STATIC SUBSECTION - DO NOT MODIFY ---------------#
 ######################################################################
+
+#----------------- INSTALL DIRECTORY -----------------#
+
+INSTALL_PATH_ARG=${INSTALL_PATH}
+# If INSTALL_PATH was not set. set it to default
+ifeq (${INSTALL_PATH_ARG},)
+	INSTALL_PATH_ARG=./install
+endif 
 
 # Adds each modules in include separately.
 INC_MODULES =  $(addprefix -I , $(shell find ${INC} -type d 2>/dev/null))
@@ -217,7 +224,9 @@ VPATH = ${MODULES}
 #------------------ STATIC SUBSECTION - DO NOT MODIFY ---------------#
 ######################################################################
 
-#------------------ DEFAULT -------------------#
+################################################
+#----------------- MAIN RULES -----------------#
+################################################
 
 # All
 all: rel utest
@@ -233,8 +242,16 @@ debug:
 utest:
 	@$(MAKE) -C $(TST)
 
+# Install rule	
+install: $(MAKE_EXTERNAL) info_prefix init ${APP_NAME} info_suffix init_install clean
+
+################################################
+#--------------- LINKER / COMPILER ------------#
+################################################
+
 #------------------ LINKER --------------------#
 
+# Used in debug
 ${APP_NAME}: ${OBJECTS}
 	@$(CC) -o ${BIN}/${APP_NAME} $^ $(L_FLAGS)
 
@@ -254,7 +271,9 @@ ${OBJ}/%.o: %${CUDA_EXT}
 	@echo
 	@$(NVCC) $(NVCC_FLAGS) -c -o $@ $<
 
-#------------------ EXTERNALS -----------------#
+################################################
+#----------------- EXTERNALS ------------------#
+################################################
 
 # Make external makefiles
 $(MAKE_EXTERNAL):
@@ -267,7 +286,9 @@ $(MAKE_EXTERNAL):
 	@echo 'Compiling External $@ Finished'
 	@echo
 
+################################################
 #---------------- UTILITY RULES ---------------#
+################################################
 
 # Creates all the directories of the project
 init:
@@ -277,14 +298,26 @@ clean:
 	@$(RM) *.o *~ ${OBJ}/*.o ${OBJ}/*.d ${OBJ}/*~ ${BIN}/*
 	@$(MAKE) -C $(TST) clean
 
-
 .PHONY: $(SUBDIRS) clean
 
 ######################################################################
 #------------------ DYNAMIC SUBSECTION - CAN MODIFY -----------------#
 ######################################################################
 
-#----------------- PRINT RULES ----------------#
+# This rule should be used to define the installation process.
+# Add all requiremnt for your installation here.
+# This will be ran after compilation.
+init_install:
+	@mkdir -p ${INSTALL_PATH_ARG}
+	@echo "Installing resources"
+	@cp -r ./res ${INSTALL_PATH_ARG}
+	@echo "Installing scripts"
+	@cp -r ./script ${INSTALL_PATH_ARG}
+	@cp ${BIN}/${APP_NAME} ${INSTALL_PATH_ARG}
+
+################################################
+#----------------- PRINT RULES-----------------#
+################################################
 
 info_prefix:
 	@echo

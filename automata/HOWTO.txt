@@ -1,0 +1,138 @@
+#####################################################################
+#
+#			USAGE
+#
+#####################################################################
+
+Refer to ../INSTALL.txt to install the application first.
+
+After successful Installation the directory should contains:
+./res/			Resources required and helpful to run the program
+./script/		Automated scripts to run computations
+./optimizer		The executable
+
+Type:
+./optimizer --help
+to see list of all flags.
+
+WARNING:
+The program should be called from current directory:
+./optimizer [FLAGS]
+
+#####################################################################
+#
+#			OPTIMIZER EXPERIMENTS
+#
+#####################################################################
+
+The optimizer program has 3 main roles/experiments:
+0) Main: DFA Optimization		Flag: -E 0
+1) DFA Generation.				Flag: -E 1
+2) Word Generation.				Flag: -E 2
+
+###############################################
+#			Main: DFA Optimization
+###############################################
+
+Example of running Main DFA Optimization.
+	Start state 	= 3
+	End state 		= 15
+	Max iteration 	= 200
+	Swarm size 		= 50
+	Input DFA 		= ./res/recons/class_s4_r5/dfa_s4_r5_1/s4_r5.dfa
+	Word set 		= ./res/words_C4_Train2000_Test2000.txt 
+
+./optimizer -E 0 -A ./res/recons/class_s4_r5/dfa_s4_r5_1/s4_r5.dfa -W ./res/words_C4_Train2000_Test2000.txt -q 3 -Q 15 -S 50 -I 200
+
+
+###############################################
+#			DFA Generation
+###############################################
+
+Example of running DFA Generation.
+To generate DFA with 5 states and 3 symbols:
+
+./optimizer -E 1 --gen-dfa-states 5 --gen-dfa-symbols 3 --gen-dfa-path ./res/my_dfa
+
+If 'my_dfa' directory does not exist, it will be created.
+Three files will generated:
+s5_r3.dfa		The string representation of DFA - The unified format
+s5_r3.dot		Graph of DFA in DOT language.
+s5_r3.jpg		Graph of DFA in JPG, based on DOT
+
+###############################################
+#			WORD Generation
+###############################################
+
+Example of running Word Generation
+To generate Word set with:
+	Symbols 					= 3
+	Constanc C 					= 4
+	Entire Training Size		= 7500
+	Training Max word length	= 20
+	Testing set size			= 7500
+	Testing Max word length 	= 30
+
+./optimizer -E 2 --gen-w-sym-count 3 --gen-w-c 4 --gen-w-train-size 7500 --gen-w-train-max-length 20 --gen-w-test-size 7500 --gen-w-test-max-length 30
+
+The file will be generated in
+./res/words_C4_Train7500_Test7500.txt
+
+
+#####################################################################
+#
+#			SCRIPTS
+#
+#####################################################################
+
+Scripts contains ready to run experiments.
+
+WARNING:
+The scripts should be ran from the current directory.
+
+###############################################
+#			RECONSTRUCTION SCRIPTS
+###############################################
+
+Constant 4
+Classes of Automata [4, 6]. 10 Automata in each class
+
+	./script/recons/recons_C4_cl4_6.sh 
+	
+Constant 4
+Classes of Automata [10, 15]. 10 Automata in each class
+
+	./script/recons/recons_C4_cl10_15.sh 
+
+Constant 5
+Classes of Automata [4, 6] 10 Automata in each class
+
+	./script/recons/recons_C5_cl4_6.sh 
+
+Constant 5
+Classes of Automata [10, 15]. 10 Automata in each class
+
+	./script/recons/recons_C5_cl10_15.sh 
+
+
+###############################################
+#			APPROXIMATION SCRIPTS
+###############################################
+
+Constant 4
+Classes of Automata [20, 30, 50, 80]. 10 Automata in each class
+
+	./script/approx/approx_C4.sh 
+
+Constant 5
+Classes of Automata [20, 30]. 10 Automata in each class
+
+	./script/approx/approx_C5_cl20_30.sh
+	
+Constant 5
+Classes of Automata [50, 80]. 10 Automata in each class
+	
+	./script/approx/approx_C5_cl50_80.sh 
+
+
+

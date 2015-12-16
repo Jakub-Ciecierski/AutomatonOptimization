@@ -91,7 +91,7 @@ run_optimizer(){
 	echo "Log Dir: " $3
 	echo "---------------------"
 	
-	./bin/optimizer -E 0 -A $1 \
+	./optimizer -E 0 -A $1 \
 		-q $2 -Q $2 \
 		--log-dir $3 \
 		--log-main-dir ${MAIN_DIR_LOG} \

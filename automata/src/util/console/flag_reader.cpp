@@ -88,7 +88,8 @@ namespace console {
         flags.push_back(Flag("E", "exp",
                              "Expiriment ID - "
                                      "0: Main Optimizer, "
-                                     "1: DFA Generation",
+                                     "1: DFA Generation, "
+                                     "2: Word Generation",
                              INT, &global_settings::EXPERIMENT_ID));
 
         /* ------ DFA GENERATION SETTINGS ----- */

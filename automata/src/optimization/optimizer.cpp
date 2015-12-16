@@ -66,8 +66,6 @@ const DFA* Optimizer::getTool() const{
 void Optimizer::generateWords() {
     logger::log(Verbose(OPTIMIZER_V), "Generating Words");
 
-    std::vector<int>* alphabet = tool->getAlphabet();
-
     _wordsGenerator = new WordsGenerator(global_settings::WORDS_PATH);
 }
 

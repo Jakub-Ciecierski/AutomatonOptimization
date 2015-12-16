@@ -92,7 +92,7 @@ run_optimizer(){
 	echo "DIR: " $4
 	echo "---------------------"
 	
-	./bin/optimizer -E 0 -A $1 \
+	./optimizer -E 0 -A $1 \
 		-q $2 -Q $3 \
 		-I ${MAX_ITER} \
 		--log-dir $4 \

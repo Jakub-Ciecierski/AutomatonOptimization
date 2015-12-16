@@ -44,8 +44,6 @@ namespace utils {
         return vec123;
     }
 
-    // TODO(dybisz) fix this shit
-    // In case of int generation, make endRange++.
     template<class T>
     inline T generateRandomNumber(T startRange, T endRange) {
         return startRange + (T) rand() / ((T) RAND_MAX / (T) (endRange - startRange));

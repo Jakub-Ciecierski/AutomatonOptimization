@@ -174,7 +174,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Starts groupplot with given style
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \newcommand{\beginGroupPlot}[0]{
+\newcommand{\beginGroupPlot}[0]{
     \begin{groupplot}[
         group style={group size= 2 by 2,  vertical sep=50pt},
         height = 5.5cm, 
@@ -217,12 +217,11 @@
         },
         xtick = data, 
         scaled y ticks = false, 
-        legend cell align=right, 
-        legend columns=-1
+        legend cell align=center, 
+        legend columns=1,
         legend style={
-            at={(0.0, 0.0)}, 
-            anchor=south east,
-            column sep=15ex
+            at={(1.45, 0.45)}, 
+            anchor=north,
         }
         ]
     }%beginGroupPlot
@@ -788,12 +787,6 @@ Through out the computations, we might find several equally best automatons. In 
 
 
 
-
-
-
-
-
-
 \section{Modeling}\label{sec:modeling}
 
 In this section the project implementation is discussed. 
@@ -811,14 +804,14 @@ A state diagram of finding the optimal automaton is shown in figure~\ref{fig:sta
     \caption{Class diagram of Automata module}
     \label{fig:class_automata}
     
-    \includegraphics[width=0.85\textwidth]{res/uml/classes/automata.jpg}
+    \includegraphics[width=0.65\textwidth]{res/uml/classes/automata.jpg}
 \end{figure}
 
 \begin{figure}[H]
     \caption{Class diagram of Optimization module }
     \label{fig:class_opt_main}
     
-    \includegraphics[width=0.85\textwidth]{res/uml/classes/optimizationMain.jpg}
+    \includegraphics[width=0.75\textwidth]{res/uml/classes/optimizationMain.jpg}
     
 \end{figure}
 
@@ -827,7 +820,7 @@ A state diagram of finding the optimal automaton is shown in figure~\ref{fig:sta
     \caption{Class diagram of Optimization Algorithm module}
     \label{fig:class_opt_alg}
     
-    \includegraphics[width=0.85\textwidth]{res/uml/classes/optimizationAlg.jpg}
+    \includegraphics[width=0.75\textwidth]{res/uml/classes/optimizationAlg.jpg}
     
 \end{figure}
 
@@ -906,10 +899,6 @@ Finally the time of computations of each class for both $C=4$ and $C=5$ is prese
 
 
     \nextgroupplot[title=Class 4,  ylabel=Accuracy]
-    %%%%%%%%%%%%%%%%%%%%
-    % LEGEND
-    %%%%%%%%%%%%%%%%%%%%
-    \setPlotLegend
     \saveResultsFirst   {0.75}{0.76}{0.76}{0.76}
     \saveResultsSecond  {0.76}{0.76}{0.76}{0.76}
     \addBarPlotResults  {C=4}{C=5}
@@ -929,9 +918,218 @@ Finally the time of computations of each class for both $C=4$ and $C=5$ is prese
     \saveResultsFirst   {0.86}{0.86}{0.86}{0.86}
     \saveResultsSecond  {0.86}{0.86}{0.86}{0.86}
     \addBarPlotResults  {C=4}{C=5}
-
+    %%%%%%%%%%%%%%%%%%%%
+    % LEGEND
+    %%%%%%%%%%%%%%%%%%%%
+    \setPlotLegend
+    
 \end{groupplot}
 \end{tikzpicture}
+\end{figure}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GROUP LINE PLOT
+% RECON     {C4, C5}
+% CLASSES   {4, 6, 10, 15.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
+    \caption{Reconstruction. Testing Set Accuracy across the PSO interval for all classes}
+    \label{fig:recons_pso}
+    
+    \setPlotStyle
+    \begin{tikzpicture}
+    
+    \begin{groupplot}[group style={group size= 2 by 2,
+        vertical sep=50pt, horizontal sep=40pt}, 
+    height=5cm,
+    width=9cm,
+    xtick={3,4,5,6,7,8,9,10,11,12,13,14,15},
+    xlabel=States,
+    ymax=1.0, 
+    ymin=0.0, 
+    xmin=3,
+    xmax=15,  
+    legend cell align=left, 
+    legend columns=-1, 
+    legend style={
+        at={(-0.76, -0.7)}, 
+        anchor=south east, 
+        column sep=2ex
+    }
+    ]
+    
+    
+    %%%%%%%%%%%%%%%%%%%%
+    % CLASS     4
+    %%%%%%%%%%%%%%%%%%%%
+    
+    \nextgroupplot[title=Class 4, ylabel=Testing Set Accuracy]
+    
+    % RECONS_C4_CL4_1
+    \addplot[color=bblue, mark=x] coordinates {
+        (3, 0.64)
+        (4, 0.67)
+        (5, 0.68)
+        (6, 0.68)
+        (7, 0.69)
+        (8, 0.69)
+        (9, 0.69)
+        (10, 0.70)
+        (11, 0.72)
+        (12, 0.70)
+        (13, 0.71)
+        (14, 0.71)
+        (15, 0.71)
+    };
+    
+    
+    % RECONS_C5_CL4_1
+    \addplot[color=rred, mark=o] coordinates {
+        (3, 0.64)
+        (4, 0.67)
+        (5, 0.68)
+        (6, 0.68)
+        (7, 0.69)
+        (8, 0.69)
+        (9, 0.69)
+        (10, 0.70)
+        (11, 0.72)
+        (12, 0.70)
+        (13, 0.71)
+        (14, 0.71)
+        (15, 0.71)
+    };
+    
+    
+    %%%%%%%%%%%%%%%%%%%%
+    % CLASS     6
+    %%%%%%%%%%%%%%%%%%%%
+    \nextgroupplot[title=Class 6]
+    % RECONS_C4_CL6_1
+    \addplot[color=bblue, mark=x] coordinates {
+        (3, 0.63)
+        (4, 0.68)
+        (5, 0.70)
+        (6, 0.72)
+        (7, 0.72)
+        (8, 0.74)
+        (9, 0.74)
+        (10, 0.75)
+        (11, 0.75)
+        (12, 0.76)
+        (13, 0.76)
+        (14, 0.77)
+        (15, 0.77)
+    };
+    
+    
+    % RECONS_C5_CL6_1
+    \addplot[color=rred, mark=o] coordinates {
+        (3, 0.63)
+        (4, 0.67)
+        (5, 0.70)
+        (6, 0.71)
+        (7, 0.73)
+        (8, 0.74)
+        (9, 0.74)
+        (10, 0.75)
+        (11, 0.75)
+        (12, 0.76)
+        (13, 0.76)
+        (14, 0.77)
+        (15, 0.77)
+    };
+    
+    
+    %%%%%%%%%%%%%%%%%%%%
+    % CLASS     10
+    %%%%%%%%%%%%%%%%%%%%
+    \nextgroupplot[title=Class 10, ylabel=Testing Set Accuracy]
+    
+    % RECONS_C4_CL10_1
+    \addplot[color=bblue, mark=x] coordinates {
+        (3, 0.66)
+        (4, 0.72)
+        (5, 0.75)
+        (6, 0.77)
+        (7, 0.78)
+        (8, 0.79)
+        (9, 0.80)
+        (10, 0.80)
+        (11, 0.81)
+        (12, 0.81)
+        (13, 0.82)
+        (14, 0.82)
+        (15, 0.83)
+    };
+    
+    % RECONS_C5_CL10_1
+    \addplot[color=rred, mark=o] coordinates {
+        (3, 0.66)
+        (4, 0.72)
+        (5, 0.75)
+        (6, 0.77)
+        (7, 0.78)
+        (8, 0.79)
+        (9, 0.80)
+        (10, 0.80)
+        (11, 0.81)
+        (12, 0.81)
+        (13, 0.82)
+        (14, 0.82)
+        (15, 0.83)
+    };
+    
+    
+    %%%%%%%%%%%%%%%%%%%%
+    % CLASS     15
+    %%%%%%%%%%%%%%%%%%%%
+    \nextgroupplot[title=Class 15]
+    
+    % RECONS_C4_CL15
+    \addplot[color=bblue, mark=x] coordinates {
+        (3, 0.66)
+        (4, 0.72)
+        (5, 0.75)
+        (6, 0.77)
+        (7, 0.79)
+        (8, 0.80)
+        (9, 0.81)
+        (10, 0.82)
+        (11, 0.82)
+        (12, 0.83)
+        (13, 0.83)
+        (14, 0.84)
+        (15, 0.84)
+    };
+    
+    
+    % RECONS_C5_CL15
+    \addplot[color=rred, mark=o] coordinates {
+        (3, 0.66)
+        (4, 0.72)
+        (5, 0.75)
+        (6, 0.77)
+        (7, 0.79)
+        (8, 0.80)
+        (9, 0.81)
+        (10, 0.82)
+        (11, 0.82)
+        (12, 0.83)
+        (13, 0.83)
+        (14, 0.84)
+        (15, 0.84)
+    };
+    
+    \addlegendentry{C=4}
+    \addlegendentry{C=5}
+    
+    \end{groupplot}
+    \end{tikzpicture}
 \end{figure}
 
 
@@ -944,267 +1142,60 @@ Finally the time of computations of each class for both $C=4$ and $C=5$ is prese
 \begin{figure}[H]
     \caption{Reconstruction. Time of computations (in minutes) for classes 4,6,10,15 for both set of words}
     \label{fig:recons_time}
-
-
-\setPlotStyle
-\begin{tikzpicture}
-
-\begin{groupplot}[group style={group size= 1 by 1,
-    vertical sep=50pt, horizontal sep=40pt}, 
-height=5cm,
-width=9cm,
-xlabel=Classes,
-xtick={4,6,10,15},
-legend cell align=left, 
-legend columns=-1, 
-legend style={
-    at={(-0.76, -0.7)}, 
-    anchor=south east, 
-    column sep=2ex
-}
-]
-
-%%%%%%%%%%%%%%%%%%%%
-% CLASS     4
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Time of Computations, ylabel=Time [min]]
-
-% RECONS_C4_CL4
-\addplot[color=bblue, mark=x] coordinates {
-    (4, 8.0)
-    (6, 8.0)
-    (10, 8.0)
-    (15, 8.0)
-};
-
-
-% RECONS_C5_CL4
-\addplot[color=rred, mark=o] coordinates {
-    (4, 62.0)
-    (6, 63.0)
-    (10, 64.0)
-    (15, 64.0)
-};
-
-
-\addlegendentry{C=4}
-\addlegendentry{C=5}
-
-\end{groupplot}
-\end{tikzpicture}
-\end{figure}
-
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% GROUP LINE PLOT
-% RECON     {C4, C5}
-% CLASSES   {4, 6, 10, 15.}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[H]
-    \caption{Reconstruction. Testing Set Accuracy across the PSO interval for all classes}
-    \label{fig:recons_pso}
-
-\setPlotStyle
-\begin{tikzpicture}
-
-\begin{groupplot}[group style={group size= 2 by 2,
+    
+    
+    \setPlotStyle
+    \begin{tikzpicture}
+    
+    \begin{groupplot}[group style={group size= 1 by 1,
         vertical sep=50pt, horizontal sep=40pt}, 
-        height=5cm,
-        width=9cm,
-        xtick={3,4,5,6,7,8,9,10,11,12,13,14,15},
-        xlabel=States,
-        ymax=1.0, 
-        ymin=0.0, 
-        xmin=3,
-        xmax=15,  
-        legend cell align=left, 
-        legend columns=-1, 
-        legend style={
-            at={(-0.76, -0.7)}, 
-            anchor=south east, 
-            column sep=2ex
-        }
-       ]
-
-
-%%%%%%%%%%%%%%%%%%%%
-% CLASS     4
-%%%%%%%%%%%%%%%%%%%%
-
-\nextgroupplot[title=Class 4, ylabel=Testing Set Accuracy]
-
-% RECONS_C4_CL4_1
-\addplot[color=bblue, mark=x] coordinates {
-    (3, 0.64)
-    (4, 0.67)
-    (5, 0.68)
-    (6, 0.68)
-    (7, 0.69)
-    (8, 0.69)
-    (9, 0.69)
-    (10, 0.70)
-    (11, 0.72)
-    (12, 0.70)
-    (13, 0.71)
-    (14, 0.71)
-    (15, 0.71)
-};
-
-
-% RECONS_C5_CL4_1
-\addplot[color=rred, mark=o] coordinates {
-    (3, 0.64)
-    (4, 0.67)
-    (5, 0.68)
-    (6, 0.68)
-    (7, 0.69)
-    (8, 0.69)
-    (9, 0.69)
-    (10, 0.70)
-    (11, 0.72)
-    (12, 0.70)
-    (13, 0.71)
-    (14, 0.71)
-    (15, 0.71)
-};
-
-
-%%%%%%%%%%%%%%%%%%%%
-% CLASS     6
-%%%%%%%%%%%%%%%%%%%%
-\nextgroupplot[title=Class 6]
-% RECONS_C4_CL6_1
-\addplot[color=bblue, mark=x] coordinates {
-    (3, 0.63)
-    (4, 0.68)
-    (5, 0.70)
-    (6, 0.72)
-    (7, 0.72)
-    (8, 0.74)
-    (9, 0.74)
-    (10, 0.75)
-    (11, 0.75)
-    (12, 0.76)
-    (13, 0.76)
-    (14, 0.77)
-    (15, 0.77)
-};
-
-
-% RECONS_C5_CL6_1
-\addplot[color=rred, mark=o] coordinates {
-    (3, 0.63)
-    (4, 0.67)
-    (5, 0.70)
-    (6, 0.71)
-    (7, 0.73)
-    (8, 0.74)
-    (9, 0.74)
-    (10, 0.75)
-    (11, 0.75)
-    (12, 0.76)
-    (13, 0.76)
-    (14, 0.77)
-    (15, 0.77)
-};
-
-
-%%%%%%%%%%%%%%%%%%%%
-% CLASS     10
-%%%%%%%%%%%%%%%%%%%%
-\nextgroupplot[title=Class 10, ylabel=Testing Set Accuracy]
-
-% RECONS_C4_CL10_1
-\addplot[color=bblue, mark=x] coordinates {
-    (3, 0.66)
-    (4, 0.72)
-    (5, 0.75)
-    (6, 0.77)
-    (7, 0.78)
-    (8, 0.79)
-    (9, 0.80)
-    (10, 0.80)
-    (11, 0.81)
-    (12, 0.81)
-    (13, 0.82)
-    (14, 0.82)
-    (15, 0.83)
-};
-
-% RECONS_C5_CL10_1
-\addplot[color=rred, mark=o] coordinates {
-    (3, 0.66)
-    (4, 0.72)
-    (5, 0.75)
-    (6, 0.77)
-    (7, 0.78)
-    (8, 0.79)
-    (9, 0.80)
-    (10, 0.80)
-    (11, 0.81)
-    (12, 0.81)
-    (13, 0.82)
-    (14, 0.82)
-    (15, 0.83)
-};
-
-
-%%%%%%%%%%%%%%%%%%%%
-% CLASS     15
-%%%%%%%%%%%%%%%%%%%%
-\nextgroupplot[title=Class 15]
-
-% RECONS_C4_CL15
-\addplot[color=bblue, mark=x] coordinates {
-    (3, 0.66)
-    (4, 0.72)
-    (5, 0.75)
-    (6, 0.77)
-    (7, 0.79)
-    (8, 0.80)
-    (9, 0.81)
-    (10, 0.82)
-    (11, 0.82)
-    (12, 0.83)
-    (13, 0.83)
-    (14, 0.84)
-    (15, 0.84)
-};
-
-
-% RECONS_C5_CL15
-\addplot[color=rred, mark=o] coordinates {
-    (3, 0.66)
-    (4, 0.72)
-    (5, 0.75)
-    (6, 0.77)
-    (7, 0.79)
-    (8, 0.80)
-    (9, 0.81)
-    (10, 0.82)
-    (11, 0.82)
-    (12, 0.83)
-    (13, 0.83)
-    (14, 0.84)
-    (15, 0.84)
-};
-
-\addlegendentry{C=4}
-\addlegendentry{C=5}
-
-\end{groupplot}
-\end{tikzpicture}
-
-
+    height=5cm,
+    width=9cm,
+    xlabel=Classes,
+    xtick={4,6,10,15},
+    legend cell align=left, 
+    legend columns=1,
+    legend style={
+        at={(1.3, 0.7)}, 
+        anchor=south east, 
+        column sep=2ex
+    }
+    ]
+    
+    %%%%%%%%%%%%%%%%%%%%
+    % CLASS     4
+    %%%%%%%%%%%%%%%%%%%%
+    
+    
+    
+    \nextgroupplot[title=Time of Computations, ylabel=Time [min]]
+    
+    % RECONS_C4_CL4
+    \addplot[color=bblue, mark=x] coordinates {
+        (4, 8.0)
+        (6, 8.0)
+        (10, 8.0)
+        (15, 8.0)
+    };
+    
+    
+    % RECONS_C5_CL4
+    \addplot[color=rred, mark=o] coordinates {
+        (4, 62.0)
+        (6, 63.0)
+        (10, 64.0)
+        (15, 64.0)
+    };
+    
+    
+    \addlegendentry{C=4}
+    \addlegendentry{C=5}
+    
+    \end{groupplot}
+    
+    \end{tikzpicture}
+    
 \end{figure}
-
 
 
 
@@ -1272,6 +1263,7 @@ The tendency of accuracy growth together with increased number of states remain 
 \end{tikzpicture}
 
 \end{figure}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -61,7 +61,6 @@ private:
     // Generates the sample set of words Omega
     WordsGenerator* _wordsGenerator;
 
-    //
     vector<int> _toolRelationResults;
 
     Particle* bestParticle;
@@ -111,8 +110,6 @@ private:
      */
     void compareResultWithBestResult(Particle* result,
                                      double testSetResult);
-
-    double computeTestSetResults(Particle* particle);
 
     void summarize(Particle* particle, int psoStateCount,
                               double testSetResult,

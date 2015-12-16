@@ -7,6 +7,9 @@
 namespace experiments
 {
 
+    /*
+     * Runs the DFA Generation Experiment
+     */
     void runDFAGenerationExperiment();
 
     namespace dfa_gen

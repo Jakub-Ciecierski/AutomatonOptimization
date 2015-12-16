@@ -5,6 +5,7 @@
 #include <entities/random_sphere.h>
 #include <algorithms/pso_update/pso_update_naive.h>
 #include <algorithms/pso_update/pso_update_sphere.h>
+#include <logger/log.h>
 #include "pso_update_common.h"
 
 namespace pso
@@ -15,9 +16,7 @@ namespace pso
             unsigned long size = particles->size();
             for(unsigned long i = 0; i < size; i ++){
                 Particle* p = (*particles)[i];
-
                 naive::update_naive(p);
-                //sphere::update_sphere(p);
 
                 boundPositionWithInterval(p);
                 p->updateCurrentDFA();
@@ -57,7 +56,6 @@ namespace pso
 
         void boundPositionWithInterval(Particle* particle){
             const Point<double>* position = particle->getPosition();
-            Point<double> newPosition(position->size());
 
             const double intervalMin = particle->getIntervalMin();
             const double intervalMax = particle->getIntervalMax();

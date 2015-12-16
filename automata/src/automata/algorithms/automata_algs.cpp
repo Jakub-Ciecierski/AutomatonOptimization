@@ -9,9 +9,9 @@
 namespace automata
 {
 
-    unsigned int removeUnreachableStates(DFA* dfa){
+    unsigned int removeUnreachableStates(DFA** dfa){
         std::vector<unsigned int>* reachibilityFlags =
-                                getReachabilityFlags(dfa);
+                                getReachabilityFlags(*dfa);
 
         unsigned int reducedCount = 0;
         for(unsigned int i = 0; i < reachibilityFlags->size(); i++){
@@ -72,11 +72,11 @@ namespace automata
         return reachableFlags;
     }
 
-    std::map<int, int>* reduceDFA(DFA* dfa,
+    std::map<int, int>* reduceDFA(DFA** dfa,
                                   std::vector<unsigned int>*reductionFlags){
-        const TransitionFunction* tf = dfa->getTransitionFunction();
-        unsigned int stateCount = dfa->getStateCount();
-        unsigned int symbolCount = dfa->getSymbolCount();
+        const TransitionFunction* tf = (*dfa)->getTransitionFunction();
+        unsigned int stateCount = (*dfa)->getStateCount();
+        unsigned int symbolCount = (*dfa)->getSymbolCount();
 
         unsigned int unreachableCount = 0;
         unsigned int currentReducedState = 0;
@@ -110,8 +110,8 @@ namespace automata
                     }
             }
 
-            delete dfa;
-            dfa = new DFA(tfReduced);
+            delete *dfa;
+            *dfa = new DFA(tfReduced);
         }
 
         return statesMapping;

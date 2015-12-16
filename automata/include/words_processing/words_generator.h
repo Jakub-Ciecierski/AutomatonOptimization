@@ -72,8 +72,8 @@ private:
 		int _wordsInTrainingSet;
 		int _wordsInFirstSubset;
 		int _wordsInSecondSubset;
+        int _maxWordLengthTraining;
 		int _wordsInTestingSet;
-		int _maxWordLengthTraining;
 		int _maxWordLengthTesting;
 		char _commentSign = '#';
 		char _testHeaderSign = '[';

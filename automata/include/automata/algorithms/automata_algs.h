@@ -20,7 +20,7 @@ namespace automata
      * Returns the number of removed states;
      *
      */
-    unsigned int removeUnreachableStates(DFA* dfa);
+    unsigned int removeUnreachableStates(DFA** dfa);
 
     /*
      * Returns a flag of states Reachability.
@@ -49,7 +49,7 @@ namespace automata
      *
      * Allocated memory for the map. It should be removed manually.
      */
-    std::map<int, int>* reduceDFA(DFA* dfa,
+    std::map<int, int>* reduceDFA(DFA** dfa,
                            std::vector<unsigned int>* reductionFlags);
 }
 

@@ -109,11 +109,10 @@ std::vector<const Point<T>*> KMeans<T>::getCluster(int i){
 
 template <class T>
 
-std::vector<int> KMeans<T>::getClusterIndices(int i){
+const std::vector<int>* KMeans<T>::getClusterIndices(int i) const{
     if( i < 0 || i >= k)
         throw std::invalid_argument("Index out of range");
-
-    return this->clusterIndices[i];
+    return &(this->clusterIndices[i]);
 }
 
 

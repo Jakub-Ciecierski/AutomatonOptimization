@@ -166,14 +166,14 @@ Word* createBigWord_r4(){
 //-----------------------------------------------------------//
 //  TESTS
 //-----------------------------------------------------------//
-/*
+
 TEST(AutomataAlgorithms,
      RemoveUnreachableStates_DFA_s4_r2_unreach0_0StatesRemoved){
     DFA* dfa = createDFA_s5_r2_unreach0();
 
     unsigned int expectedunreachableCount = 0;
     unsigned int actualunreachableCount =
-            automata::removeUnreachableStates(dfa);
+            automata::removeUnreachableStates(&dfa);
 
     delete dfa;
 
@@ -187,7 +187,7 @@ TEST(AutomataAlgorithms,
 
     unsigned int expectedunreachableCount = 1;
     unsigned int actualunreachableCount =
-            automata::removeUnreachableStates(dfa);
+            automata::removeUnreachableStates(&dfa);
 
     delete dfa;
     EXPECT_EQ(expectedunreachableCount, actualunreachableCount);
@@ -200,7 +200,7 @@ TEST(AutomataAlgorithms,
 
     unsigned int expectedunreachableCount = 2;
     unsigned int actualunreachableCount =
-            automata::removeUnreachableStates(dfa);
+            automata::removeUnreachableStates(&dfa);
 
     delete dfa;
     EXPECT_EQ(expectedunreachableCount, actualunreachableCount);
@@ -212,7 +212,7 @@ TEST(AutomataAlgorithms,
 
     unsigned int expectedunreachableCount = 3;
     unsigned int actualunreachableCount =
-            automata::removeUnreachableStates(dfa);
+            automata::removeUnreachableStates(&dfa);
 
     delete dfa;
     EXPECT_EQ(expectedunreachableCount, actualunreachableCount);
@@ -225,7 +225,7 @@ TEST(AutomataAlgorithms,
     Word* w = createMediumWord_r2();
 
     int expectedState = dfa->compute(*w);
-    automata::removeUnreachableStates(dfa);
+    automata::removeUnreachableStates(&dfa);
     int actualState = dfa->compute(*w);
 
     delete w;
@@ -241,7 +241,7 @@ TEST(AutomataAlgorithms,
     Word* w = createBigWord_r2();
 
     int expectedState = dfa->compute(*w);
-    automata::removeUnreachableStates(dfa);
+    automata::removeUnreachableStates(&dfa);
     int actualState = dfa->compute(*w);
 
     delete w;
@@ -260,14 +260,16 @@ TEST(AutomataAlgorithms,
     std::vector<unsigned int>* reachibilityFlags =
                         automata::getReachabilityFlags(dfa);
     std::map<int, int>* mapping =
-                        automata::reduceDFA(dfa, reachibilityFlags);
+                        automata::reduceDFA(&dfa, reachibilityFlags);
+
+    int actualState = dfa->compute(*w);
+    int expectedState = (*mapping)[preReductionState];
 
     delete reachibilityFlags;
     delete mapping;
     delete w;
     delete dfa;
-    int actualState = dfa->compute(*w);
-    int expectedState = (*mapping)[preReductionState];
+
     EXPECT_EQ(expectedState, actualState);
 }
 
@@ -281,7 +283,7 @@ TEST(AutomataAlgorithms,
     std::vector<unsigned int>* reachibilityFlags =
                     automata::getReachabilityFlags(dfa);
     std::map<int, int>* mapping =
-                    automata::reduceDFA(dfa, reachibilityFlags);
+                    automata::reduceDFA(&dfa, reachibilityFlags);
 
     int actualState = dfa->compute(*w);
     int expectedState = (*mapping)[preReductionState];
@@ -293,4 +295,4 @@ TEST(AutomataAlgorithms,
 
     EXPECT_EQ(expectedState, actualState);
 }
-*/
+

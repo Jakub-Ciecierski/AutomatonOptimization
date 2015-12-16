@@ -117,9 +117,9 @@ double Optimizer::computeError(Particle* particle,
     for(unsigned int i = 0; i < wordCount-1; i++){
         for(unsigned int j = i+1; j < wordCount; j++){
             bool inRelationResult = 
-					(stateVectorResult[i] == stateVectorResult[j]);
+                    (stateVectorResult[i] == stateVectorResult[j]);
             bool inRelationTool = 
-					(stateVectorTool[i] == stateVectorTool[j]);
+                    (stateVectorTool[i] == stateVectorTool[j]);
             count += (inRelationResult == inRelationTool) ? 1:0;
             
             pairCount++;
@@ -159,7 +159,7 @@ void Optimizer::runPSOLogic(int s, int r) {
             computeError(bestPSOResult, _wordsGenerator->getTrainingAllSet());
 
     compareResultWithBestResult(bestPSOResult, testSetResult);
-	
+
     std::string info = "PSO Result Summary - States = " + std::to_string(s);
     summarize(bestPSOResult, s,
               testSetResult,
@@ -231,7 +231,7 @@ void Optimizer::summarize(Particle* particle, int psoStateCount,
 
     const DFA* dfa = particle->getBestDFA();
     DFA* reducedDFA = new DFA(*dfa);
-    double unreachableCount = automata::removeUnreachableStates(reducedDFA);
+    double unreachableCount = automata::removeUnreachableStates(&reducedDFA);
 
     // Build string for result
     stringstream ss;

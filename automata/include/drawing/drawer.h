@@ -20,7 +20,6 @@ namespace drawing
      */
     std::string graphToDOT(const Graph& graph);
 
-
     /*
      * Draws DFA and saves it in filepath.
      * DFA is transformed into Graph and then drawn as such

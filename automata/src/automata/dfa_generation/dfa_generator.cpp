@@ -47,7 +47,7 @@ namespace automata
 
             DFA* dfaRandom = dfa_loader::loadDFAFromString(dfaStr);
             unreachableStateCount =
-                    automata::removeUnreachableStates(dfaRandom);
+                    automata::removeUnreachableStates(&dfaRandom);
             delete dfaRandom;
 
             if(unreachableStateCount > 0)

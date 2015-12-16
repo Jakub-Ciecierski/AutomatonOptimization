@@ -229,46 +229,4 @@ void PSO::_printInfoAndPlot(int t, ConsolePlot *cPlot,
     cout << endl;
     numberOfLinesToReset++;
     totalNumberOfLinesToReset = numberOfLinesToReset;
-
-    /*
-    if(t > 0) {
-        for (unsigned int i = 0; i < _particles.size(); i++) */
-/*
-            Particle *bestParticle = _bestParticles[0];
-
-            const Point<double> *currPos = (_particles[i]->getPosition());
-            const Point<double> *gbestPos = bestParticle->getPBest();
-
-            double distance = math::euclideanDistance(*currPos, *gbestPos);
-
-            std::string str =
-                    "P[" + std::to_string(i) + "] - Fitness";
-            LOG_CALC(str.c_str(), _particles[i]->getFitness());
-*/
-/*
-            Particle *bestParticle = _bestParticles[0];
-
-            const Point<double> *currPos = (_particles[i]->getPosition());
-            const Point<double> *gbestPos = bestParticle->getPBest();
-
-            double distance = math::euclideanDistance(*currPos, *gbestPos);
-
-            std::string str =
-                    "P[" + std::to_string(i) + "] - Distance To gbest";
-            LOG_CALC(str.c_str(), distance);
-*/
-
-/*
-            Point<double> currPos = *(_particles[i]->getPosition());
-            Point<double> oldPos = _particles[i]->oldPosition;
-            //std::cout << currPos.size() << " : " << oldPos.size() << std::endl;
-            double distance = math::euclideanDistance(
-                                    *(_particles[i]->getPosition()),
-                                    _particles[i]->oldPosition);
-
-            std::string str = "P[" + std::to_string(i) + "] - Delta Pos Distance";
-            LOG_CALC(str.c_str(), distance);
-            */
-
-
 }

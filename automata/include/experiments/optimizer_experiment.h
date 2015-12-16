@@ -11,6 +11,9 @@
 namespace experiments
 {
 
+    /*
+     * Runs the main Optimization Experiment
+     */
     void runOptimizerExperiment();
 }
 

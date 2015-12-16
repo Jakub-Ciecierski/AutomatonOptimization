@@ -16,7 +16,6 @@
  * 3) update centroids by computing center of gravity - mean
  * 4) Repeat 2), 3) until convergence or after maximum iterations.
  *
- * TODO Parallel
  */
 template <class T>
 class KMeans {
@@ -133,7 +132,7 @@ public:
      *
      * @i - the index of cluster.
      */
-    std::vector<int> getClusterIndices(int i);
+    const std::vector<int>* getClusterIndices(int i) const;
 
     int getK();
     double getTol();

@@ -59,6 +59,11 @@ private:
 
     void createAlphabet(unsigned int symbolCount);
 
+    /*
+     * Checks whether a DFA is in fact deterministic.
+     * Throws invalid_argument exception if given Transition Function
+     * does not yeild determinism
+     */
     void checkDeterminism();
 
 public:

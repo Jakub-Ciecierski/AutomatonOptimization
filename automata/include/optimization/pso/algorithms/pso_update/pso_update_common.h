@@ -15,6 +15,9 @@ namespace pso
 {
     namespace update
     {
+        /*
+         * Update all particles
+         */
         void updateParticles(std::vector<Particle*>* particles);
 
         /*

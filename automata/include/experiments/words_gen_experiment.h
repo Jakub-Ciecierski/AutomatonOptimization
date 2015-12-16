@@ -6,6 +6,9 @@
 #define AC_WORDS_GEN_EXPERIMENT_H
 
 namespace experiments{
+    /*
+     * Runs the Word Generation Experiment
+     */
     void runWordsGenerationExperiment();
 }
 

@@ -1,5 +1,5 @@
 ###############################################
-#			Structure of the project
+#			Structure of the project		  #
 ###############################################
 
 ----------------------------------------------------------
@@ -23,13 +23,13 @@
 ./googletest/ 				The library used to create unit tests. Should not be of any concern
 
 ###############################################
-#				Install
+#				  Install					  #
 ###############################################
 
 Refer to ./INSTALL.txt 
 
 ###############################################
-#				Usage
+#				   Usage					  #
 ###############################################
 
-Refer to ./HOWTO.txt
+Refer to automata/HOWTO.txt

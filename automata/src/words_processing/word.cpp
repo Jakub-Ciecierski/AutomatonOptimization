@@ -11,8 +11,7 @@ Word::Word(vector<int> word) {
 }
 
 Word::Word(int word[]) {
-    // TODO(dybisz) change it
-    cout << "i chuj" << endl;
+
 }
 
 void Word::appendSymbol(int symbol) {

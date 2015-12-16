@@ -96,28 +96,6 @@ namespace global_settings {
     // DEFAULT_THREAD_COUNT will be used.
     extern int TRUE_THREAD_COUNT;
 
-    /* ------ WORDS GENERATION ----- */
-    // Maximum number of testing words
-    extern int R_MAX;
-    // Number of words in omega_{S}
-    extern int SIZE_S;
-    // Number of words in omega_{M}
-    extern int SIZE_M;
-    // Number of words in omega_{L}
-    extern int SIZE_L;
-    // Minimum word length in omega_{S}
-    extern int MIN_LENG_S;
-    // Maximum word length in omega_{S}
-    extern int MAX_LENG_S;
-    // Minimum word length in omega_{M}
-    extern int MIN_LENG_M;
-    // Maximum word length in omega_{M}
-    extern int MAX_LENG_M;
-    // Minimum word length in omega_{L}
-    extern int MIN_LENG_L;
-    // Maximum word length in omega_{L}
-    extern int MAX_LENG_L;
-
     /* ------ CLUSTERING ----- */
     // The convergence tolerance in kmeans
     extern double KM_TOL;

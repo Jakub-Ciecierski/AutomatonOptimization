@@ -208,58 +208,7 @@ namespace console {
                              INT,
                              &global_settings::TRUE_THREAD_COUNT));
 
-        /* ------ WORDS GENERATION ----- */
-/*
-        flags.push_back(Flag("R", "r-max",
-                             "Maximum number of words",
-                             INT,
-                             &global_settings::R_MAX));
 
-
-        flags.push_back(Flag("S", "w-size",
-                             "Size of Small Omega",
-                             INT,
-                             &global_settings::SIZE_S));
-
-
-        flags.push_back(Flag("M", "m-size",
-                             "Size of Medium Omega",
-                             INT,
-                             &global_settings::SIZE_M));
-
-        flags.push_back(Flag("L", "l-size",
-                             "Size of Large Omega",
-                             INT,
-                             &global_settings::SIZE_L));
-
-        flags.push_back(Flag("z", "word-s-min",
-                             "Minimum Length of Small Words",
-                             INT,
-                             &global_settings::MIN_LENG_S));
-
-        flags.push_back(Flag("Z", "word-s-max",
-                             "Maximum Length of Small Words",
-                             INT,
-                             &global_settings::MAX_LENG_S));
-
-        flags.push_back(Flag("x", "word-m-min",
-                             "Minimum Length of Medium Words",
-                             INT,
-                             &global_settings::MIN_LENG_M));
-        flags.push_back(Flag("X", "word-m-max",
-                             "Maximum Length of Medium Words",
-                             INT,
-                             &global_settings::MAX_LENG_M));
-
-        flags.push_back(Flag("c", "word-l-min",
-                             "Minimum Length of Large Words",
-                             INT,
-                             &global_settings::MIN_LENG_L));
-        flags.push_back(Flag("C", "word-l-max",
-                             "Maximum Length of Large Words",
-                             INT,
-                             &global_settings::MAX_LENG_L));
-*/
         /* ------ CLUSTERING ----- */
 
         flags.push_back(Flag("m", "km-tol",

@@ -47,18 +47,6 @@ namespace global_settings {
     int DEFAULT_THREAD_COUNT    = 4;
     int TRUE_THREAD_COUNT       = 0;
 
-    /* ------ WORDS GENERATION ----- */
-    int R_MAX                   = 8;   // FOR_NOW: Max length of generated words
-    int SIZE_S                  = 100; // FOR_NOW: Size of test set
-    int SIZE_M                  = 100;
-    int SIZE_L                  = 100;
-    int MIN_LENG_S              = 0;
-    int MAX_LENG_S              = 8;	
-    int MIN_LENG_M              = 9;
-    int MAX_LENG_M              = 16;
-    int MIN_LENG_L              = 17;
-    int MAX_LENG_L              = 25;
-    
     /* ------ CLUSTERING ----- */
     double KM_TOL               = 0.0001f;
     int KM_MAX_ITER             = 1000;
@@ -283,85 +271,6 @@ namespace global_settings {
             ss << PATH_TO_VALUE;
         ss << " ";
         ss << GEN_WORD_TEST_MAX_LENGTH<< std::endl;
-
-
-
-
-
-
-
-
-        s = "R_MAX ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << R_MAX << std::endl;
-
-        s = "SIZE_S ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << SIZE_S << std::endl;
-
-        s = "SIZE_M ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << SIZE_M << std::endl;
-
-        s = "SIZE_L ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << SIZE_L << std::endl;
-
-        s = "MIN_LENG_S ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << MIN_LENG_S << std::endl;
-
-
-        s = "MAX_LENG_S ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << MAX_LENG_S << std::endl;
-
-        s = "MIN_LENG_M ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << MIN_LENG_M << std::endl;
-
-        s = "MAX_LENG_M ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << MAX_LENG_M << std::endl;
-
-        s = "MIN_LENG_L ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << MIN_LENG_L << std::endl;
-
-        s = "MAX_LENG_L ";
-        ss << s;
-        for(unsigned int i = 0;i < startColumn-s.length(); i++)
-            ss << PATH_TO_VALUE;
-        ss << " ";
-        ss << MAX_LENG_L << std::endl;
-
 
         ss << std::endl<< "CLUSTERING SETTINGS" <<std::endl <<std::endl;
 

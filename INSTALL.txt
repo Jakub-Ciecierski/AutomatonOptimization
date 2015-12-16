@@ -1,14 +1,14 @@
 ###############################################
-#				Install
+#                Install                      #
 ###############################################
 1) To install change directory to ./automata.
 
-	cd automata
+    cd automata
 
 2.1) Type 'make' to compile and run Unit Tests. 
 This will create a executable in automata/bin/ 
 
-	make
+    make
 
 2.2) To properly install the application type 
 'make install INSTALL_PATH=/my/path/' to install
@@ -16,5 +16,5 @@ the program in the given directory.
 Directory will be created if does not exist.
 If INSTALL_PATH will not be provided, a default directory './install'
 will be used.
-	
-	make install INSTALL_PATH=~/programs/optimizer
+
+    make install INSTALL_PATH=~/programs/optimizer
